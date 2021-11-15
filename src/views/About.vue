@@ -14,7 +14,7 @@
 <h2>Find Your Account</h2>
 <div class="bord">
 <p>Please enter your email address or mobile number to search for your account.</p>
-<input type="text" placeholder="Mobile Number">
+<input type="text" placeholder="Mobile Number" class="mobile">
 </div>
 <div class="btn">
   <button>Cancel</button>
@@ -23,7 +23,7 @@
  </div>
 </div>
 
- <div class="footer" v-show="false">
+ <div class="footer">
         <div class="wrapper">
 <div class="wrap-1">
     <a href="#">Kiswahili</a>
@@ -100,6 +100,7 @@ export default({
   font-size: 15px;
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 10px;
 }
 .nav img{
@@ -169,11 +170,64 @@ input{
   border:none;
   border-radius: 5px;
   cursor: pointer;
+  padding: 0 20px;
+  height: 36px;
+}
+.btn button:last-child{
+  background: #1877f2;
+  color: #fff;
+}
+.mobile{
+  margin-bottom: 20px;
 }
 
 
-/* Monderu2810 */
+.footer{
+    background: #fff;
+    margin-bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding:20px 0 0;
 
+}
+.wrapper{
+    margin:0 auto;
+    width:58%;
+  
+}
+
+.footer a {
+    text-decoration: none;
+    color: #8A8D91;
+    margin: 1px;
+    font-size: 12px;
+    
+}
+.wrap-1 a{
+    padding-left:10px;
+}
+.wrap-2 a{
+    padding-left:11px;
+}
+.wrap-1 a:first-child{
+    padding-left:0px;
+}
+.wrap-2 a:first-child{
+    padding-left:0px;
+}
+.footer a:hover{
+    text-decoration: underline;
+}
+.meta{
+    color: #737373;  
+    font-size: 12px;
+    margin-top: 20px;
+}
+.languages{
+    font-size: 40px;
+}
 
 
 

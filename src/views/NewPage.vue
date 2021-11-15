@@ -38,7 +38,7 @@
             </div>
         </div>
      </div>
-<div id="popup" >
+<div id="popup">
 <div class="part-1">
   <span>Email or Phone</span>
   <input type="email">

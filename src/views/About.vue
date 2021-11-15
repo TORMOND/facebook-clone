@@ -6,7 +6,7 @@
     <input type="email" placeholder="Email or Phone">
     <input type="password" placeholder="password">
     <button><router-link to="/Login" class="login">Log In</router-link></button>
-    <a href="#">Forgotten Account?</a>
+    <a href="#" class="forgotten">Forgotten Account?</a>
     </div>
   </nav>
 <div class="account">
@@ -107,7 +107,7 @@ export default({
   width: 150px;
   height: 56px;
 }
-.nav a{
+.forgotten{
   text-decoration: none;
   color:#1877f2;
 }
@@ -122,7 +122,7 @@ export default({
   cursor:pointer;
 
 }
-.login{
+.login {
     text-decoration: none;
   color: #fff;
 }
@@ -157,14 +157,14 @@ input{
 .bord p{
   font-size: 17px;
   margin-bottom: 16px;
-  margin-left: auto;
-  width: calc(100% - 50px);
+  margin:10px auto;
+  width: calc(100% - 70px);
   
 }
 .bord input{
   padding: 16px 0 16px 16px;
   margin:0 auto;
-  width: calc(100% - 50px);
+  width: calc(100% - 90px);
   
 }
 .btn{

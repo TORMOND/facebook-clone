@@ -34,7 +34,7 @@
     </div>
 
    
-    <div class="footer">
+    <div class="footer" >
         <div class="wrapper">
 <div class="wrap-1">
     <a href="#">Kiswahili</a>
@@ -90,11 +90,11 @@
 
 
 
-    <div id="popup" class="mypopup" v-show="popup">
+    <div id="popup" class="mypopup" v-if="popup">
         <div class="ftp">
             <div class="box-1">
                 <h1>Sign Up</h1>
-                <img src="__geKiQnSG-.png" @click="toggle">
+                <img src="https://static.xx.fbcdn.net/rsrc.php/v3/y2/r/__geKiQnSG-.png" @click="toggle">
             </div>
             <div class="box-2">
                 <p>It's quick and easy.</p>
@@ -166,8 +166,9 @@ export default {
       }
     },
     methods: {
-    toogle(){
+    toggle:function(){
       this.popup = !this.popup
+
     }
     
     }
@@ -400,19 +401,19 @@ input{
     pointer-events: all;
     transition: 0.8s;
 } */
-/* #app.active {
+#app.active {
     opacity: 0.25;
     pointer-events: none;
     user-select: none;
     transition: 0.1s;
-} */
+}
 
 .mypopup {
     box-shadow: 2px 2px 2px 2px rgb(202, 199, 199);
-    margin: 8px;
-    margin: auto;
     border-radius: 5px;
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 400px;
 }
 
 .mypopup img {
@@ -422,13 +423,11 @@ input{
 }
 
 .ftp {
-  
     height: 82px;
     padding: 10px 16px;
 }
 
 .box-1 {
-   
     height: 38px;
     display: flex;
     align-items: center;
@@ -448,15 +447,21 @@ input{
 .box-2 p{
     color: #606770;
 }
+.box-3{
+    border-top: 1px solid grey;
+}
 .names {
  display: flex;
  gap: 10px;
+ margin: 0 auto;
 }
 
 .names input {
+    background: #f0f2f5;
     padding: 10px;
     border: 1px solid rgb(216, 212, 212);
     border-radius: 5px;
+    font-size: 15px;
 }
 
 .names input .error {
@@ -468,8 +473,11 @@ input{
 }
 
 .details input {
+    background: #f0f2f5;
+    width: calc(100% - 35px);
     border: 1px solid rgb(216, 212, 212);
     border-radius: 5px;
+    font-size: 15px;
 }
 
 #firstName .error {
@@ -484,7 +492,10 @@ input{
 
 .date {  
     font-size: 12px;
-    margin: 2px 0 0;
+    margin: 2px auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
 }
 
 .date-no {  
@@ -493,40 +504,34 @@ input{
 }
 
 .date-no select {
-  
-  
     padding: 0 20px 0 8px;
     border: 1px solid rgb(216, 212, 212);
     border-radius: 5px;
 }
 
-.date-no select:nth-child(2) {
-    margin: 0 0 0 12px;
-}
-
-.date-no select:nth-child(3) {
-    margin: 0 0 0 12px;
-}
 
 .radio-btn {
     margin: -8px -6px -6px;
     color: #777777;
     display: flex;
     margin-top: 5px;
+    gap: 20px;
+    align-items: center;
 }
 
 .radio-btn input {
     width: 13px;
     height: 13px;
+    margin-left: 5px;
+    top:10px;
     border: 1px solid rgb(216, 212, 212);
     border-radius: 5px;
 }
 
 .radio-btn span {
-  
     color: #1c1e21;
     font-size: 15px;
-    padding: 0 18px 0 10px;
+    padding: 0 28px 0 10px;
     border: 1px solid rgb(216, 212, 212);
     border-radius: 5px;
     display: flex;
@@ -539,8 +544,6 @@ input{
 }
 
 .policy {
-  
-  
     margin: 11px 0;
     font-size: 11px;
 }
@@ -550,20 +553,17 @@ input{
     color: #fff;
     border: none;
     border-radius: 8px;
- 
+    widows: 254px;
+    height: 36px;
+    margin: 0 auto; 
 }
 
 .button {
-   
-   
     display: flex;
-    align-items: center;
-    justify-content: center;
+   
 }
 
 .box-3 {
-  
-  
     margin: 12px;
 }
 
@@ -575,6 +575,8 @@ input{
 }
 .form{
     padding: 16px;
+    display: flex;
+    flex-direction: column;
 }
 
 @media all and(max-width:1024px) {

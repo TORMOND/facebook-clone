@@ -1,29 +1,24 @@
 <template>
-  <div class="about">
-  <nav class="nav">
-    <img src="https://static.xx.fbcdn.net/rsrc.php/y8/r/dF5SId3UHWd.svg">
-    <div class="accessibility">
-    <input type="email" placeholder="Email or Phone">
-    <input type="password" placeholder="password">
-    <button><router-link to="/Login" class="login">Log In</router-link></button>
-    <a href="#">Forgotten Account?</a>
-    </div>
-  </nav>
-<div class="account">
- <div class="card">
-<h2>Find Your Account</h2>
-<div class="bord">
-<p>Please enter your email address or mobile number to search for your account.</p>
-<input type="text" placeholder="Mobile Number" class="mobile">
-</div>
-<div class="btn">
-  <button>Cancel</button>
-  <button>Search</button>
-</div>
- </div>
-</div>
-
- <div class="footer">
+  <div class="log-in">
+    <div class="container">
+        <div class="image" >
+                <img src="https://static.xx.fbcdn.net/rsrc.php/y8/r/dF5SId3UHWd.svg">
+            </div>
+            <div class="part">
+            <div class="card">
+                <div class="h2">Log in to facebook</div>
+                <form>
+                  <input  type="email" placeholder="Email address or phone number" v-model="email">
+               <span class="danger">The email address or mobile number you entered isn't connected to an account. Find your account and log in.</span>
+                 <input type="password" placeholder="Password" v-model="password">
+                   <div class="log">
+                           <button class="login">Log In</button></div>
+                             <div class="forgot"><a href=""><router-link to="/about">Forgotten Password?</router-link></a></div>
+        </form>    
+        </div>
+        </div>
+        </div>
+            <div class="footer">
         <div class="wrapper">
 <div class="wrap-1">
     <a href="#">Kiswahili</a>
@@ -76,119 +71,126 @@
 </div>
 </div>
  </div>
-
   </div>
 </template>
+
 <script>
+// @ is an alias to /src
 
 
-export default({
-  setup() {
-    
-  },
-})
+export default {
+  name: 'Login',
+  data() {
+      return {
+       title:'Log In',
+       email:'',
+       password:'',
+      }
+    },
+}
 </script>
 <style scoped>
-.nav{
-  display: flex;
-  justify-content: space-between;
-  box-shadow:3px 3px 5px #ceced1, 3px 3px 5px #ceced1, 3px 3px 5px #ceced1, 3px 3px 5px #ceced1 ;
-  align-items: center;
+.log-in{
+    display: flex;  
+       flex-direction: column;
 }
-.accessibility{
-  padding:0 16px;
-  font-size: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+.container{
+  background: #f0f2f5;  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 60px 0;
 }
-.nav img{
-  width: 150px;
-  height: 56px;
-}
-.nav a{
-  text-decoration: none;
-  color:#1877f2;
-}
-.nav button{
-  background: #1877f2;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  width: 69px;
-  height: 40px;
-  padding: 6px 4px;
-  cursor:pointer;
+.image{
+width: 80%;
+display: flex;
+justify-content: flex-start;
 
 }
-.login{
-    text-decoration: none;
-  color: #fff;
+img{
+    width: 240px;
+    height: 84.4px;
+    margin: auto;
 }
-input{
-  padding: 8px 12px 10px;
-  border-radius: 5px;
-  border:1px solid rgb(153, 151, 151);
-}
-.account{
-  background:#f0f2f5;
-  padding:80px 0;
-  display: flex;
+.part{
+   margin:0 auto; 
+   display: flex;
 }
 .card{
-  background: #fff;
-  margin: auto;
-  border-radius: 10px;
-  padding: 10px 0 0;
-}
-.card h2{
-  padding: 18px 16px 18px 18px ;
-  font-size: 20px;
-  margin:-15px 0 0;
-}
-.bord{
-  border-top: 1px solid #ceced1;
-    border-bottom: 1px solid #ceced1;
+    background: #fff;
+    margin:auto;
+    width: 396px;
+    padding: 10px 0 24px;
+    border-radius: 5px; 
+    box-shadow: 3px 3px 5px #ceced1, 3px 3px 5px #ceced1,  3px 3px 5px #ceced1,  3px 3px 5px #ceced1 ;
     display: flex;
     flex-direction: column;
-    padding-bottom: 20px;
 }
-.bord p{
-  font-size: 17px;
-  margin-bottom: 16px;
-  margin-left: auto;
-  width: calc(100% - 50px);
+.h2{
+    margin: 0 auto;
+    padding: 24px 0 16px;
+    font-size: 18px;
+}
+form{
+     display: flex;  
+     flex-direction: column; 
+}
+.danger{
+    color: #f02849;
+    font-size: 13px;
+    margin: 0 auto;
+     width: calc( 100% - 20%);
+}
+input{
+    margin:0 auto;
+    width: calc( 100% - 20%);
+    padding: 14px 16px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    border-radius: 5px;
+    border:1px solid #f0f2f5;
+    font-size: 17px;
+}
+input:first-child{
+    border:1px solid #f02849;
+}
+.log{
+ display: flex;
+}
+.login{
+      width: calc( 100% - 20%);
+    padding: 14px 16px;
+    margin: 6px auto;
+    border-radius: 5px;
+    color: #fff;
+    background: #1877f2;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.login:hover{
+    background: #1773eb;
+}
+.forgot{
+  
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+.forgot a{
+    text-decoration: none;
+    color:#1877f2 ;
+}
+.forgot a:hover{
+    text-decoration: underline;
+}
+.wrapper{
+    margin:0 auto;
+    width:58%;
   
 }
-.bord input{
-  padding: 16px 0 16px 16px;
-  margin:0 auto;
-  width: calc(100% - 50px);
-  
-}
-.btn{
-  padding: 16px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-.btn button{
-  border:none;
-  border-radius: 5px;
-  cursor: pointer;
-  padding: 0 20px;
-  height: 36px;
-}
-.btn button:last-child{
-  background: #1877f2;
-  color: #fff;
-}
-.mobile{
-  margin-bottom: 20px;
-}
-
-
 .footer{
     background: #fff;
     margin-bottom: 0;
@@ -197,14 +199,8 @@ input{
     justify-content: center;
     flex-direction: column;
     padding:20px 0 0;
-   margin-top: 114px;
+    margin-top: 94px;
 }
-.wrapper{
-    margin:0 auto;
-    width:58%;
-  
-}
-
 .footer a {
     text-decoration: none;
     color: #8A8D91;
@@ -234,11 +230,5 @@ input{
 }
 .languages{
     font-size: 40px;
-}
-
-@media all and(max-width:850px){
-  .nav input{
-  display: none;
-  }
 }
 </style>

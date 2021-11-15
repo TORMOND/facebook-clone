@@ -19,16 +19,16 @@
                            <input type="password" placeholder="Password" v-model="password">
                         </div>
                         <div class="log">
-                           <button class="login">Log In</button></div>
-                           <div class="forgot"><a href="">Forgotten Password?</a></div>
+                           <button class="login"><router-link to="/Login" class="login">Log In</router-link></button></div>
+                           <div class="forgot"><a href=""><router-link to="/about">Forgotten Password?</router-link></a></div>
 
                            <div class="line"></div>
                            <div class="acc">
-                           <button @click="toggle"  class="newacc">Create New Account</button></div>
+                           <button @click="toggle" class="newacc">Create New Account</button></div>
                        </form>
             </div>
        
-        <p><a href="#" class="create">Create a Page </a> for a celebrity, brand or business.</p>
+        <p><a href="" class="create"><router-link to="/NewPage" class="create">Create a Page</router-link> </a> for a celebrity, brand or business.</p>
       </div>  </div>
         </div>
     </div>
@@ -90,7 +90,7 @@
 
 
 
-    <div id="popup" class="mypopup" v-show="popup" >
+    <div id="popup" class="mypopup" v-show="popup">
         <div class="ftp">
             <div class="box-1">
                 <h1>Sign Up</h1>
@@ -154,9 +154,9 @@
 <script>
 export default {
   name: 'HelloWorld',
-  props: {
-    msg: String
-  },
+//   props: {
+//     msg: String
+//   },
  data() {
       return {
        email: '',
@@ -167,7 +167,7 @@ export default {
     },
     methods: {
     toogle(){
-      this.popup =!popup
+      this.popup = !this.popup
     }
     
     }
@@ -270,6 +270,7 @@ input{
     font-size: 20px;
     font-weight: bold;
     cursor: pointer;
+    text-decoration: none;
 }
 .login:hover{
     background: #1773eb;
@@ -399,16 +400,14 @@ input{
     pointer-events: all;
     transition: 0.8s;
 } */
-#app.active {
+/* #app.active {
     opacity: 0.25;
     pointer-events: none;
     user-select: none;
     transition: 0.1s;
-}
+} */
 
 .mypopup {
-    width: 432px;
-    height: 503px;
     box-shadow: 2px 2px 2px 2px rgb(202, 199, 199);
     margin: 8px;
     margin: auto;
@@ -423,13 +422,13 @@ input{
 }
 
 .ftp {
-    width: 432px;
+  
     height: 82px;
     padding: 10px 16px;
 }
 
 .box-1 {
-    width: 400px;
+   
     height: 38px;
     display: flex;
     align-items: center;
@@ -442,7 +441,7 @@ input{
 }
 
 .box-2 {
-    width: 400px;
+ 
     height: 24px;
     font-size: 15px;
 }
@@ -450,16 +449,11 @@ input{
     color: #606770;
 }
 .names {
-    width: 399px;
-    height: 55px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    margin: 2px;
+ display: flex;
+ gap: 10px;
 }
 
 .names input {
-    width: 186px;
-    height: 36px;
     padding: 10px;
     border: 1px solid rgb(216, 212, 212);
     border-radius: 5px;
@@ -488,23 +482,19 @@ input{
     top:40px;
 }
 
-.date {
-    width: 400px;
-    height: 20px;
+.date {  
     font-size: 12px;
     margin: 2px 0 0;
 }
 
-.date-no {
-    width: 399px;
-    height: 36px;
+.date-no {  
     display: flex;
     border: 1px solid rgb(216, 212, 212);
 }
 
 .date-no select {
-    width: 125px;
-    height: 36px;
+  
+  
     padding: 0 20px 0 8px;
     border: 1px solid rgb(216, 212, 212);
     border-radius: 5px;
@@ -519,8 +509,6 @@ input{
 }
 
 .radio-btn {
-    width: 411px;
-    height: 50px;
     margin: -8px -6px -6px;
     color: #777777;
     display: flex;
@@ -535,8 +523,7 @@ input{
 }
 
 .radio-btn span {
-    width: 128.28px;
-    height: 36px;
+  
     color: #1c1e21;
     font-size: 15px;
     padding: 0 18px 0 10px;
@@ -552,8 +539,8 @@ input{
 }
 
 .policy {
-    width: 399px;
-    height: 28px;
+  
+  
     margin: 11px 0;
     font-size: 11px;
 }
@@ -563,21 +550,20 @@ input{
     color: #fff;
     border: none;
     border-radius: 8px;
-    width: 194px;
-    height: 36px;
+ 
 }
 
 .button {
-    width: 400px;
-    height: 56px;
+   
+   
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .box-3 {
-    width: 400px;
-    height: 380px;
+  
+  
     margin: 12px;
 }
 
@@ -587,7 +573,9 @@ input{
    user-select: none;
    transition: 0.1s;
 }
-
+.form{
+    padding: 16px;
+}
 
 @media all and(max-width:1024px) {
     .card{

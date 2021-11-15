@@ -1,11 +1,13 @@
 <template>
   <div class="newPage">
    <nav>
+     <div class="wrapper">
 <div class="box">
     <h1>facebook</h1>
     <button>Sign Up</button>
 </div>
 <a href="" >Join or login to facebook </a>
+</div>
      </nav>
      <div class="container">
         <div class="element">
@@ -13,6 +15,7 @@
             <p>Connect your business, yourself or your cause to the worldwide community of people on Facebook. To get started, choose a
             Page category.</p>
         </div> 
+        <div class="displays">
         <div class="grid">
             <div class="card">
                 <img src="https://www.facebook.com/images/pages/create/biz_illustration.png">
@@ -31,6 +34,7 @@
                 
                 </div>
                 <button>Get Started</button>
+            </div>
             </div>
         </div>
      </div>
@@ -77,8 +81,13 @@ nav {
     display: flex;
     color: #fff;
     align-items: center;
-   justify-content: center;
-   gap: 250px;
+  
+}
+.wrapper{
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 450px;
 }
 .box h1{
     font-size: 48px;
@@ -118,9 +127,11 @@ nav a{
     margin-top: 16px;
     gap: 20px;
     padding-top: 120px;
-
 }
-
+.displays{
+  margin:0 auto;
+  display: flex;
+}
 p{
     padding-top: 10px;
 }
@@ -168,8 +179,8 @@ p {
     font-size: 14px;
 }
 .element{
-  width: 980px;
   margin: 0 auto;
+  padding: 20px  0;
 }
 .card button {
     padding: 0 11px;

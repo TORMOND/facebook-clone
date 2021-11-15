@@ -60,8 +60,10 @@
 
 export default({
   setup() {
-    
+ 
+     
   },
+
 })
 </script>
 <style scoped>
@@ -235,6 +237,7 @@ box-shadow: 3px 3px 5px #ceced1;
   border: none;
   background: #4267b2;
   color: #fff;
+  cursor: pointer;
 }
 .enter{
   display: flex;

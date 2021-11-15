@@ -32,8 +32,7 @@
       </div>  </div>
         </div>
     </div>
-
-   
+<!--  <p v-bind::key="password">{{password}}</p> -->
     <div class="footer" >
         <div class="wrapper">
 <div class="wrap-1">
@@ -117,7 +116,7 @@
                     </p>
                     <span class="date-no">
                         <select id="day">
-                           
+                        
                         </select>
     
                         <select id="month">
@@ -163,14 +162,16 @@ export default {
        password: '',
         image:true,
        popup:false,
+      
       }
     },
     methods: {
     toggle:function(){
       this.popup = !this.popup
-
+      const app = document.querySelector('#app')
+        app.classList = "active";
     }
-    
+  
     }
 
 }
@@ -420,6 +421,7 @@ input{
     width: 24px;
     height: 24px;
     cursor: pointer;
+    margin: 0;
 }
 
 .ftp {
@@ -493,14 +495,14 @@ input{
 .date {  
     font-size: 12px;
     margin: 2px auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
 }
 
 .date-no {  
-    display: flex;
+   display: grid;
+  grid-template-columns: repeat(3, 1fr);
     border: 1px solid rgb(216, 212, 212);
+     gap: 20px;
+     border: none;
 }
 
 .date-no select {
@@ -515,14 +517,14 @@ input{
     color: #777777;
     display: flex;
     margin-top: 5px;
-    gap: 20px;
+    gap: 10px;
     align-items: center;
 }
 
 .radio-btn input {
     width: 13px;
     height: 13px;
-    margin-left: 5px;
+    margin-left:5px;
     top:10px;
     border: 1px solid rgb(216, 212, 212);
     border-radius: 5px;
@@ -536,12 +538,10 @@ input{
     border-radius: 5px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-left: 10px;
 }
 
-.radio-btn p {
-    top: 50%;
-}
 
 .policy {
     margin: 11px 0;
@@ -553,9 +553,10 @@ input{
     color: #fff;
     border: none;
     border-radius: 8px;
-    widows: 254px;
+    width: 194px;
     height: 36px;
     margin: 0 auto; 
+    cursor: pointer;
 }
 
 .button {

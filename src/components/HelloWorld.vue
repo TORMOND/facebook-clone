@@ -267,21 +267,24 @@ export default {
 
  login:function(){
  if(this.mail === "" && this.pass === ""){
-     alert("this is blank")
-     
+this.$router.push('/Login')
  }else{
 
      signInWithEmailAndPassword(auth, this.mail, this.pass).then((userCredential) => {
     // Signed in 
     const user = userCredential.user;
-    console.log(user);
+    // console.log(user);
     alert("You've Signed in as" + this.mail);
-        
+      if (user) {
+            this.$router.push('/Navigation')
+            console.log(user)
+    }else{
+        stop. this.$router.push('/Navigation')
+        alert("error")
+    }
+      
   });
  }
-
-
-
    
  }
     },

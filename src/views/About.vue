@@ -6,7 +6,7 @@
     <input type="email" placeholder="Email or Phone">
     <input type="password" placeholder="password">
     <button><router-link to="/Login" class="login">Log In</router-link></button>
-    <a href="#" class="forgotten">Forgotten Account?</a>
+    <a href="#" class="forgotten"><router-link to="/about" >Forgotten Account?</router-link></a>
     </div>
   </nav>
 <div class="account">
@@ -107,7 +107,7 @@ export default({
   width: 150px;
   height: 56px;
 }
-.forgotten{
+.forgotten a{
   text-decoration: none;
   color:#1877f2;
 }

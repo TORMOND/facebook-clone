@@ -85,6 +85,7 @@ export default {
        title:'Log In',
        email:'',
        password:'',
+        currentRoute: window.location.Login
       }
     },
 }
@@ -174,7 +175,6 @@ input:first-child{
     background: #1773eb;
 }
 .forgot{
-  
     display: flex;
     justify-content: center;
     margin-top: 16px;
@@ -189,7 +189,6 @@ input:first-child{
 .wrapper{
     margin:0 auto;
     width:58%;
-  
 }
 .footer{
     background: #fff;

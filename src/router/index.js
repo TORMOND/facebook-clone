@@ -32,6 +32,14 @@ const routes = [
     component: function () {
       return import(/* webpackChunkName: "about" */ '../views/LogIn.vue')
     }
+  },
+  {
+    path: '/Navigation',
+    name: 'Navigation',
+   
+    component: function () {
+      return import(/* webpackChunkName: "about" */ '../views/Navigation.vue')
+    }
   }
 ]
 

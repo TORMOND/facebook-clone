@@ -15,12 +15,12 @@
             <div class="card">
                        <form>
                            <div class="textplace">
-                           <input  type="email" placeholder="Email address or phone number" v-model="mail">
-                           <input type="password" placeholder="Password" v-model="pass">
+                           <input  type="email" placeholder="Email address or phone number" v-model="mail"  >
+                           <input type="password" placeholder="Password" v-model="pass" class="textField">
                         </div>
                         <div class="log">
                            <button class="login" @click="login">login</button></div>
-                           <!-- <router-link to="/Login" class="login">Log In</router-link> -->
+                           
                            <div class="forgot"><a href=""><router-link to="/about">Forgotten Password?</router-link></a></div>
 
                            <div class="line"></div>
@@ -262,8 +262,13 @@ export default {
     //   }),
       
     });   
+    
   
   },
+  input:function(){
+      const textField = document.querySelector('textField');  
+      textField.$style.color = "blue";
+    },
 
  login:function(){
  if(this.mail === "" && this.pass === ""){
@@ -371,6 +376,10 @@ input{
     border:1px solid #f0f2f5;
     font-size: 17px;
 }
+.inputClick{
+    border:1px solid #1877f2;
+}
+
 .log{
     display: flex;
     width: 100%;
@@ -469,7 +478,6 @@ input{
 .wrapper{
     margin:0 auto;
     width:58%;
-  
 }
 
 .footer a {
@@ -477,7 +485,6 @@ input{
     color: #8A8D91;
     margin: 1px;
     font-size: 12px;
-    
 }
 .wrap-1 a{
     padding-left:10px;
@@ -558,7 +565,6 @@ input{
 }
 
 .box-2 {
- 
     height: 24px;
     font-size: 15px;
 }
@@ -616,7 +622,7 @@ input{
 .date-no {  
    display: grid;
   grid-template-columns: repeat(3, 1fr);
-    border: 1px solid rgb(216, 212, 212);
+   border: 1px solid rgb(216, 212, 212);
      gap: 20px;
      border: none;
 }

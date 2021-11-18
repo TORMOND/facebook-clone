@@ -15,7 +15,7 @@
             <div class="card">
                        <form>
                            <div class="textplace">
-                           <input  type="email" placeholder="Email address or phone number" v-model="mail"  >
+                           <input  type="email" placeholder="Email address or phone number" v-model="mail" @click="input" class="textField" >
                            <input type="password" placeholder="Password" v-model="pass" class="textField">
                         </div>
                         <div class="log">
@@ -266,8 +266,8 @@ export default {
   
   },
   input:function(){
-      const textField = document.querySelector('textField');  
-      textField.$style.color = "blue";
+      const textField = document.querySelector('#textField');  
+      textField.style.color = "blue";
     },
 
  login:function(){
@@ -300,6 +300,9 @@ this.$router.push('/Login')
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.textField:focus{
+    outline-color:#1877f2;
+}
 .app{
    margin: 0;
     padding: 0;

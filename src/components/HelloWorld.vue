@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-  <div class="opt">
+  <div id="opt">
         <div class="grid">
             <div class="segment-1">
                 <div class="center">
@@ -15,7 +15,7 @@
             <div class="card">
                        <form>
                            <div class="textplace">
-                           <input  type="email" placeholder="Email address or phone number" v-model="mail" @click="input" class="textField" >
+                           <input  type="email" placeholder="Email address or phone number" v-model="mail" class="textField" >
                            <input type="password" placeholder="Password" v-model="pass" class="textField">
                         </div>
                         <div class="log">
@@ -232,9 +232,18 @@ export default {
     },
     methods: {
     toggle:function(){
-      this.popup = !this.popup
-      const app = document.querySelector('#app')
-        app.classList = "active";
+      this.popup =!this.popup
+//       if(this.popup=true){
+//       const app = document.querySelector('#opt')
+//         app.classList = "active";
+//         this.popup = true
+//         const popup = document.querySelector('#popup')
+//         popup.classList = "active"
+// }else{
+//     this.popup.classList = '';
+//      app.classList = '';
+// }
+
     //     const form = document.querySelector('#signupForm');
     //  form.reset();
     },
@@ -251,6 +260,13 @@ export default {
   console.log(this.firstName, this.surName, this.password,this.custom)
       createUserWithEmailAndPassword(auth, this.email, this.password).then((userCredential) => {
     // Signed in 
+    const docRef = addDoc(collection(db, "user-Details"), {
+      name: this.firstName,
+      secondName: this.surName,
+     
+    });
+
+    console.log("Document written with ID: ", docRef);
     const user = userCredential.user;
     // ..
     console.log(user);
@@ -265,10 +281,7 @@ export default {
     
   
   },
-  input:function(){
-      const textField = document.querySelector('#textField');  
-      textField.style.color = "blue";
-    },
+ 
 
  login:function(){
  if(this.mail === "" && this.pass === ""){
@@ -280,14 +293,17 @@ this.$router.push('/Login')
     const user = userCredential.user;
     // console.log(user);
     alert("You've Signed in as" + this.mail);
+      onAuthStateChanged(auth, user => {
+
+      console.log(user);
       if (user) {
             this.$router.push('/Navigation')
             console.log(user)
     }else{
-        stop. this.$router.push('/Navigation')
+        // stop.this.$router.push('/Navigation')
         alert("error")
     }
-      
+      })
   });
  }
    
@@ -330,7 +346,7 @@ this.$router.push('/Login')
 .segment-2{
      margin:auto 0 0;
 }
-.opt{ 
+#opt{ 
     background: #f0f2f5;
     margin:0 auto;
     display: flex;
@@ -522,13 +538,13 @@ input{
     z-index: 1;
 }
 
-/* #popup.active {
+ #popup.active {
     position: fixed;
     z-index: 10;
     pointer-events: all;
     transition: 0.8s;
-} */
-#app.active {
+} 
+#opt.active {
     opacity: 0.25;
     pointer-events: none;
     user-select: none;

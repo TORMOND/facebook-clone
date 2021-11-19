@@ -3,7 +3,7 @@
       <nav>
           <div class="fb-point">
           <i class="fab fa-facebook"></i>
-          <input type="text" placeholder="Search Facebook">
+          <input type="text" placeholder="Search Facebook" class="field">
           <!-- <i class="fas fa-search"></i> -->
           </div>
           <div class="navigate">
@@ -19,7 +19,7 @@
              <span><i class="fas fa-plus"></i></span>
               <span><i class="fab fa-facebook-messenger"></i></span>
               <span><i class="fas fa-bell"></i></span>
-              <span><i class="fas fa-caret-down"></i></span>
+              <span @click="operate"><i class="fas fa-caret-down"></i></span>
           </div>
       </nav>
       <div class="container">
@@ -117,6 +117,8 @@
 <div class="part-2"></div>
 </div>
       </div>
+
+
 <div id="modal" v-if="modal">
     <div class="create">
         <h2>Create post</h2>
@@ -124,11 +126,11 @@
     </div>
       <div class="post">
   <span><i class="fas fa-user"></i></span>
-  <p>Victor Monderu</p>
+  <p>View Profile</p>
  </div>
- <div>
- <textarea></textarea>
-  <i class="fal fa-smile"></i>
+ <div class="text">
+ <textarea placeholder="what's on your mind, Victor"></textarea>
+ 
   </div>
   <div class="include">
       <div class="outline">
@@ -136,6 +138,7 @@
 <button>X</button>
 </div>
 <i class="fas fa-plus-square"></i>
+<input type="file" class="file">
 <h3>Add photos/videos</h3>
 <h6>or drag and drop</h6>
 </div>
@@ -159,35 +162,116 @@
 <label><i class="fas fa-ellipsis-h"></i></label>
   </div>
   <div class="enter">
-      <button>Post</button>
+      <button @click="upload">Post</button>
   </div>
 </div>
 </div>
 
+<div id="popup" v-if="popup">
+  
+ <div class="post">
+   <label @click="operate"> <span><i class="fas fa-user"></i></span>
+  <p>View Profile</p></label>
+ </div>
+<div @click="operate">
+    <label @click="signOut"><i class="fas fa-sign-out-alt"></i>Log Out</label>
+</div>
+</div>
 
     </div>
 </template>
 <script>
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, addDoc, doc, getDocs} from "firebase/firestore"
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCkWbp12XRoV38kEajV7hBahdxwUxSXiVc",
+  authDomain: "meta-fb.firebaseapp.com",
+  projectId: "meta-fb",
+  storageBucket: "meta-fb.appspot.com",
+  messagingSenderId: "973161692832",
+  appId: "1:973161692832:web:82d9c0d61cd734369493c5",
+  measurementId: "G-76Q2K0FMJ6"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+const querySnapshot = getDocs(collection(db, "user-Details"), {
+});
+ querySnapshot.then((collection) => {
+  // doc.data() is never undefined for query doc snapshots
+  console.log(querySnapshot);
+  console.log(collection);
+
+}).catch((error) => {
+  console.log("Error getting document:", error);
+
+
+}); 
+
 export default {
     data() {
        return{
       modal:false,
+      popup:false,
        } 
     },
     methods: {
       open:function(){
           this.modal=!this.modal
-      }
+      },
+signOut:function(){
+ signOut(auth).then(() => {
+    // Sign-out successful.
+    alert("user Signed out");
+    this.$router.push('/')
+  }).catch((error) => {
+    // An error happened.
+  });
+},
+operate:function(){
+    this.popup =!this.popup
+},
+upload:function(){
+const storage = getStorage();
+const storageRef = ref(storage, 'street.jpg');
+
+// Create file metadata including the content type
+/** @type {image} */
+const metadata = {
+  contentType: 'image/jpg',
+};
+
+// Upload the file and metadata
+const uploadTask = uploadBytes(storageRef, metadata);
+},
+
     }  
      
 
 }
 </script>
 <style scoped>
-/* @font-face {
-    font-family:segoe;
-    src: url('segoe ui semilight.ttf');
-} */
+#popup{
+    position:fixed;
+    background: #fff;
+    top: 5%;
+    left: 80%;
+    border-radius: 10px;
+    padding: 16px;
+    font-weight: 700;
+}
 
 #fb{
     font-family: 'Segoe UI';
@@ -224,6 +308,9 @@ nav{
     background: #f0f2f5;
     padding: 7px 16px 9px 36px;
     font-size: 16px;
+}
+.field:focus{
+    outline: none;
 }
 .navigate{
     display: grid;
@@ -460,6 +547,9 @@ border: none;
 width: 80%;
 cursor: pointer;
 }
+.post input:focus{
+    outline: none;
+}
 .post-2{
     border-top: 1px solid #65676b;
    display: grid;
@@ -476,8 +566,7 @@ cursor: pointer;
     color: orange;
 }
 textarea{
-    border: none;
-    
+    border: none;  
 }
 button{
     cursor: pointer;
@@ -580,12 +669,21 @@ h6{
 .segment-2{
     padding: 16px 0;
 }
-
-
-.part-1 input{
-    width: 100px;
-    height: 50px;
-    background: chartreuse;
+textarea{
+    width: 90%;
+}
+textarea:focus{
+    outline: none;
+}
+.text{
+    padding: 12px 16px 0;
+}
+.file:focus{
+    outline: none;
+}
+.file{
+    border: none;
+    background: #f0f2f5;
 }
 @media all and (max-width: 850px){
     .part-1{

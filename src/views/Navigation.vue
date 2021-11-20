@@ -25,8 +25,10 @@
       <div class="container">
 <div class="grid">
 <div class="part-1">
-    <!-- <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet, possimus repudiandae veritatis, dolor quisquam corrupti vel optio, numquam porro dolorum eum doloremque provident autem ad dolore dolorem iste aperiam nihil.</p>
-    <input type="file" placeholder="add image"> -->
+    <div class="post">
+  <span><i class="fas fa-user"></i></span>
+  <p>Victor Monderu</p>
+    </div>
 </div>
 <div class="content">
 
@@ -60,9 +62,12 @@
     <div class="more"></div>
     <div class="engagement">
         <div class="emoji">
-        <span><i class="fas fa-thumbs-up"></i></span>
-        <span><i class="fas fa-heart"></i></span>
-       <p>177k</p>
+        <span @click="like"><i class="fas fa-thumbs-up"></i></span>
+        <span @click="like"><i class="fas fa-heart"></i></span>
+       <p>
+              <label v-show="unliked">177k</label>
+           <label v-show="liked">You and 177k others</label>
+       </p>
         </div>
         <div class="reviews">
         <p>5.3k comments</p>
@@ -70,7 +75,7 @@
         </div>
     </div>
     <div class="action">
-        <label><i class="fas fa-thumbs-up"></i>like</label>
+        <label @click="like"><i class="fas fa-thumbs-up"></i>like</label>
              <label><i class="far fa-comment-alt"></i>comment</label>
                   <label><i class="fas fa-share"></i>share</label>
     </div>
@@ -96,9 +101,12 @@
     <div class="more"></div>
     <div class="engagement">
         <div class="emoji">
-        <span><i class="fas fa-thumbs-up"></i></span>
-        <span><i class="fas fa-heart"></i></span>
-       <p>177k</p>
+        <span @click="like"><i class="fas fa-thumbs-up"></i></span>
+        <span @click="like"><i class="fas fa-heart"></i></span>
+       <p>
+             <label v-show="unliked">177k</label>
+           <label v-show="liked">You and 177k others</label>
+       </p>
         </div>
         <div class="reviews">
         <p>5.3k comments</p>
@@ -106,7 +114,7 @@
         </div>
     </div>
     <div class="action">
-        <label><i class="fas fa-thumbs-up"></i>like</label>
+        <label @click="like"><i class="fas fa-thumbs-up"></i>like</label>
              <label><i class="far fa-comment-alt"></i>comment</label>
                   <label><i class="fas fa-share"></i>share</label>
     </div>
@@ -124,7 +132,7 @@
         <h2>Create post</h2>
       <button @click="open">X</button> 
     </div>
-      <div class="post">
+      <div class="post" @click="run">
   <span><i class="fas fa-user"></i></span>
   <p>View Profile</p>
  </div>
@@ -171,7 +179,7 @@
   
  <div class="post">
    <label @click="operate"> <span><i class="fas fa-user"></i></span>
-  <p>View Profile</p></label>
+  <p><router-link to="/profile" class="view">View Profile</router-link></p></label>
  </div>
 <div @click="operate">
     <label @click="signOut"><i class="fas fa-sign-out-alt"></i>Log Out</label>
@@ -183,7 +191,7 @@
 <script>
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, doc, getDocs} from "firebase/firestore"
+import { getFirestore, collection, addDoc, doc, getDocs, getDoc} from "firebase/firestore"
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
 import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -219,17 +227,36 @@ const querySnapshot = getDocs(collection(db, "user-Details"), {
 
 
 }); 
+// import { doc, getDoc } from "firebase/firestore";
 
+// const docRef = doc(db, "cities", "SF");
+// const docSnap = await getDoc(docRef);
+
+// if (docSnap.exists()) {
+//   console.log("Document data:", docSnap.data());
+// } else {
+//   // doc.data() will be undefined in this case
+//   console.log("No such document!");
+// }
 export default {
     data() {
        return{
       modal:false,
       popup:false,
+      unliked:true,
+      liked:false,
        } 
     },
     methods: {
+         like:function(){
+this.unliked =!this.unliked
+this.liked =!this.liked
+        },
       open:function(){
           this.modal=!this.modal
+      },
+      run:function(){
+this.$router.push('/profile')
       },
 signOut:function(){
  signOut(auth).then(() => {
@@ -241,7 +268,8 @@ signOut:function(){
   });
 },
 operate:function(){
-    this.popup =!this.popup
+    this.popup =!this.popup;
+    this.modal=false;
 },
 upload:function(){
 const storage = getStorage();
@@ -259,7 +287,6 @@ const uploadTask = uploadBytes(storageRef, metadata);
 
     }  
      
-
 }
 </script>
 <style scoped>
@@ -280,7 +307,9 @@ const uploadTask = uploadBytes(storageRef, metadata);
     width: 100%;
     position: relative;
 }
-
+.field:focus{
+    outline: none;
+}
 nav{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -309,9 +338,7 @@ nav{
     padding: 7px 16px 9px 36px;
     font-size: 16px;
 }
-.field:focus{
-    outline: none;
-}
+
 .navigate{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -684,6 +711,10 @@ textarea:focus{
 .file{
     border: none;
     background: #f0f2f5;
+}
+.view{
+    text-decoration: none;
+    color: #65676b;
 }
 @media all and (max-width: 850px){
     .part-1{

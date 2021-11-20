@@ -22,7 +22,7 @@ const routes = [
     name: 'NewPage',
    
     component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/NewPage.vue')
+      return import( '../views/NewPage.vue')
     }
   },
   {
@@ -30,7 +30,7 @@ const routes = [
     name: 'Login',
    
     component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/LogIn.vue')
+      return import( '../views/LogIn.vue')
     }
   },
   {
@@ -38,7 +38,7 @@ const routes = [
     name: 'Navigation',
    
     component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/Navigation.vue')
+      return import( '../views/Navigation.vue')
     }
   },
   {
@@ -46,7 +46,15 @@ const routes = [
     name: 'signUp',
    
     component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/signUp.vue')
+      return import('../views/signUp.vue')
+    }
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+   
+    component: function () {
+      return import( '../views/Profile.vue')
     }
   }
 ]

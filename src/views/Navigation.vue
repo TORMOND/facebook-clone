@@ -227,17 +227,22 @@ const querySnapshot = getDocs(collection(db, "user-Details"), {
 
 
 }); 
-// import { doc, getDoc } from "firebase/firestore";
+// const auth = getAuth();
+// const user = auth.currentUser;
+// if (user !== null) {
+//   // The user object has basic properties such as display name, email, etc.
+//   const displayName = user.displayName;
+//   const email = user.email;
+//   const photoURL = user.photoURL;
+//   const emailVerified = user.emailVerified;
 
-// const docRef = doc(db, "cities", "SF");
-// const docSnap = await getDoc(docRef);
-
-// if (docSnap.exists()) {
-//   console.log("Document data:", docSnap.data());
-// } else {
-//   // doc.data() will be undefined in this case
-//   console.log("No such document!");
+//   // The user's ID, unique to the Firebase project. Do NOT use
+//   // this value to authenticate with your backend server, if
+//   // you have one. Use User.getToken() instead.
+//   const uid = user.uid;
+//   console.log(email)
 // }
+
 export default {
     data() {
        return{

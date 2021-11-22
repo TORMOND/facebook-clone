@@ -41,9 +41,10 @@
             <span>251 friends</span> -->
         </div>
         <div class="persons">
-            <div class="images">
+            <div class="images" >
                 <img src="https://images.theconversation.com/files/417198/original/file-20210820-25-1j3afhs.jpeg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip">
                 </div>
+                
                             <div class="images">
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Hashmask_15753.jpg/1200px-Hashmask_15753.jpg">
                <p>{{user}}</p>
@@ -75,6 +76,9 @@
                 <div class="images">
                     <img src="https://www.denofgeek.com/wp-content/uploads/2020/11/webstory-deadpool-image06-1.jpg?fit=1170%2C780">
                <p>{{user}}</p>
+                </div>
+                 <div class="images" >
+                <img src="Hashmask_15753.jpg">
                 </div>
         </div>
     </div>
@@ -123,8 +127,9 @@
     </div> 
 
 <div class="posted-comments" style="padding:16px 28px">
-  <span @click="showComments">More comments.....</span>
-<p></p>
+    <p>{{comments}}</p>
+  <span @click="showComments" class="more">More comments.....</span>
+<p v-show="moreComments">{{more}}</p>
 </div>
  
     </div>
@@ -138,6 +143,8 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, doc, getDocs, getDoc} from "firebase/firestore"
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
+import { getStorage, ref } from "firebase/storage";
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -178,6 +185,18 @@ getDoc(docRef).then((doc)=>{
    
 })
 
+//  Create a reference with an initial file path and name
+const storage = getStorage();
+const pathReference = ref(storage, 'meta-fb/Hashmask_15753.jpg');
+
+// Create a reference from a Google Cloud Storage URI
+const gsReference = ref(storage, 'gs://meta-fb.appspot.com/Hashmask_15753.jpg');
+
+// Create a reference from an HTTPS URL
+// Note that in the URL, characters are URL escaped!
+const httpsReference = ref(storage, 'https://firebasestorage.googleapis.com/v0/b/meta-fb.appspot.com/o/Hashmask_15753.jpg?alt=media&token=52d02ebf-0015-4129-ad34-71d9aa10e113');  
+console.log(httpsReference)
+
 export default {
     data() {
         return{
@@ -189,6 +208,8 @@ liked:false,
 number: 177,
 present:true,
 absent:false,
+more:"comments",
+moreComments:false,
 
         }
     },
@@ -222,20 +243,25 @@ send:function(){
        }
 },
 showComments:function(){
-   
+//  getDocs(collection(db, "Post"));  
 const docRef = doc(db, 'Posts', 'buR5eDQ4S6WsbHavLSow')
 getDoc(docRef).then((doc)=>{
     console.log(doc.data().comments);
-  
+  this.more = doc.data().comments
+  this.moreComments = true
 })
 
-// const querySnapshot =  getDocs(collection(db, "Post"));
-// querySnapshot.then((doc) => {
-//   // doc.data() is never undefined for query doc snapshots
-//   console.log(doc.id, " => ", doc);
-// });
+const querySnapshot =  getDocs(collection(db, "user-Details"));
+querySnapshot.then((doc) => {
+  // doc.data() is never undefined for query doc snapshots
 
+ console.log(doc.docs)
+ for( let i = 0; i < doc.docs.length; i++ ){
+ doc.docs.data[i]
 
+}
+ 
+});
 
 },
 
@@ -267,6 +293,7 @@ getDoc(docRef).then((doc)=>{
      width: 101.98px; 
       height:101.98px;
       border-radius: 10px;
+
 }
 #profile{
     background: #f0f2f5;
@@ -423,13 +450,13 @@ cursor: pointer;
 .posts label:hover{
     background: #f0f2f5;
 }
-.posted-comments{
-    display: flex;
-    gap: 20px;
-    align-items: center;
-}
+
 .posted-comments p{
     width: 80%;
+}
+.posted-comments{
+    margin: 0 auto;
+    border-top:0.5px solid #bfc0c2 ;
 }
 .sent{
     display: flex;
@@ -438,5 +465,10 @@ cursor: pointer;
      background: #f0f2f5;
      align-items: center;
      padding:5px 16px;
+}
+.more{
+    font-size: 14px;
+    color: #ceced1;
+    cursor: pointer;
 }
 </style>

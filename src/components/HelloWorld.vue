@@ -188,18 +188,7 @@ const analytics = getAnalytics(app);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-const querySnapshot = getDocs(collection(db, "user-Details"), {
-});
- querySnapshot.then((collection) => {
-  // doc.data() is never undefined for query doc snapshots
-  console.log(querySnapshot);
-  console.log(collection);
 
-}).catch((error) => {
-  console.log("Error getting document:", error);
-
-
-}); 
 //  createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
 //     // Signed in 
 //     const user = userCredential.user;
@@ -260,6 +249,7 @@ export default {
   console.log(this.firstName, this.surName, this.password,this.custom)
       createUserWithEmailAndPassword(auth, this.email, this.password).then((userCredential) => {
     // Signed in 
+     const user = userCredential.user;
     const docRef = addDoc(collection(db, "user-Details"), {
      email:this.email,
       name: this.firstName,
@@ -267,8 +257,7 @@ export default {
     });
 
     console.log("Document written with ID: ", docRef);
-    const user = userCredential.user;
-    // ..
+   
     console.log(user);
     alert("signed in as " + this.email)
     // const docRef = addDoc(collection(db, "user-Details"), {
@@ -294,8 +283,20 @@ this.$router.push('/Login')
     // console.log(user);
     alert("You've Signed in as" + this.mail);
       onAuthStateChanged(auth, user => {
+          const querySnapshot = getDocs(collection(db, "user-Details"), {
+});
+ querySnapshot.then((collection) => {
+  // doc.data() is never undefined for query doc snapshots
+  console.log(querySnapshot);
+  console.log(collection);
 
-      console.log(user);
+}).catch((error) => {
+  console.log("Error getting document:", error);
+
+
+}); 
+
+      console.log(user.email, user.uid);
       if (user) {
             this.$router.push('/Navigation')
             console.log(user)

@@ -160,7 +160,7 @@
 
 <script>
 
-import { computed } from '@vue/reactivity'
+// import { computed } from '@vue/reactivity'
 
 //Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -261,9 +261,9 @@ export default {
       createUserWithEmailAndPassword(auth, this.email, this.password).then((userCredential) => {
     // Signed in 
     const docRef = addDoc(collection(db, "user-Details"), {
+     email:this.email,
       name: this.firstName,
       secondName: this.surName,
-     
     });
 
     console.log("Document written with ID: ", docRef);

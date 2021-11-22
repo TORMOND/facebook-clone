@@ -89,11 +89,16 @@
       <div class="more"></div>
     <div class="engagement">
         <div class="emoji">
-        <span @click="like"><i class="fas fa-thumbs-up"></i></span>
-        <span @click="like"><i class="fas fa-heart"></i></span>
+        <span @click="like" v-show="present" class="like"><i class="fas fa-thumbs-up"></i></span>
+        <span @click="like" v-show="present" class="heart"><i class="fas fa-heart"></i></span>
+
+          <span @click="unlike" v-show="absent " class="like"><i class="fas fa-thumbs-up"></i></span>
+        <span @click="unlike" v-show="absent" class="heart"><i class="fas fa-heart"></i></span>
        <p>
-           <label v-show="unliked">177k</label>
-           <label v-show="liked">You and 177k others</label>
+           <!-- <label v-show="unliked">177k</label>
+           <label v-show="liked">You and 177k others</label> -->
+
+           <label v-if="number">{{number}}</label>
           </p>
         </div>
         <div class="reviews">
@@ -102,7 +107,8 @@
         </div>
     </div>
     <div class="action">
-        <label @click="like" class="thumbs-up"><i class="fas fa-thumbs-up"></i>like</label>
+        <label @click="like" class="thumbs-up" v-show="present" ><i class="fas fa-thumbs-up"></i>like</label>
+          <label @click="unlike" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up"></i>like</label>
              <label><i class="far fa-comment-alt"></i>comment</label>
                   <label><i class="fas fa-share"></i>share</label>
     </div>
@@ -110,13 +116,17 @@
         <div class="post">
   <span><i class="fas fa-user"></i></span>
  <input type="text" placeholder="write a comment" v-model="comments" >
+ <div @click="send" style="cursor:pointer" class="sent">
+ <i class="far fa-paper-plane"></i>
+ <p>Send</p>
+ </div>
     </div> 
 
-<div class="posted-comments">
-    <p v-bind="comments">{{comments}}</p>
+<div class="posted-comments" style="padding:16px 28px">
+  <span @click="showComments">More comments.....</span>
+<p></p>
 </div>
-
-
+ 
     </div>
     </div>
 </div>
@@ -164,6 +174,7 @@ const db = getFirestore(app);
 const docRef = doc(db, 'user-Details', 'g5eRQt4jK6BsSOZP0Ee0')
 getDoc(docRef).then((doc)=>{
     console.log(doc.data());
+    
    
 })
 
@@ -175,18 +186,60 @@ comments:'',
 user:"friends",
 unliked:true,
 liked:false,
+number: 177,
+present:true,
+absent:false,
 
         }
     },
     methods: {
-        like:function(){
-this.unliked =!this.unliked
-this.liked =!this.liked
- 
+
+        unlike:function(){
     const thumb = document.querySelector('.thumbs-up');
-thumb.style.color = "#216fd8"; 
+thumb.style.color = "#65675b"; 
+this.number--
+this.absent = false
+this.present = true
 
         },
+        like:function(){
+    const thumb = document.querySelector('.thumbs-up');
+thumb.style.color = "#216fd8"; 
+this.number++
+this.absent = true
+this.present = false
+        },
+send:function(){
+
+    if(this.comments===""){
+
+
+    }else{
+       const docRef = addDoc(collection(db, "Posts"), {
+     comments:this.comments
+     
+       }) 
+       }
+},
+showComments:function(){
+   
+const docRef = doc(db, 'Posts', 'buR5eDQ4S6WsbHavLSow')
+getDoc(docRef).then((doc)=>{
+    console.log(doc.data().comments);
+  
+})
+
+// const querySnapshot =  getDocs(collection(db, "Post"));
+// querySnapshot.then((doc) => {
+//   // doc.data() is never undefined for query doc snapshots
+//   console.log(doc.id, " => ", doc);
+// });
+
+
+
+},
+
+
     },
 }
 </script>
@@ -293,6 +346,7 @@ h1{
     display: flex;
     gap: 20px;
     padding: 12px 16px 16px;
+    align-items: center;
 }
 .post input{
 padding: 8px 12px;
@@ -316,7 +370,7 @@ cursor: pointer;
   padding: 12px 16px 0;
   border-bottom: 1px solid #65676b;
 }
-.emoji span:first-child{
+.emoji .like{
  background: #216FD8;
  color: #fff;
  border-radius:50%;
@@ -328,7 +382,7 @@ cursor: pointer;
  font-size: 12px;
  cursor: pointer;
 }
-.emoji span:nth-child(2){
+.emoji .heart{
  background:crimson;
  color: #fff;
  border-radius:50%;
@@ -368,5 +422,21 @@ cursor: pointer;
 }
 .posts label:hover{
     background: #f0f2f5;
+}
+.posted-comments{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.posted-comments p{
+    width: 80%;
+}
+.sent{
+    display: flex;
+     border-radius: 12px;
+     gap:10px;
+     background: #f0f2f5;
+     align-items: center;
+     padding:5px 16px;
 }
 </style>

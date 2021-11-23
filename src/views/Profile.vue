@@ -77,9 +77,9 @@
                     <img src="https://www.denofgeek.com/wp-content/uploads/2020/11/webstory-deadpool-image06-1.jpg?fit=1170%2C780">
                <p>{{user}}</p>
                 </div>
-                 <div class="images" >
+                 <!-- <div class="images" >
                 <img src="Hashmask_15753.jpg">
-                </div>
+                </div> -->
         </div>
     </div>
     <div class="posts">
@@ -130,6 +130,7 @@
     <p>{{comments}}</p>
   <span @click="showComments" class="more">More comments.....</span>
 <p v-show="moreComments">{{more}}</p>
+<!-- v-for="comment in comments" :key="comment" -->
 </div>
  
     </div>
@@ -141,7 +142,7 @@
 <script>
 
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, doc, getDocs, getDoc} from "firebase/firestore"
+import { getFirestore, collection, addDoc, doc, getDocs, getDoc, onSnapshot, query, where} from "firebase/firestore"
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
 import { getStorage, ref } from "firebase/storage";
 
@@ -164,26 +165,9 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-// const auth = getAuth(app);
+ const auth = getAuth(app);
 // const analytics = getAnalytics(app);
-// const querySnapshot = getDocs(collection(db, "user-Details"), {
-// });
-//  querySnapshot.then((collection) => {
-//   // doc.data() is never undefined for query doc snapshots
-//   console.log(querySnapshot);
-//   console.log(collection);
 
-// }).catch((error) => {
-//   console.log("Error getting document:", error);
-
-
-// }); 
-const docRef = doc(db, 'user-Details', 'g5eRQt4jK6BsSOZP0Ee0')
-getDoc(docRef).then((doc)=>{
-    console.log(doc.data());
-    
-   
-})
 
 //  Create a reference with an initial file path and name
 const storage = getStorage();
@@ -197,10 +181,44 @@ const gsReference = ref(storage, 'gs://meta-fb.appspot.com/Hashmask_15753.jpg');
 const httpsReference = ref(storage, 'https://firebasestorage.googleapis.com/v0/b/meta-fb.appspot.com/o/Hashmask_15753.jpg?alt=media&token=52d02ebf-0015-4129-ad34-71d9aa10e113');  
 console.log(httpsReference)
 
+const user = auth.currentUser;
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    const uid = user.uid;
+    console.log("current users ID is",uid)
+    console.log(user.email)
+
+let currentUser = auth.currentUser
+const userRef = collection(db, 'user-Details')
+const q = query(userRef, where("email", "==", currentUser.email))
+onSnapshot(q, (snapshot)=>{
+    let users = []
+    snapshot.docs.forEach((doc)=>{
+        users.push({...doc.data(), id:doc.id})
+        console.log(doc.data())
+        
+    })
+    
+    console.log(users)
+})
+
+  } else {
+   console.log("no user")
+   
+  }
+});
+
+
+
+
+
 export default {
     data() {
         return{
-name: doc.name,
+name:"Victor Monderu",
 comments:'',
 user:"friends",
 unliked:true,
@@ -208,9 +226,9 @@ liked:false,
 number: 177,
 present:true,
 absent:false,
-more:"comments",
+more:[],
 moreComments:false,
-
+posts:[]
         }
     },
     methods: {
@@ -244,24 +262,26 @@ send:function(){
 },
 showComments:function(){
 //  getDocs(collection(db, "Post"));  
-const docRef = doc(db, 'Posts', 'buR5eDQ4S6WsbHavLSow')
-getDoc(docRef).then((doc)=>{
-    console.log(doc.data().comments);
-  this.more = doc.data().comments
+// const docRef = doc(db, 'Posts', 'buR5eDQ4S6WsbHavLSow')
+// getDoc(docRef).then((doc)=>{
+//     console.log(doc.data().comments);
+ 
+// })
+const colRef = collection(db, 'Posts')
+
+
+onSnapshot(colRef, (snapshot)=>{
+    let posts = []
+    snapshot.docs.forEach((doc)=>{
+        posts.push({...doc.data(), id:doc.id})
+        console.log(doc.data().comments)
+         this.more = doc.data().comments
   this.moreComments = true
+    })
+    
+    console.log(posts)
 })
 
-const querySnapshot =  getDocs(collection(db, "user-Details"));
-querySnapshot.then((doc) => {
-  // doc.data() is never undefined for query doc snapshots
-
- console.log(doc.docs)
- for( let i = 0; i < doc.docs.length; i++ ){
- doc.docs.data[i]
-
-}
- 
-});
 
 },
 

@@ -12,12 +12,14 @@
 
 </div>
 
+
     </div>
 </template>
 <script>
 export default {
     data() {
         return{
+            findUser:'',
             users:[{email:"victormonderu@gmail.com", uid:"tUmz1C3i4uYB5z5xNrXZlEElc8M2"},
                    {email:"annnjoki@gmail.com", uid:"eHIjlpz72qZIKRFQ4hU2tcxL1y63"}
             ]
@@ -30,20 +32,37 @@ export default {
     background: #f0f2f5;
     display:flex;
     flex-direction: column;
+    min-height: 100vh;
 }
 .users{
     display: flex;
     margin: auto;
     flex-direction: column;
+     border-radius: 10px; 
+     background: #fff;
+     padding: 8px 24px;
 }
-.user{
-   
+.use{
+  
     padding: 12px 16px;
     display: flex;
-    flex-direction: column;
+   
 }
 .use p{
     margin: 10px;
-     background: #fff;
+     
+     color: #65676B;
+     font-size: 14px;
+}
+.users input{
+    margin: 0 auto;
+    background: #f0f2f5;
+    border: none;
+    padding: 8px 12px;
+    width: 380px;
+    border-radius: 10px;
+}
+.users input:focus{
+    outline-color: #1877f2;
 }
 </style>

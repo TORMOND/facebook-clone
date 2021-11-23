@@ -164,14 +164,11 @@
 
 //Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, doc, getDocs} from "firebase/firestore"
+import { getFirestore, collection, addDoc, doc, getDocs, setDoc} from "firebase/firestore"
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
 const firebaseConfig = {
   apiKey: "AIzaSyCkWbp12XRoV38kEajV7hBahdxwUxSXiVc",
   authDomain: "meta-fb.firebaseapp.com",
@@ -189,18 +186,11 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 
-//  createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-//     // Signed in 
-//     const user = userCredential.user;
-//     // ..
-//     console.log(user);
-//     });
- 
+
+
 export default {
   name: 'HelloWorld',
-//   props: {
-//     msg: String
-//   },
+
  data() {
       return {
        mail:'',
@@ -249,14 +239,31 @@ export default {
   console.log(this.firstName, this.surName, this.password,this.custom)
       createUserWithEmailAndPassword(auth, this.email, this.password).then((userCredential) => {
     // Signed in 
-     const user = userCredential.user;
-    const docRef = addDoc(collection(db, "user-Details"), {
+    //  const user = userCredential.user;
+    // const docRef = addDoc(collection(db,  user.email), {
+    //  email:this.email,
+    //   name: this.firstName,
+    //   secondName: this.surName,
+    //   password:this.password,
+    // });
+    const user = userCredential.user;
+
+    setDoc(doc(db, "user-Details", user.uid), {
+    
      email:this.email,
       name: this.firstName,
       secondName: this.surName,
-    });
+      password:this.password,
+      id:user.uid,
+    }
+    
+    );
 
-    console.log("Document written with ID: ", docRef);
+//  const userRef  = doc(db, "user-Details" ,user.uid)
+
+
+// "user-Details", user.uid,
+    
    
     console.log(user);
     alert("signed in as " + this.email)

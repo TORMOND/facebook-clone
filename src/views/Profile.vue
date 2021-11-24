@@ -77,9 +77,7 @@
                     <img src="https://www.denofgeek.com/wp-content/uploads/2020/11/webstory-deadpool-image06-1.jpg?fit=1170%2C780">
                <p>{{user}}</p>
                 </div>
-                 <!-- <div class="images" >
-                <img src="Hashmask_15753.jpg">
-                </div> -->
+                 
         </div>
     </div>
     <div class="posts">
@@ -106,7 +104,8 @@
           </p>
         </div>
         <div class="reviews">
-        <p>5.3k comments</p>
+
+        <p>{{more.length}} comments</p>
         <p>2.6k Shares </p>
         </div>
     </div>
@@ -127,9 +126,13 @@
     </div> 
 
 <div class="posted-comments" style="padding:16px 28px">
-    <p>{{comments}}</p>
+    
   <span @click="showComments" class="more">More comments.....</span>
-<p v-show="moreComments">{{more}}</p>
+   <p>{{comments}}</p>
+<div v-show="moreComments" v-for="item in more" :key="item" class="item">
+   <p>{{item}}</p>
+   
+    </div>
 <!-- v-for="comment in comments" :key="comment" -->
 </div>
  
@@ -147,43 +150,38 @@ import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWith
 import { getStorage, ref } from "firebase/storage";
 
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// const firebaseConfig = {
+//   apiKey: "AIzaSyCkWbp12XRoV38kEajV7hBahdxwUxSXiVc",
+//   authDomain: "meta-fb.firebaseapp.com",
+//   projectId: "meta-fb",
+//   storageBucket: "meta-fb.appspot.com",
+//   messagingSenderId: "973161692832",
+//   appId: "1:973161692832:web:82d9c0d61cd734369493c5",
+//   measurementId: "G-76Q2K0FMJ6"
+// };
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCkWbp12XRoV38kEajV7hBahdxwUxSXiVc",
-  authDomain: "meta-fb.firebaseapp.com",
-  projectId: "meta-fb",
-  storageBucket: "meta-fb.appspot.com",
-  messagingSenderId: "973161692832",
-  appId: "1:973161692832:web:82d9c0d61cd734369493c5",
-  measurementId: "G-76Q2K0FMJ6"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
- const auth = getAuth(app);
-// const analytics = getAnalytics(app);
+// // Initialize Firebase
+// const app = initializeApp(firebaseConfig);
+// const db = getFirestore(app);
+//  const auth = getAuth(app);
+// // const analytics = getAnalytics(app);
 
 
-//  Create a reference with an initial file path and name
-const storage = getStorage();
-const pathReference = ref(storage, 'meta-fb/Hashmask_15753.jpg');
+// //  Create a reference with an initial file path and name
+// const storage = getStorage();
+// const pathReference = ref(storage, 'meta-fb/Hashmask_15753.jpg');
 
-// Create a reference from a Google Cloud Storage URI
-const gsReference = ref(storage, 'gs://meta-fb.appspot.com/Hashmask_15753.jpg');
+// // Create a reference from a Google Cloud Storage URI
+// const gsReference = ref(storage, 'gs://meta-fb.appspot.com/Hashmask_15753.jpg');
 
-// Create a reference from an HTTPS URL
-// Note that in the URL, characters are URL escaped!
-const httpsReference = ref(storage, 'https://firebasestorage.googleapis.com/v0/b/meta-fb.appspot.com/o/Hashmask_15753.jpg?alt=media&token=52d02ebf-0015-4129-ad34-71d9aa10e113');  
-console.log(httpsReference)
+// // Create a reference from an HTTPS URL
+// // Note that in the URL, characters are URL escaped!
+// const httpsReference = ref(storage, 'https://firebasestorage.googleapis.com/v0/b/meta-fb.appspot.com/o/Hashmask_15753.jpg?alt=media&token=52d02ebf-0015-4129-ad34-71d9aa10e113');  
+// console.log(httpsReference)
 
-const user = auth.currentUser;
+// const user = auth.currentUser;
 
-onAuthStateChanged(auth, (user) => {
+ onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/firebase.User
@@ -212,6 +210,7 @@ onSnapshot(q, (snapshot)=>{
 });
 
 
+ import{ app, db, auth, firebaseConfig, person, user } from '@/firebase.js'
 
 
 
@@ -228,7 +227,8 @@ present:true,
 absent:false,
 more:[],
 moreComments:false,
-posts:[]
+posts:[],
+
         }
     },
     methods: {
@@ -252,39 +252,33 @@ send:function(){
 
     if(this.comments===""){
 
-
     }else{
        const docRef = addDoc(collection(db, "Posts"), {
-     comments:this.comments
+     comments:this.comments,    
      
        }) 
+       console.log(user)
        }
 },
 showComments:function(){
-//  getDocs(collection(db, "Post"));  
-// const docRef = doc(db, 'Posts', 'buR5eDQ4S6WsbHavLSow')
-// getDoc(docRef).then((doc)=>{
-//     console.log(doc.data().comments);
- 
-// })
-const colRef = collection(db, 'Posts')
 
+const colRef = collection(db, 'Posts')
 
 onSnapshot(colRef, (snapshot)=>{
     let posts = []
     snapshot.docs.forEach((doc)=>{
         posts.push({...doc.data(), id:doc.id})
         console.log(doc.data().comments)
-         this.more = doc.data().comments
-  this.moreComments = true
+         this.more.push (doc.data().comments)
+    this.moreComments = true
     })
-    
-    console.log(posts)
+    console.log(person)
+    console.log(user.email)
 })
-
+},
+run:function(){
 
 },
-
 
     },
 }
@@ -376,6 +370,7 @@ h1{
 .posts{
     background: #fff;
     border-radius: 10px;
+   
 }
 .post span{
     width: 40px;
@@ -394,7 +389,9 @@ h1{
     gap: 20px;
     padding: 12px 16px 16px;
     align-items: center;
+    margin: 0 auto;
 }
+
 .post input{
 padding: 8px 12px;
 font-size: 17px;
@@ -490,5 +487,10 @@ cursor: pointer;
     font-size: 14px;
     color: #ceced1;
     cursor: pointer;
+}
+.item p{
+   background: #f0f2f5; 
+   padding: 10px 16px;
+   border-radius: 10px;
 }
 </style>

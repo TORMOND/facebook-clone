@@ -27,6 +27,7 @@ const auth = getAuth(app);
 
 const person = "victor"
 const user = auth.currentUser;
+
 export {
     app, db, auth, firebaseConfig, person, user
 }

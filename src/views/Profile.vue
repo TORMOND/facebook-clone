@@ -25,11 +25,11 @@
         <div class="container">
            <div class="back-image">
                <div class="circle">
-<img src="https://i.gadgets360cdn.com/large/Bored_ape_NFT_1631274836067.jpg?downsize=950:*">
+<img src="" id="profileimg">
                </div>        
            </div>
            <div class="information">
-               <h1>{{name}}</h1>
+               <h1 >{{name}} {{secondName}}</h1>
            </div>
 </div>
 <div class="wrapper">
@@ -73,9 +73,12 @@
                     <img src="https://www.altcoinbuzz.io/wp-content/uploads/2021/01/Enjin-MetaverseMe-Partner-to-Merge-NFTs-and-Augmented-Reality-1.jpg">
                 <p>{{user}}</p>
                 </div>
-                <div class="images">
+                <div class="images" @click="pool">
                     <img src="https://www.denofgeek.com/wp-content/uploads/2020/11/webstory-deadpool-image06-1.jpg?fit=1170%2C780">
-               <p>{{user}}</p>
+               <p>DeadPool</p>
+                </div>
+                <div class="images">
+                    <img  src=""  id="myimg">
                 </div>
                  
         </div>
@@ -83,10 +86,10 @@
     <div class="posts">
       <div class="post">
   <span><i class="fas fa-user"></i></span>
- <p>Victor Monderu</p>
+ <p>{{name}} {{secondName}}</p>
     </div>
-    <div class="sent-image">
-        <img src="https://static1.hotcarsimages.com/wordpress/wp-content/uploads/2021/04/Rolls-Royce-Phantom-Black-1-e1619613317783.jpg">
+    <div class="sent-image" v-show="false">
+        <img src="" id="postimg">
     </div>
       <div class="more"></div>
     <div class="engagement">
@@ -127,10 +130,10 @@
 
 <div class="posted-comments" style="padding:16px 28px">
     
-  <span @click="showComments" class="more">More comments.....</span>
+  <!-- <span @click="showComments" class="more">More comments.....</span> -->
    <p>{{comments}}</p>
 <div v-show="moreComments" v-for="item in more" :key="item" class="item">
-   <p>{{item}}</p>
+   <p><span style="color:#ceced1">{{item.user}}</span> :{{item.comments}}</p>
    
     </div>
 <!-- v-for="comment in comments" :key="comment" -->
@@ -147,77 +150,94 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, doc, getDocs, getDoc, onSnapshot, query, where} from "firebase/firestore"
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
-import { getStorage, ref } from "firebase/storage";
 
-
-// const firebaseConfig = {
-//   apiKey: "AIzaSyCkWbp12XRoV38kEajV7hBahdxwUxSXiVc",
-//   authDomain: "meta-fb.firebaseapp.com",
-//   projectId: "meta-fb",
-//   storageBucket: "meta-fb.appspot.com",
-//   messagingSenderId: "973161692832",
-//   appId: "1:973161692832:web:82d9c0d61cd734369493c5",
-//   measurementId: "G-76Q2K0FMJ6"
-// };
-
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
-//  const auth = getAuth(app);
-// // const analytics = getAnalytics(app);
-
-
-// //  Create a reference with an initial file path and name
-// const storage = getStorage();
-// const pathReference = ref(storage, 'meta-fb/Hashmask_15753.jpg');
-
-// // Create a reference from a Google Cloud Storage URI
-// const gsReference = ref(storage, 'gs://meta-fb.appspot.com/Hashmask_15753.jpg');
-
-// // Create a reference from an HTTPS URL
-// // Note that in the URL, characters are URL escaped!
-// const httpsReference = ref(storage, 'https://firebasestorage.googleapis.com/v0/b/meta-fb.appspot.com/o/Hashmask_15753.jpg?alt=media&token=52d02ebf-0015-4129-ad34-71d9aa10e113');  
-// console.log(httpsReference)
-
-// const user = auth.currentUser;
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
  onAuthStateChanged(auth, (user) => {
   if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/firebase.User
-    const uid = user.uid;
-    console.log("current users ID is",uid)
-    console.log(user.email)
+const storage = getStorage();
+getDownloadURL(ref(storage, 'images/deadpool-image.jpg'))
+  .then((url) => {
+    // `url` is the download URL for 'images/stars.jpg'
 
-let currentUser = auth.currentUser
-const userRef = collection(db, 'user-Details')
-const q = query(userRef, where("email", "==", currentUser.email))
-onSnapshot(q, (snapshot)=>{
-    let users = []
-    snapshot.docs.forEach((doc)=>{
-        users.push({...doc.data(), id:doc.id})
-        console.log(doc.data())
-        
-    })
-    
-    console.log(users)
-})
+    // This can be downloaded directly:
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'blob';
+    xhr.onload = (event) => {
+      const blob = xhr.response;
+    };
+    xhr.open('GET', url);
+    xhr.send();
 
-  } else {
-   console.log("no user")
-   
+    // Or inserted into an <img> element
+    const img = document.getElementById('myimg');
+    img.setAttribute('src', url);
+  })
+  .catch((error) => {
+    // Handle any errors
+  });
   }
-});
+ })
 
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+const storage = getStorage();
+getDownloadURL(ref(storage, 'images/Rolls-Royce-Phantom-Black.jpg'))
+  .then((url) => {
+    // `url` is the download URL for 'images/stars.jpg'
+
+    // This can be downloaded directly:
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'blob';
+    xhr.onload = (event) => {
+      const blob = xhr.response;
+    };
+    xhr.open('GET', url);
+    xhr.send();
+
+    // Or inserted into an <img> element
+    const img = document.getElementById('postimg');
+    img.setAttribute('src', url);
+  })
+  .catch((error) => {
+    // Handle any errors
+  });
+  }
+ })
+
+ onAuthStateChanged(auth, (user) => {
+  if (user) {
+const storage = getStorage();
+getDownloadURL(ref(storage, 'images/cool-Benjamin.jpeg'))
+  .then((url) => {
+    // `url` is the download URL for 'images/stars.jpg'
+
+    // This can be downloaded directly:
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'blob';
+    xhr.onload = (event) => {
+      const blob = xhr.response;
+    };
+    xhr.open('GET', url);
+    xhr.send();
+
+    // Or inserted into an <img> element
+    const img = document.getElementById('profileimg');
+    img.setAttribute('src', url);
+  })
+  .catch((error) => {
+    // Handle any errors
+  });
+  }
+ })
 
  import{ app, db, auth, firebaseConfig, person, user } from '@/firebase.js'
-
-
 
 export default {
     data() {
         return{
-name:"Victor Monderu",
+name:"",
+secondName:"",
 comments:'',
 user:"friends",
 unliked:true,
@@ -226,6 +246,7 @@ number: 177,
 present:true,
 absent:false,
 more:[],
+person:[],
 moreComments:false,
 posts:[],
 
@@ -249,18 +270,95 @@ this.absent = true
 this.present = false
         },
 send:function(){
-
+    
     if(this.comments===""){
 
     }else{
+        let user = auth.currentUser
        const docRef = addDoc(collection(db, "Posts"), {
      comments:this.comments,    
-     
-       }) 
+     user:user.email,
+
+    
+       });
+        // this.more.push (this.comments)
+        //  this.person.push(user.email)
        console.log(user)
        }
 },
-showComments:function(){
+pool:function(){
+const useRef = collection(db, 'user-Details')
+const m = query(useRef, where("email", "==", "deadpool@gmail.com"))
+onSnapshot(m, (snapshot)=>{
+    let use = []
+    snapshot.docs.forEach((doc)=>{
+        use.push({...doc.data(), id:doc.id})
+        console.log(doc.data().name)
+         console.log(doc.data().secondName)
+         this.name = doc.data().name
+         this.secondName = doc.data().secondName
+    })
+    console.log(use)
+})
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+const storage = getStorage();
+getDownloadURL(ref(storage, 'images/deadpool-image.jpg'))
+  .then((url) => {
+    // `url` is the download URL for 'images/stars.jpg'
+    // This can be downloaded directly:
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'blob';
+    xhr.onload = (event) => {
+      const blob = xhr.response;
+    };
+    xhr.open('GET', url);
+    xhr.send();
+
+    // Or inserted into an <img> element
+    const img = document.getElementById('profileimg');
+    img.setAttribute('src', url);
+  })
+  .catch((error) => {
+    // Handle any errors
+  });
+  }
+ })
+},
+
+names:function(){
+  onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    const uid = user.uid;
+    console.log("current users ID is",uid)
+    console.log(user.email)
+
+let currentUser = auth.currentUser
+const userRef = collection(db, 'user-Details')
+const q = query(userRef, where("email", "==", currentUser.email))
+onSnapshot(q, (snapshot)=>{
+    let users = []
+    snapshot.docs.forEach((doc)=>{
+        users.push({...doc.data(), id:doc.id})
+        console.log(doc.data().name)
+         console.log(doc.data().secondName)
+         this.name = doc.data().name
+         this.secondName = doc.data().secondName
+    })
+    
+    console.log(users)
+})
+
+  } else {
+   console.log("no user")
+   
+  }
+
+
+});
 
 const colRef = collection(db, 'Posts')
 
@@ -268,26 +366,36 @@ onSnapshot(colRef, (snapshot)=>{
     let posts = []
     snapshot.docs.forEach((doc)=>{
         posts.push({...doc.data(), id:doc.id})
-        console.log(doc.data().comments)
-         this.more.push (doc.data().comments)
+        console.log(doc.data())
+         this.more.push (doc.data())
+         this.person.push(doc.data().user)
+         
     this.moreComments = true
     })
     console.log(person)
-    console.log(user.email)
+   console.log(this.more)
+   console.log(this.person)
 })
-},
-run:function(){
-
 },
 
     },
+
+
+     beforeMount(){
+    this.names()
+ },
 }
 </script>
 <style scoped>
+.postimg{
+    width:50%;
+}
 .friends{
     background: #fff;
     border-radius: 10px;
     padding: 10px;
+    grid-column: 1/2;
+    grid-row: 1;
 }
 .friends h1{
     font-size: 20px;
@@ -307,7 +415,6 @@ run:function(){
      width: 101.98px; 
       height:101.98px;
       border-radius: 10px;
-
 }
 #profile{
     background: #f0f2f5;
@@ -321,7 +428,7 @@ run:function(){
      flex-direction: column;
 }
 .back-image{
-background-image: url();
+/* background-image: url(); */
 background: #ceced1;
 margin: 0 auto;
 border-radius: 10px;
@@ -359,6 +466,7 @@ h1{
 .wrapper{
     display: flex;
     justify-content: center;
+    margin: 0 auto;
 }
 .wrap{
     display: grid;
@@ -370,7 +478,17 @@ h1{
 .posts{
     background: #fff;
     border-radius: 10px;
+    grid-column: 2/2;
+    grid-row: 1;
+}
+.sent-img{
+    width:500px;
+    margin: 0 auto;
+     display: flex;
+}
+#postimg{
    
+    margin: 0 auto;
 }
 .post span{
     width: 40px;
@@ -492,5 +610,20 @@ cursor: pointer;
    background: #f0f2f5; 
    padding: 10px 16px;
    border-radius: 10px;
+}
+
+@media all and(max-width:900px){
+    .wrap{
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .friends{
+        grid-column: 1/1;
+        grid-row: 1;
+    }
+    .posts{
+          grid-column: 1/1;
+        grid-row: 2;
+    }
 }
 </style>

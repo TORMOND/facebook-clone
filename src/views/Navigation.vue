@@ -137,7 +137,7 @@
   <p>View Profile</p>
  </div>
  <div class="text">
- <textarea placeholder="what's on your mind, Victor"></textarea>
+ <textarea placeholder="what's on your mind, Victor" v-model="remarks"></textarea>
  
   </div>
   <div class="include">
@@ -191,7 +191,7 @@
 <script>
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, doc, getDocs, getDoc} from "firebase/firestore"
+import { getFirestore, collection, addDoc, doc, getDocs, getDoc, setDoc} from "firebase/firestore"
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
 import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -199,21 +199,21 @@ import { getAnalytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCkWbp12XRoV38kEajV7hBahdxwUxSXiVc",
-  authDomain: "meta-fb.firebaseapp.com",
-  projectId: "meta-fb",
-  storageBucket: "meta-fb.appspot.com",
-  messagingSenderId: "973161692832",
-  appId: "1:973161692832:web:82d9c0d61cd734369493c5",
-  measurementId: "G-76Q2K0FMJ6"
-};
+// const firebaseConfig = {
+//   apiKey: "AIzaSyCkWbp12XRoV38kEajV7hBahdxwUxSXiVc",
+//   authDomain: "meta-fb.firebaseapp.com",
+//   projectId: "meta-fb",
+//   storageBucket: "meta-fb.appspot.com",
+//   messagingSenderId: "973161692832",
+//   appId: "1:973161692832:web:82d9c0d61cd734369493c5",
+//   measurementId: "G-76Q2K0FMJ6"
+// };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const db = getFirestore(app);
-const auth = getAuth(app);
+// // Initialize Firebase
+// const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
+// const db = getFirestore(app);
+// const auth = getAuth(app);
 
 const querySnapshot = getDocs(collection(db, "user-Details"), {
 });
@@ -227,28 +227,8 @@ const querySnapshot = getDocs(collection(db, "user-Details"), {
 
 
 }); 
-// const storage = getStorage();
-// getDownloadURL(ref(storage, 'images/stars.jpg'))
-//   .then((url) => {
-//     // `url` is the download URL for 'images/stars.jpg'
 
-//     // This can be downloaded directly:
-//     const xhr = new XMLHttpRequest();
-//     xhr.responseType = 'blob';
-//     xhr.onload = (event) => {
-//       const blob = xhr.response;
-//     };
-//     xhr.open('GET', url);
-//     xhr.send();
-
-//     // Or inserted into an <img> element
-//     const img = document.getElementById('myimg');
-//     img.setAttribute('src', url);
-//   })
-//   .catch((error) => {
-//     // Handle any errors
-//   });
-
+import{ app, db, auth, firebaseConfig, person, user } from '@/firebase.js'
 export default {
     data() {
        return{
@@ -256,6 +236,7 @@ export default {
       popup:false,
       unliked:true,
       liked:false,
+      remarks:'',
        } 
     },
     methods: {
@@ -267,6 +248,8 @@ this.liked =!this.liked
           this.modal=!this.modal
       },
       run:function(){
+
+
 this.$router.push('/profile')
       },
 signOut:function(){
@@ -283,6 +266,19 @@ operate:function(){
     this.modal=false;
 },
 upload:function(){
+
+
+   const user = auth.currentUser;
+
+    setDoc(doc(db, "created-post", user.uid), {
+      
+      remarks:this.remarks,
+      id:user.uid,
+      user:user.email,
+      
+    }
+    
+    );
 const storage = getStorage();
 const storageRef = ref(storage, 'street.jpg');
 

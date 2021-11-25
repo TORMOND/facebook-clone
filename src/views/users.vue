@@ -29,7 +29,8 @@
                </div>        
            </div>
            <div class="information">
-               <h1 >{{name}} {{secondName}}</h1>
+               <!-- <h1 >{{name}} {{secondName}}</h1> -->
+               <h1>{{$route.params.name}}</h1>
            </div>
 </div>
 <div class="wrapper">
@@ -74,14 +75,12 @@
                 <p>{{user}}</p>
                 </div>
 
-               
+                <router-link :to="{name:'Users', params: {name:name}}">
                 <div class="images" @click="pool">
-                     <router-link :to="{name:'Users', params: {name:name}}">
                     <img src="https://www.denofgeek.com/wp-content/uploads/2020/11/webstory-deadpool-image06-1.jpg?fit=1170%2C780">
                <p>DeadPool</p>
-                </router-link>
                 </div>
-               
+                </router-link>
                 <div class="images">
                     <img  src=""  id="myimg">
                 </div>
@@ -91,7 +90,7 @@
     <div class="posts">
       <div class="post">
   <span><i class="fas fa-user"></i></span>
- <p>{{name}} {{secondName}}</p>
+ <p>{{$route.params.name}}</p>
     </div>
     <div class="sent-image">
         <img src="" id="postimg">
@@ -239,6 +238,7 @@ getDownloadURL(ref(storage, 'images/cool-Benjamin.jpeg'))
  import{ app, db, auth, firebaseConfig, person, user } from '@/firebase.js'
 
 export default {
+    name:'Users',
     data() {
         return{
 name:"",
@@ -391,6 +391,8 @@ onSnapshot(colRef, (snapshot)=>{
  },
 }
 </script>
+
+
 <style scoped>
 .postimg{
     width:50%;

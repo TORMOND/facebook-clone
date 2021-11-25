@@ -141,16 +141,16 @@
  
   </div>
   <div class="include">
+      <input type="file" class="file" placeholder="select file" @change="onFileSelected">
       <div class="outline">
           <div class="btn">
 <button>X</button>
 </div>
 <i class="fas fa-plus-square"></i>
-<input type="file" class="file">
+<img src="street.jpg" id="image-preview">
 <h3>Add photos/videos</h3>
 <h6>or drag and drop</h6>
 </div>
-
 
 
 
@@ -237,9 +237,20 @@ export default {
       unliked:true,
       liked:false,
       remarks:'',
+      selectedFile:null,
        } 
     },
     methods: {
+        onFileSelected(event){
+console.log(event)
+this.selectedFile = event.target.files[0]
+console.log(this.selectedFile)
+const img = document.getElementById('image-preview');
+    img.setAttribute('src', this.selectedFile.name);
+
+
+
+        },
          like:function(){
 this.unliked =!this.unliked
 this.liked =!this.liked
@@ -289,7 +300,7 @@ const metadata = {
 };
 
 // Upload the file and metadata
-const uploadTask = uploadBytes(storageRef, metadata);
+const uploadTask = uploadBytes(storageRef, 'street.jpg', metadata);
 },
 
     }  
@@ -713,15 +724,20 @@ textarea:focus{
     padding: 12px 16px 0;
 }
 .file:focus{
-    outline: none;
+    outline-color: none;
 }
 .file{
     border: none;
     background: #f0f2f5;
+   
 }
 .view{
     text-decoration: none;
     color: #65676b;
+}
+#image-preview{
+    width: 200px;
+    height: 200px;
 }
 @media all and (max-width: 850px){
     .part-1{

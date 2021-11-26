@@ -7,8 +7,7 @@
           <!-- <i class="fas fa-search"></i> -->
           </div>
           <div class="navigate">
-              
-            <span><i class="fas fa-home"></i></span>
+            <router-link to="/Navigation" style="text-decoration:none; color:#65675b"><span><i class="fas fa-home"></i></span></router-link>  
            <span><i class="fab fa-youtube"></i></span>
              <span><i class="fas fa-store"></i></span>
              <!-- <span class="material-icons-outlined">storefront</span>  -->
@@ -74,14 +73,13 @@
                 <p>{{user}}</p>
                 </div>
 
-               
-                <div class="images" @click="pool">
-                     <router-link :to="{name:'Users', params: {name:name}}">
+               <router-link :to="{name:'Users', params: {name:name}}" style="text-decoration:none; color:#65675b">
+                <div class="images" @click="pool">                    
                     <img src="https://www.denofgeek.com/wp-content/uploads/2020/11/webstory-deadpool-image06-1.jpg?fit=1170%2C780">
                <p>DeadPool</p>
-                </router-link>
                 </div>
-               
+                </router-link>
+
                 <div class="images">
                     <img  src=""  id="myimg">
                 </div>
@@ -118,8 +116,8 @@
         </div>
     </div>
     <div class="action">
-        <label @click="like" class="thumbs-up" v-show="present" ><i class="fas fa-thumbs-up"></i>like</label>
-          <label @click="unlike" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up"></i>like</label>
+        <label @click="like" class="thumbs-up" v-show="present" ><i class="far fa-thumbs-up"></i>like</label>
+          <label @click="unlike" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
              <label><i class="far fa-comment-alt"></i>comment</label>
                   <label><i class="fas fa-share"></i>share</label>
     </div>
@@ -260,16 +258,16 @@ posts:[],
     methods: {
 
         unlike:function(){
-    const thumb = document.querySelector('.thumbs-up');
-thumb.style.color = "#65675b"; 
+//     const thumb = document.querySelector('.thumbs-up');
+// thumb.style.color = "#65675b"; 
 this.number--
 this.absent = false
 this.present = true
 
         },
         like:function(){
-    const thumb = document.querySelector('.thumbs-up');
-thumb.style.color = "#216fd8"; 
+// const thumb = document.querySelector('.thumbs-up');
+// thumb.style.color = "#216fd8"; 
 this.number++
 this.absent = true
 this.present = false

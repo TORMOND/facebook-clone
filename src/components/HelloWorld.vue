@@ -21,7 +21,7 @@
                         <div class="log">
                            <button class="login" @click="login">login</button></div>
                            
-                           <div class="forgot"><a href=""><router-link to="/about">Forgotten Password?</router-link></a></div>
+                           <div class="forgot"><router-link to="/about">Forgotten Password?</router-link></div>
 
                            <div class="line"></div>
                            <div class="acc">
@@ -169,25 +169,7 @@ import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWith
 import { getAnalytics } from "firebase/analytics";
 
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCkWbp12XRoV38kEajV7hBahdxwUxSXiVc",
-  authDomain: "meta-fb.firebaseapp.com",
-  projectId: "meta-fb",
-  storageBucket: "meta-fb.appspot.com",
-  messagingSenderId: "973161692832",
-  appId: "1:973161692832:web:82d9c0d61cd734369493c5",
-  measurementId: "G-76Q2K0FMJ6"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-
-
-
+import{ app, db, auth, firebaseConfig, person, user } from '@/firebase.js'
 export default {
   name: 'HelloWorld',
 

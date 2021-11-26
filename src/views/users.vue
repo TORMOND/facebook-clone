@@ -8,7 +8,7 @@
           </div>
           <div class="navigate">
               
-            <span><i class="fas fa-home"></i></span>
+            <router-link to="/Navigation" style="text-decoration:none; color:#65675b"><span><i class="fas fa-home"></i></span></router-link> 
            <span><i class="fab fa-youtube"></i></span>
              <span><i class="fas fa-store"></i></span>
              <!-- <span class="material-icons-outlined">storefront</span>  -->
@@ -29,8 +29,8 @@
                </div>        
            </div>
            <div class="information">
-               <!-- <h1 >{{name}} {{secondName}}</h1> -->
-               <h1>{{$route.params.name}}</h1>
+               <h1 >{{name}} {{secondName}}</h1>
+               <!-- <h1>{{$route.params.name}}</h1> -->
            </div>
 </div>
 <div class="wrapper">
@@ -45,7 +45,6 @@
             <div class="images" >
                 <img src="https://images.theconversation.com/files/417198/original/file-20210820-25-1j3afhs.jpeg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip">
                 </div>
-                
                             <div class="images">
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Hashmask_15753.jpg/1200px-Hashmask_15753.jpg">
                <p>{{user}}</p>
@@ -75,13 +74,13 @@
                 <p>{{user}}</p>
                 </div>
 
-                <router-link :to="{name:'Users', params: {name:name}}">
-                <div class="images" @click="pool">
+                <router-link :to="{name:'Users', params: {name:name}}" style="text-decoration:none; color:#65675b">
+                <div class="images" >
                     <img src="https://www.denofgeek.com/wp-content/uploads/2020/11/webstory-deadpool-image06-1.jpg?fit=1170%2C780">
                <p>DeadPool</p>
                 </div>
                 </router-link>
-                <div class="images">
+                <div class="images" @click="pool">
                     <img  src=""  id="myimg">
                 </div>
                  
@@ -90,7 +89,7 @@
     <div class="posts">
       <div class="post">
   <span><i class="fas fa-user"></i></span>
- <p>{{$route.params.name}}</p>
+ <p>{{name}} {{secondName}}</p>
     </div>
     <div class="sent-image">
         <img src="" id="postimg">
@@ -160,7 +159,7 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
  onAuthStateChanged(auth, (user) => {
   if (user) {
 const storage = getStorage();
-getDownloadURL(ref(storage, 'images/deadpool-image.jpg'))
+getDownloadURL(ref(storage, 'user-images/HGsJfplvmhhhyVTthCbZm7J7cW53/2021-bugatti-chiron-pur-sport.jpg'))
   .then((url) => {
     // `url` is the download URL for 'images/stars.jpg'
 
@@ -186,7 +185,7 @@ getDownloadURL(ref(storage, 'images/deadpool-image.jpg'))
 onAuthStateChanged(auth, (user) => {
   if (user) {
 const storage = getStorage();
-getDownloadURL(ref(storage, 'images/Rolls-Royce-Phantom-Black.jpg'))
+getDownloadURL(ref(storage, 'images/grandteton.jpg'))
   .then((url) => {
     // `url` is the download URL for 'images/stars.jpg'
 
@@ -343,7 +342,7 @@ names:function(){
 
 let currentUser = auth.currentUser
 const userRef = collection(db, 'user-Details')
-const q = query(userRef, where("email", "==", currentUser.email))
+const q = query(userRef, where("email", "==", "deadpool@gmail.com"))
 onSnapshot(q, (snapshot)=>{
     let users = []
     snapshot.docs.forEach((doc)=>{

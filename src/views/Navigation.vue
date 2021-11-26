@@ -12,10 +12,10 @@
            <span><i class="fab fa-youtube"></i></span>
              <span><i class="fas fa-store"></i></span>
              <!-- <span class="material-icons-outlined">storefront</span>  -->
-             <span><label class="user"><i class="fas fa-users"></i></label></span>
+             <span><label class="user" ><i class="fas fa-users"></i></label></span>
           </div>
           <div class="extras">
-              <span><i class="fas fa-user"></i></span>
+              <span @click="run"><i class="fas fa-user"></i></span>
              <span><i class="fas fa-plus"></i></span>
               <span><i class="fab fa-facebook-messenger"></i></span>
               <span><i class="fas fa-bell"></i></span>
@@ -24,14 +24,24 @@
       </nav>
       <div class="container">
 <div class="grid">
+
 <div class="part-1">
-    <div class="post">
+    <div class="post" @click="run">
   <span><i class="fas fa-user"></i></span>
   <p>Victor Monderu</p>
     </div>
+    <label><i class="fas fa-users"></i>Friends</label>
+    <label><i class="fas fa-bookmark"></i>Saved</label>
+    <label><i class="fas fa-users"></i>Groups</label>
+    <label><i class="fad fa-store"></i>Marketplace</label>
+    <label><i class="fab fa-youtube"></i>Watch</label>
+    <label><i class="fas fa-file"></i>Pages</label>
+    <label><i class="fas fa-calendar-alt"></i>Events</label>
 </div>
-<div class="content">
 
+
+
+<div class="content">
 <div class="wrap">
     <div class="post">
   <span><i class="fas fa-user"></i></span>
@@ -83,20 +93,26 @@
 <!-- 
 
  -->
-
+<div v-for="post in createdPosts" :key="post">
 <div class="card">
     <div class="profile">
         <div>
         <img src="https://scontent.fnbo8-1.fna.fbcdn.net/v/t1.6435-9/72952939_2497393310353084_2684978412589678592_n.png?_nc_cat=1&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=J8WEpcIH96QAX8nGTK0&_nc_ht=scontent.fnbo8-1.fna&oh=08b336607eb86dc1c0e47bac51c298a4&oe=61B96121">
-        <a href="https://crypto.com/nft/register?utm_source=facebook&utm_medium=fb&utm_campaign=NEW-Facebook%3AWW-en%3Aall%3ANFT-Conversion_DailyDrop_Registration&utm_content=20210601%20-%20Sean%20Foley&fbclid=IwAR3RZxLX-DczbTZypgAnSffd-N2xKvEmP2ubm9QmzHSuuIIxenLE1oS8jtE">crypto.com</a>
+        <!-- <a href="https://crypto.com/nft/register?utm_source=facebook&utm_medium=fb&utm_campaign=NEW-Facebook%3AWW-en%3Aall%3ANFT-Conversion_DailyDrop_Registration&utm_content=20210601%20-%20Sean%20Foley&fbclid=IwAR3RZxLX-DczbTZypgAnSffd-N2xKvEmP2ubm9QmzHSuuIIxenLE1oS8jtE">crypto.com</a> -->
+ <a>{{post.email}}</a>
+ 
+ 
    </div> 
    <div class="elipsis"><i class="fas fa-ellipsis-h"></i></div>
     </div>
     <div class="description">
-        Hong Kong's neon signs are disappearing, and street photographer Sean Foley has made it his mission to capture them before it's too late."Fading Memories" is now live, exclusively on 
+      {{post.remarks}}
     </div>
     <div class="image">
-        <img src="https://scontent.fnbo8-1.fna.fbcdn.net/v/t45.1600-4/cp0/q75/spS444/p526x296/194484182_23848002198700391_4322638678952833879_n.jpg?_nc_cat=1&ccb=1-5&_nc_sid=68ce8d&_nc_ohc=OZxphRCudjUAX8UGyXf&_nc_ht=scontent.fnbo8-1.fna&oh=15ce24028cf1565c3efc01f0470ef16a&oe=6199D6F8">
+        <!-- <img src="https://scontent.fnbo8-1.fna.fbcdn.net/v/t45.1600-4/cp0/q75/spS444/p526x296/194484182_23848002198700391_4322638678952833879_n.jpg?_nc_cat=1&ccb=1-5&_nc_sid=68ce8d&_nc_ohc=OZxphRCudjUAX8UGyXf&_nc_ht=scontent.fnbo8-1.fna&oh=15ce24028cf1565c3efc01f0470ef16a&oe=6199D6F8"> -->
+   
+   <img src="" id="myimg">
+   
     </div>
     <div class="more"></div>
     <div class="engagement">
@@ -104,8 +120,9 @@
         <span @click="like"><i class="fas fa-thumbs-up"></i></span>
         <span @click="like"><i class="fas fa-heart"></i></span>
        <p>
-             <label v-show="unliked">177k</label>
-           <label v-show="liked">You and 177k others</label>
+          
+             <label v-show="unliked"> {{post.likes}}</label>
+           <label v-show="liked">You and {{post.likes}} others</label>
        </p>
         </div>
         <div class="reviews">
@@ -117,6 +134,7 @@
         <label @click="like"><i class="fas fa-thumbs-up"></i>like</label>
              <label><i class="far fa-comment-alt"></i>comment</label>
                   <label><i class="fas fa-share"></i>share</label>
+    </div>
     </div>
 </div>
 
@@ -189,25 +207,12 @@
     </div>
 </template>
 <script>
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, doc, getDocs, getDoc, setDoc} from "firebase/firestore"
+import { getFirestore, collection, addDoc, doc, getDocs, getDoc, setDoc,  onSnapshot, query, where} from "firebase/firestore"
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
 import { getAnalytics } from "firebase/analytics";
 
-
-// const querySnapshot = getDocs(collection(db, "user-Details"), {
-// });
-//  querySnapshot.then((collection) => {
-//   // doc.data() is never undefined for query doc snapshots
-//   console.log(querySnapshot);
-//   console.log(collection);
-
-// }).catch((error) => {
-//   console.log("Error getting document:", error);
-
-
-// }); 
 
 import{ app, db, auth, firebaseConfig, person, user } from '@/firebase.js'
 export default {
@@ -219,6 +224,10 @@ export default {
       liked:false,
       remarks:'',
       selectedFile:null,
+      expression:"",
+      name:"",
+      likes:"",
+      createdPosts:[],
        } 
     },
     methods: {
@@ -232,6 +241,7 @@ const img = document.getElementById('image-preview');
 
 
         },
+        
          like:function(){
 this.unliked =!this.unliked
 this.liked =!this.liked
@@ -257,6 +267,43 @@ operate:function(){
     this.popup =!this.popup;
     this.modal=false;
 },
+create:function(){
+
+    const storage = getStorage();
+getDownloadURL(ref(storage, 'user-images/tUmz1C3i4uYB5z5xNrXZlEElc8M2'))
+  .then((url) => {
+    // `url` is the download URL for 'images/stars.jpg'
+
+    // This can be downloaded directly:
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'blob';
+    xhr.onload = (event) => {
+      const blob = xhr.response;
+    };
+    xhr.open('GET', url);
+    xhr.send();
+
+    // Or inserted into an <img> element
+    const img = document.getElementById('myimg');
+    img.setAttribute('src', url);
+  })
+  .catch((error) => {
+    // Handle any errors
+  });
+    
+const infor = collection(db, 'created-post')
+
+onSnapshot(infor, (snapshot)=>{
+    let lik = []
+    snapshot.docs.forEach((doc)=>{
+        lik.push({...doc.data(), id:doc.id})
+         this.createdPosts.push(doc.data())
+        console.log(doc.data())
+        // this.expression = doc.data().remarks
+        // this.name = doc.data().user
+    })
+})
+},
 upload:function(){
 
 
@@ -267,7 +314,7 @@ upload:function(){
       remarks:this.remarks,
       id:user.uid,
       user:user.email,
-      
+      likes:0,
     }
     
     );
@@ -284,7 +331,10 @@ const metadata = {
 const uploadTask = uploadBytes(storageRef, 'street.jpg', metadata);
 },
 
-    }  
+    },  
+      beforeMount(){
+    this.create()
+ },
      
 }
 </script>
@@ -402,13 +452,13 @@ background: #f0f2f5;
     color: #fff;
 }
 .container{
-    background: #f0f2f5;
-    
+    background: #f0f2f5;   
 }
 .grid{
     display: grid;
     grid-template-columns: repeat(12, 1fr);
    gap: 20px;
+  
 }
 .part-1{
    grid-column: 1/4;
@@ -425,6 +475,7 @@ background: #f0f2f5;
     grid-column: 9/12;
     overflow-y: scroll;
     grid-row: 1;
+    /* position: fixed; */
 }
 .card{
     background: #fff;
@@ -470,8 +521,13 @@ background: #f0f2f5;
     width: 100%;
     display: flex;
 }
+#myimg{
+    width: 100%;
+}
 .image img{
+    width: 100%;
     margin: 0 auto;
+    object-fit: cover;
 }
 .description{
     padding: 4px 16px 16px;
@@ -562,6 +618,29 @@ label:hover{
     display: flex;
     gap: 20px;
     padding: 12px 16px 16px;
+}
+/* .part-1{
+    position: fixed;
+} */
+.part-1 .post{
+    margin-top: 150px;
+    font-weight: bold;
+}
+.part-1 .post:hover{
+    background: #e4e6eb;
+}
+.part-1 label{
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 20px;
+    font-weight: bold;
+}
+.part-1 label i{
+    font-size: 20px;
+    margin: 0 10px;
+}
+.part-1 label:hover{
+background: #e4e6eb;
 }
 .post input{
 padding: 8px 12px;
@@ -727,5 +806,23 @@ textarea:focus{
     .part-2{
         display: none;
     }
+    .content{
+        grid-column: 2/10;
+    }
 }
+
+@media all and (max-width:600px){
+.content{
+        grid-column: 1/12;
+    }
+.navigate{
+    display: none;
+}
+
+
+}
+
+
+
+
 </style>

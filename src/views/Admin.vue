@@ -146,10 +146,12 @@ tr{
 tr:hover{
     background: #f0f2f5;
 }
-tr:hover.fa-ellipsis-v{
+td:hover+.fa-ellipsis-v{
  visibility: visible;
 }
-
+.fa-ellipsis-v:hover{
+    cursor: pointer;
+}
 .users input{
     background: #f0f2f5;
     border: none;

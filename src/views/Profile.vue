@@ -14,8 +14,7 @@
              <span><label class="user"><i class="fas fa-users"></i></label></span>
           </div>
           <div class="extras">
-              <span><i class="fas fa-user"></i></span>
-             <span><i class="fas fa-plus"></i></span>
+
               <span><i class="fab fa-facebook-messenger"></i></span>
               <span><i class="fas fa-bell"></i></span>
               <span @click="operate"><i class="fas fa-caret-down"></i></span>
@@ -86,6 +85,9 @@
                  
         </div>
     </div>
+
+    
+  <div class="right">
     <div class="posts">
       <div class="post">
   <span><i class="fas fa-user"></i></span>
@@ -144,6 +146,7 @@
  
     </div>
     </div>
+</div>
 </div>
 </div>
     </div>
@@ -245,7 +248,7 @@ comments:'',
 user:"friends",
 unliked:true,
 liked:false,
-number: 177,
+number: "",
 present:true,
 absent:false,
 more:[],
@@ -271,6 +274,7 @@ this.present = true
 this.number++
 this.absent = true
 this.present = false
+
         },
 send:function(){
     
@@ -331,6 +335,22 @@ getDownloadURL(ref(storage, 'images/deadpool-image.jpg'))
 },
 
 names:function(){
+const infor = collection(db, 'information')
+const like = query(infor, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ))
+onSnapshot(like, (snapshot)=>{
+    let likes = []
+    snapshot.docs.forEach((doc)=>{
+        likes.push({...doc.data(), id:doc.id})
+        console.log(doc.data().likes)
+        this.number = doc.data().likes
+        
+    })
+})
+
+
+
+
+
   onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in, see docs for a list of available properties
@@ -399,6 +419,7 @@ onSnapshot(colRef, (snapshot)=>{
     padding: 10px;
     grid-column: 1/2;
     grid-row: 1;
+  
 }
 .friends h1{
     font-size: 20px;
@@ -423,6 +444,7 @@ onSnapshot(colRef, (snapshot)=>{
     background: #f0f2f5;
      display: flex;
      flex-direction: column;
+    
 }
 .container{
   background: #fff;
@@ -477,15 +499,20 @@ h1{
     margin: 0 auto;
     padding: 20px 40px;
     gap: 30px;
+  
+}
+.right{
+    grid-column: 2/2;
+    grid-row: 1;
+    display: flex;
 }
 .posts{
     background: #fff;
     border-radius: 10px;
-    grid-column: 2/2;
-    grid-row: 1;
+   margin: 0 auto;
 }
 .sent-img{
-    width:500px;
+  
     margin: 0 auto;
      display: flex;
 }

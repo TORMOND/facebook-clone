@@ -15,10 +15,13 @@
              <span><label class="user" ><i class="fas fa-users"></i></label></span>
           </div>
           <div class="extras">
-              <span @click="run"><i class="fas fa-user"></i></span>
-             <span><i class="fas fa-plus"></i></span>
-              <span><i class="fab fa-facebook-messenger"></i></span>
-              <span><i class="fas fa-bell"></i></span>
+              <label @click="run">
+              <span><i class="fas fa-user"></i></span>
+              {{name}}
+              </label>
+             <span @click="open"><i class="fas fa-plus"></i></span>
+              <!-- <span><i class="fab fa-facebook-messenger"></i></span> -->
+              <!-- <span><i class="fas fa-bell"></i></span> -->
               <span @click="operate"><i class="fas fa-caret-down"></i></span>
           </div>
       </nav>
@@ -28,7 +31,7 @@
 <div class="part-1">
     <div class="post" @click="run">
   <span><i class="fas fa-user"></i></span>
-  <p>Victor Monderu</p>
+  <p>{{name}} {{secondName}}</p>
     </div>
     <label><i class="fas fa-users"></i>Friends</label>
     <label><i class="fas fa-bookmark"></i>Saved</label>
@@ -45,7 +48,7 @@
 <div class="wrap">
     <div class="post">
   <span><i class="fas fa-user"></i></span>
-  <input type="text" placeholder="Whats on Your mind, Victor?" @click="open">
+  <input type="text" placeholder="Whats on Your mind?" @click="open">
     </div>
   <div class="post-2">
 <label  @click="open"><i class="far fa-images"  ></i>Photo/Video</label>
@@ -72,11 +75,14 @@
     <div class="more"></div>
     <div class="engagement">
         <div class="emoji">
-        <span @click="like"><i class="fas fa-thumbs-up"></i></span>
-        <span @click="like"><i class="fas fa-heart"></i></span>
+                <span @click="like" v-show="present" class="like"><i class="fas fa-thumbs-up"></i></span>
+        <span @click="like" v-show="present" class="heart"><i class="fas fa-heart"></i></span>
+
+          <span @click="unlike" v-show="absent " class="like"><i class="fas fa-thumbs-up"></i></span>
+        <span @click="unlike" v-show="absent" class="heart"><i class="fas fa-heart"></i></span>
        <p>
-              <label v-show="unliked">177k</label>
-           <label v-show="liked">You and 177k others</label>
+              <label >177000</label>
+          
        </p>
         </div>
         <div class="reviews">
@@ -85,7 +91,8 @@
         </div>
     </div>
     <div class="action">
-        <label @click="like"><i class="fas fa-thumbs-up"></i>like</label>
+  <label @click="like" class="thumbs-up" v-show="present" ><i class="far fa-thumbs-up"></i>like</label>
+          <label @click="unlike" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
              <label><i class="far fa-comment-alt"></i>comment</label>
                   <label><i class="fas fa-share"></i>share</label>
     </div>
@@ -117,12 +124,13 @@
     <div class="more"></div>
     <div class="engagement">
         <div class="emoji">
-        <span @click="like"><i class="fas fa-thumbs-up"></i></span>
-        <span @click="like"><i class="fas fa-heart"></i></span>
+        <span @click="like" v-show="present" class="like"><i class="fas fa-thumbs-up"></i></span>
+        <span @click="like" v-show="present" class="heart"><i class="fas fa-heart"></i></span>
+
+          <span @click="unlike" v-show="absent " class="like"><i class="fas fa-thumbs-up"></i></span>
+        <span @click="unlike" v-show="absent" class="heart"><i class="fas fa-heart"></i></span>
        <p>
-          
-             <label v-show="unliked"> {{post.likes}}</label>
-           <label v-show="liked">You and {{post.likes}} others</label>
+             <label>{{post.likes}}</label>
        </p>
         </div>
         <div class="reviews">
@@ -131,7 +139,8 @@
         </div>
     </div>
     <div class="action">
-        <label @click="like"><i class="fas fa-thumbs-up"></i>like</label>
+        <label @click="like" class="thumbs-up" v-show="present" ><i class="far fa-thumbs-up"></i>like</label>
+          <label @click="unlike" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
              <label><i class="far fa-comment-alt"></i>comment</label>
                   <label><i class="fas fa-share"></i>share</label>
     </div>
@@ -159,13 +168,16 @@
  
   </div>
   <div class="include">
-      <input type="file" class="file" placeholder="select file" @change="onFileSelected">
+      <input type="file" class="file" placeholder="select file"  @change="onFileSelected" accept="image/*">
       <div class="outline">
           <div class="btn">
 <button>X</button>
 </div>
 <i class="fas fa-plus-square"></i>
-<img src="street.jpg" id="image-preview">
+<!-- <button @click="pickFile">Upload Image</button>
+<input type="file" style="display:none;" @change="onFileSelected" ref="fileInput"> -->
+<img :src="imageUrl" height="120">
+
 <h3>Add photos/videos</h3>
 <h6>or drag and drop</h6>
 </div>
@@ -174,6 +186,7 @@
 
 <div class="mobile">
     <span><i class="fas fa-mobile-alt"></i></span>
+
     <p>Add photos from your mobile device.</p>
     <button>Add</button>
 </div>
@@ -215,6 +228,8 @@ import { getAnalytics } from "firebase/analytics";
 
 
 import{ app, db, auth, firebaseConfig, person, user } from '@/firebase.js'
+
+
 export default {
     data() {
        return{
@@ -226,33 +241,57 @@ export default {
       selectedFile:null,
       expression:"",
       name:"",
+      secondName:"",
+      imageUrl:"",
       likes:"",
       createdPosts:[],
+      present:true,
+      absent:false,
+      number:"",
+      image:null,
        } 
     },
     methods: {
-        onFileSelected(event){
-console.log(event)
-this.selectedFile = event.target.files[0]
-console.log(this.selectedFile)
-const img = document.getElementById('image-preview');
-    img.setAttribute('src', this.selectedFile.name);
 
-
-
+        unlike:function(){
+           this.absent = false
+          this.present = true
         },
-        
          like:function(){
 this.unliked =!this.unliked
 this.liked =!this.liked
+this.absent = true
+this.present = false
+
+  
+// updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
+//     // const b = query(docRef, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ));
+
+//    likes:this.number
+     
+//        });
         },
       open:function(){
           this.modal=!this.modal
       },
       run:function(){
-
-
 this.$router.push('/profile')
+      },
+
+      pickFile:function(){
+    this.$ref.fileInput.click()
+      },
+      onFileSelected:function(event){
+const files = event.target.files
+let filename = files[0].name
+const fileReader = new FileReader()
+fileReader.addEventListener('load', () =>{
+    this.imageUrl = fileReader.result
+    console.log(filename)
+  
+})
+fileReader.readAsDataURL(files[0])
+this.image = files[0]
       },
 signOut:function(){
  signOut(auth).then(() => {
@@ -268,6 +307,38 @@ operate:function(){
     this.modal=false;
 },
 create:function(){
+
+ onAuthStateChanged(auth, (user) => {
+  if (user) {
+
+    const uid = user.uid;
+    console.log("current users ID is",uid)
+    console.log(user.email)
+
+let currentUser = auth.currentUser
+const userRef = collection(db, 'user-Details')
+const q = query(userRef, where("email", "==", currentUser.email))
+onSnapshot(q, (snapshot)=>{
+    let users = []
+    snapshot.docs.forEach((doc)=>{
+        users.push({...doc.data(), id:doc.id})
+        console.log(doc.data().name)
+         console.log(doc.data().secondName)
+         this.name = doc.data().name
+         this.secondName = doc.data().secondName
+    })
+    
+    console.log(users)
+})
+
+  } else {
+   console.log("no user")
+   
+  }
+
+
+});
+
 
     const storage = getStorage();
 getDownloadURL(ref(storage, 'user-images/tUmz1C3i4uYB5z5xNrXZlEElc8M2'))
@@ -299,6 +370,7 @@ onSnapshot(infor, (snapshot)=>{
         lik.push({...doc.data(), id:doc.id})
          this.createdPosts.push(doc.data())
         console.log(doc.data())
+
         // this.expression = doc.data().remarks
         // this.name = doc.data().user
     })
@@ -319,7 +391,7 @@ upload:function(){
     
     );
 const storage = getStorage();
-const storageRef = ref(storage, 'street.jpg');
+const storageRef = ref(storage, this.image);
 
 // Create file metadata including the content type
 /** @type {image} */
@@ -328,7 +400,7 @@ const metadata = {
 };
 
 // Upload the file and metadata
-const uploadTask = uploadBytes(storageRef, 'street.jpg', metadata);
+const uploadTask = uploadBytes(storageRef, this.image, metadata);
 },
 
     },  
@@ -464,6 +536,7 @@ background: #f0f2f5;
    grid-column: 1/4;
    overflow-y: scroll;
    grid-row: 1;
+ 
 }
 .content{
    grid-column: 4/9; 
@@ -542,7 +615,7 @@ background: #f0f2f5;
   padding: 12px 16px 0;
   border-bottom: 1px solid #65676b;
 }
-.emoji span:first-child{
+.emoji .like{
  background: #216FD8;
  color: #fff;
  border-radius:50%;
@@ -554,7 +627,7 @@ background: #f0f2f5;
  font-size: 12px;
  cursor: pointer;
 }
-.emoji span:nth-child(2){
+.emoji .heart{
  background:crimson;
  color: #fff;
  border-radius:50%;
@@ -623,8 +696,9 @@ label:hover{
     position: fixed;
 } */
 .part-1 .post{
-    margin-top: 150px;
+    margin-top: 80px;
     font-weight: bold;
+  
 }
 .part-1 .post:hover{
     background: #e4e6eb;

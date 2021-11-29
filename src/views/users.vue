@@ -25,7 +25,7 @@
         <div class="container">
            <div class="back-image">
                <div class="circle">
-<img src="" id="profileimg">
+<img src="" id="profilemg">
                </div>        
            </div>
            <div class="information">
@@ -81,7 +81,7 @@
                 </div>
                 </router-link>
                 <div class="images" @click="pool">
-                    <img  src=""  id="myimg">
+                    <img  src=""  id="mimg">
                 </div>
                  
         </div>
@@ -92,7 +92,7 @@
  <p>{{name}} {{secondName}}</p>
     </div>
     <div class="sent-image">
-        <img src="" id="postimg">
+        <img src="" id="pstimg">
     </div>
       <div class="more"></div>
     <div class="engagement">
@@ -173,7 +173,7 @@ getDownloadURL(ref(storage, 'user-images/HGsJfplvmhhhyVTthCbZm7J7cW53/2021-bugat
     xhr.send();
 
     // Or inserted into an <img> element
-    const img = document.getElementById('myimg');
+    const img = document.getElementById('mimg');
     img.setAttribute('src', url);
   })
   .catch((error) => {
@@ -199,7 +199,7 @@ getDownloadURL(ref(storage, 'images/grandteton.jpg'))
     xhr.send();
 
     // Or inserted into an <img> element
-    const img = document.getElementById('postimg');
+    const img = document.getElementById('pstimg');
     img.setAttribute('src', url);
   })
   .catch((error) => {
@@ -211,7 +211,7 @@ getDownloadURL(ref(storage, 'images/grandteton.jpg'))
  onAuthStateChanged(auth, (user) => {
   if (user) {
 const storage = getStorage();
-getDownloadURL(ref(storage, 'images/cool-Benjamin.jpeg'))
+getDownloadURL(ref(storage, 'images/deadpool-image.jpg'))
   .then((url) => {
     // `url` is the download URL for 'images/stars.jpg'
 
@@ -225,7 +225,7 @@ getDownloadURL(ref(storage, 'images/cool-Benjamin.jpeg'))
     xhr.send();
 
     // Or inserted into an <img> element
-    const img = document.getElementById('profileimg');
+    const img = document.getElementById('profilemg');
     img.setAttribute('src', url);
   })
   .catch((error) => {
@@ -390,7 +390,6 @@ onSnapshot(colRef, (snapshot)=>{
  },
 }
 </script>
-
 
 <style scoped>
 .postimg{

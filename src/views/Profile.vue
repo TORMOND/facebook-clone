@@ -44,7 +44,7 @@
                 </div>
                 
                             <div class="images">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Hashmask_15753.jpg/1200px-Hashmask_15753.jpg">
+                                <img src="street.jpg">
                <p>{{user}}</p>
                 </div>
                             <div class="images">
@@ -149,12 +149,21 @@
 </div>
 </div>
 </div>
+<div id="popup" v-if="popup">
+     <!-- <div class="post">
+   <label @click="operate"> <span><i class="fas fa-user"></i></span>
+  <p><router-link to="/profile" class="view">View Profile</router-link></p></label>
+ </div> -->
+<div @click="operate" >
+    <label @click="signOut"><i class="fas fa-sign-out-alt" style="margin-top:20px; "></i>Log Out</label>
+</div>
+</div>
     </div>
 </template>
 <script>
 
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, doc, getDocs, getDoc, onSnapshot, query, where} from "firebase/firestore"
+import { getFirestore, collection, addDoc, doc, getDocs, getDoc, onSnapshot, query, where, setDoc, updateDoc} from "firebase/firestore"
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
 
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
@@ -242,6 +251,7 @@ getDownloadURL(ref(storage, 'images/cool-Benjamin.jpeg'))
 export default {
     data() {
         return{
+popup:false,
 name:"",
 secondName:"",
 comments:'',
@@ -259,13 +269,24 @@ posts:[],
         }
     },
     methods: {
-
+operate:function(){
+    this.popup =!this.popup;
+    
+},
         unlike:function(){
 //     const thumb = document.querySelector('.thumbs-up');
 // thumb.style.color = "#65675b"; 
 this.number--
 this.absent = false
 this.present = true
+updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
+    // const b = query(docRef, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ));
+
+   likes:this.number
+     
+       });
+//    console.log(this.number)
+     
 
         },
         like:function(){
@@ -274,8 +295,18 @@ this.present = true
 this.number++
 this.absent = true
 this.present = false
+ updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
+    // const b = query(docRef, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ));
 
+   likes:this.number
+     
+       });
+   console.log(this.number)
+     
+   
         },
+
+   
 send:function(){
     
     if(this.comments===""){
@@ -290,7 +321,7 @@ send:function(){
        });
         // this.more.push (this.comments)
         //  this.person.push(user.email)
-       console.log(user)
+    //    console.log(user)
        }
 },
 pool:function(){
@@ -305,7 +336,7 @@ onSnapshot(m, (snapshot)=>{
          this.name = doc.data().name
          this.secondName = doc.data().secondName
     })
-    console.log(use)
+    // console.log(use)
 })
 
 onAuthStateChanged(auth, (user) => {
@@ -333,31 +364,35 @@ getDownloadURL(ref(storage, 'images/deadpool-image.jpg'))
   }
  })
 },
-
+signOut:function(){
+ signOut(auth).then(() => {
+    // Sign-out successful.
+    alert("user Signed out");
+    this.$router.push('/')
+  }).catch((error) => {
+    // An error happened.
+  });
+},
 names:function(){
-const infor = collection(db, 'information')
-const like = query(infor, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ))
+const like = collection(db, 'information')
+// const like = query(infor, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ))
 onSnapshot(like, (snapshot)=>{
     let likes = []
     snapshot.docs.forEach((doc)=>{
         likes.push({...doc.data(), id:doc.id})
-        console.log(doc.data().likes)
+       
         this.number = doc.data().likes
         
     })
 })
-
-
-
-
 
   onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/firebase.User
     const uid = user.uid;
-    console.log("current users ID is",uid)
-    console.log(user.email)
+    // console.log("current users ID is",uid)
+    // console.log(user.email)
 
 let currentUser = auth.currentUser
 const userRef = collection(db, 'user-Details')
@@ -366,8 +401,8 @@ onSnapshot(q, (snapshot)=>{
     let users = []
     snapshot.docs.forEach((doc)=>{
         users.push({...doc.data(), id:doc.id})
-        console.log(doc.data().name)
-         console.log(doc.data().secondName)
+        // console.log(doc.data().name)
+        //  console.log(doc.data().secondName)
          this.name = doc.data().name
          this.secondName = doc.data().secondName
     })
@@ -380,7 +415,6 @@ onSnapshot(q, (snapshot)=>{
    
   }
 
-
 });
 
 const colRef = collection(db, 'Posts')
@@ -389,15 +423,15 @@ onSnapshot(colRef, (snapshot)=>{
     let posts = []
     snapshot.docs.forEach((doc)=>{
         posts.push({...doc.data(), id:doc.id})
-        console.log(doc.data())
+        // console.log(doc.data())
          this.more.push (doc.data())
          this.person.push(doc.data().user)
          
     this.moreComments = true
     })
-    console.log(person)
-   console.log(this.more)
-   console.log(this.person)
+//     console.log(person)
+//    console.log(this.more)
+//    console.log(this.person)
 })
 },
 
@@ -412,6 +446,11 @@ onSnapshot(colRef, (snapshot)=>{
 <style scoped>
 .postimg{
     width:50%;
+}
+.post{
+    display: flex;
+    gap: 20px;
+    padding: 12px 16px 16px;
 }
 .friends{
     background: #fff;
@@ -641,7 +680,24 @@ cursor: pointer;
    padding: 10px 16px;
    border-radius: 10px;
 }
-
+#popup{
+    position:fixed;
+    background: #fff;
+    top: 5%;
+    left: 80%;
+    border-radius: 10px;
+    padding: 16px;
+    font-weight: 700;
+    box-shadow: 3px 3px 5px #ceced1, 3px 3px 5px #ceced1, 3px 3px 5px #ceced1 ;
+}
+#popup label{
+    cursor: pointer;
+    padding: 10px 24px;
+    border-radius: 5px;
+}
+#popup label:hover{
+    background: #f0f2f5;
+}
 @media all and(max-width:900px){
     .wrap{
         display: grid;

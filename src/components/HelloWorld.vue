@@ -188,7 +188,7 @@ export default {
        female:'',
        male:'',
        custom:'',
-//  pronouns:{"She:Wish her a happy birthday", "He:Wish him a happy birthday","They:Wish them a happy birthday"}
+
       }
     },
     methods: {
@@ -219,19 +219,9 @@ export default {
   },
   signUp:function(){
   console.log(this.firstName, this.surName, this.password,this.custom)
-      createUserWithEmailAndPassword(auth, this.email, this.password).then((userCredential) => {
-    // Signed in 
-    //  const user = userCredential.user;
-    // const docRef = addDoc(collection(db,  user.email), {
-    //  email:this.email,
-    //   name: this.firstName,
-    //   secondName: this.surName,
-    //   password:this.password,
-    // });
+      createUserWithEmailAndPassword(auth, this.email, this.password).then((userCredential) => {  
     const user = userCredential.user;
-
     setDoc(doc(db, "user-Details", user.uid), {
-    
      email:this.email,
       name: this.firstName,
       secondName: this.surName,
@@ -241,26 +231,13 @@ export default {
     
     );
 
-//  const userRef  = doc(db, "user-Details" ,user.uid)
-
-
-// "user-Details", user.uid,
-    
-   
     console.log(user);
-    alert("signed in as " + this.email)
-    // const docRef = addDoc(collection(db, "user-Details"), {
-    //   name: this.firstName,
-    //   surname: this.surName,
-     
-    //   }),
-      
-    });   
-    
+    alert("signed Up as " + this.email)
+   
+    });    
   
   },
  
-
  login:function(){
  if(this.mail === "" && this.pass === ""){
 this.$router.push('/Login')

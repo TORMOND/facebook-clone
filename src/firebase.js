@@ -25,9 +25,9 @@ const analytics = getAnalytics(app);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-const person = "victor"
+
 const user = auth.currentUser;
 
 export {
-    app, db, auth, firebaseConfig, person, user
+    app, db, auth, firebaseConfig, user
 }

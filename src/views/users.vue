@@ -234,7 +234,7 @@ getDownloadURL(ref(storage, 'images/deadpool-image.jpg'))
   }
  })
 
- import{ app, db, auth, firebaseConfig, person, user } from '@/firebase.js'
+ import{ app, db, auth, firebaseConfig, user } from '@/firebase.js'
 
 export default {
     name:'Users',

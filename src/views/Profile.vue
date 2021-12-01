@@ -14,7 +14,10 @@
              <span><label class="user"><i class="fas fa-users"></i></label></span>
           </div>
           <div class="extras">
-
+  <!-- <label @click="run">
+              <span><i class="fas fa-user"></i></span>
+              {{name}}
+              </label> -->
               <span><i class="fab fa-facebook-messenger"></i></span>
               <span><i class="fas fa-bell"></i></span>
               <span @click="operate"><i class="fas fa-caret-down"></i></span>
@@ -246,7 +249,7 @@ getDownloadURL(ref(storage, 'images/cool-Benjamin.jpeg'))
   }
  })
 
- import{ app, db, auth, firebaseConfig, person, user } from '@/firebase.js'
+ import{ app, db, auth, firebaseConfig, user } from '@/firebase.js'
 
 export default {
     data() {
@@ -269,6 +272,9 @@ posts:[],
         }
     },
     methods: {
+//          run:function(){
+// this.$router.push('/profile')
+//       },
 operate:function(){
     this.popup =!this.popup;
     
@@ -444,6 +450,7 @@ onSnapshot(colRef, (snapshot)=>{
 }
 </script>
 <style scoped>
+
 .postimg{
     width:50%;
 }

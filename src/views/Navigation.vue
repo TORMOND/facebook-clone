@@ -43,7 +43,6 @@
 </div>
 
 
-
 <div class="content">
 <div class="wrap">
     <div class="post">
@@ -81,8 +80,7 @@
           <span @click="unlike" v-show="absent " class="like"><i class="fas fa-thumbs-up"></i></span>
         <span @click="unlike" v-show="absent" class="heart"><i class="fas fa-heart"></i></span>
        <p>
-              <label >177000</label>
-          
+              <label>177000</label>
        </p>
         </div>
         <div class="reviews">
@@ -97,17 +95,14 @@
                   <label><i class="fas fa-share"></i>share</label>
     </div>
 </div>
-<!-- 
 
- -->
 <div v-for="post in createdPosts" :key="post">
 <div class="card">
     <div class="profile">
         <div>
         <img src="https://scontent.fnbo8-1.fna.fbcdn.net/v/t1.6435-9/72952939_2497393310353084_2684978412589678592_n.png?_nc_cat=1&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=J8WEpcIH96QAX8nGTK0&_nc_ht=scontent.fnbo8-1.fna&oh=08b336607eb86dc1c0e47bac51c298a4&oe=61B96121">
         <!-- <a href="https://crypto.com/nft/register?utm_source=facebook&utm_medium=fb&utm_campaign=NEW-Facebook%3AWW-en%3Aall%3ANFT-Conversion_DailyDrop_Registration&utm_content=20210601%20-%20Sean%20Foley&fbclid=IwAR3RZxLX-DczbTZypgAnSffd-N2xKvEmP2ubm9QmzHSuuIIxenLE1oS8jtE">crypto.com</a> -->
- <a>{{post.email}}</a>
- 
+ <a>{{post.user}}</a>
  
    </div> 
    <div class="elipsis"><i class="fas fa-ellipsis-h"></i></div>
@@ -153,7 +148,6 @@
 </div>
       </div>
 
-
 <div id="modal" v-if="modal">
     <div class="create">
         <h2>Create post</h2>
@@ -181,7 +175,6 @@
 <h3>Add photos/videos</h3>
 <h6>or drag and drop</h6>
 </div>
-
 
 
 <div class="mobile">
@@ -227,8 +220,7 @@ import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWith
 import { getAnalytics } from "firebase/analytics";
 
 
-import{ app, db, auth, firebaseConfig, person, user } from '@/firebase.js'
-
+import{ app, db, auth, firebaseConfig, user } from '@/firebase.js'
 
 export default {
     data() {
@@ -249,6 +241,7 @@ export default {
       absent:false,
       number:"",
       image:null,
+      
        } 
     },
     methods: {
@@ -262,13 +255,9 @@ this.unliked =!this.unliked
 this.liked =!this.liked
 this.absent = true
 this.present = false
-
-  
 // updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
 //     // const b = query(docRef, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ));
-
 //    likes:this.number
-     
 //        });
         },
       open:function(){
@@ -310,7 +299,6 @@ create:function(){
 
  onAuthStateChanged(auth, (user) => {
   if (user) {
-
     const uid = user.uid;
     console.log("current users ID is",uid)
     console.log(user.email)
@@ -336,9 +324,7 @@ onSnapshot(q, (snapshot)=>{
    
   }
 
-
 });
-
 
     const storage = getStorage();
 getDownloadURL(ref(storage, 'user-images/tUmz1C3i4uYB5z5xNrXZlEElc8M2'))
@@ -369,20 +355,21 @@ onSnapshot(infor, (snapshot)=>{
     snapshot.docs.forEach((doc)=>{
         lik.push({...doc.data(), id:doc.id})
          this.createdPosts.push(doc.data())
-        console.log(doc.data())
+        // console.log(doc.data())
+        // console.log(doc.data().likes)
+        // console.log(lik[0])
+        // console.log(lik[1])
+        // console.log(lik[0].likes)
+        console.log(lik[0].likes)
 
-        // this.expression = doc.data().remarks
-        // this.name = doc.data().user
+        
     })
 })
 },
 upload:function(){
-
-
    const user = auth.currentUser;
 
-    setDoc(doc(db, "created-post", user.uid), {
-      
+    setDoc(doc(db, "created-post", user.uid), {  
       remarks:this.remarks,
       id:user.uid,
       user:user.email,
@@ -420,7 +407,6 @@ const uploadTask = uploadBytes(storageRef, this.image, metadata);
     padding: 16px;
     font-weight: 700;
 }
-
 #fb{
     font-family: 'Segoe UI';
     margin: 0;
@@ -471,7 +457,6 @@ border-radius:10px ;
 cursor: pointer;
 padding: 10px ;
 }
-
 .navigate span:hover{
 background: #f0f2f5;
 

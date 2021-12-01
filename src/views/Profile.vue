@@ -452,29 +452,7 @@ onSnapshot(colRef, (snapshot)=>{
 }
 </script>
 <style scoped>
- .tooltiptext {
-  visibility: hidden;
-  width: 120px;
-  background-color: rgb(54, 54, 54);
-  opacity: 0.8;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-margin-top: 50px;
-  /* Position the tooltip */
-  position: absolute;
-  z-index: 1;
-}
-
-.home:hover+.tooltiptext {
-  visibility: visible;
-}
-
-
-
-
-
+ 
 .postimg{
     width:50%;
 }
@@ -523,7 +501,6 @@ margin-top: 50px;
      flex-direction: column;
 }
 .back-image{
-/* background-image: url(); */
 background: #ceced1;
 margin: 0 auto;
 border-radius: 10px;
@@ -582,12 +559,10 @@ h1{
    margin: 0 auto;
 }
 .sent-img{
-  
     margin: 0 auto;
      display: flex;
 }
-#postimg{
-   
+#postimg{   
     margin: 0 auto;
 }
 .post span{
@@ -728,6 +703,23 @@ cursor: pointer;
 }
 #popup label:hover{
     background: #f0f2f5;
+}
+.tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: rgb(54, 54, 54);
+  opacity: 0.8;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  margin-top: 50px;
+  position: absolute;
+  z-index: 1;
+}
+
+.home:hover+.tooltiptext {
+  visibility: visible;
 }
 @media all and(max-width:900px){
     .wrap{

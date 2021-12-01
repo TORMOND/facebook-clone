@@ -325,7 +325,7 @@ export default {
       absent:false,
       number:"",
       image:null,
-    //   downloads:[],
+ 
        } 
     },
     methods: {
@@ -399,34 +399,7 @@ onSnapshot(q, (snapshot)=>{
 
  
 
-
-
     const storage = getStorage();
-getDownloadURL(ref(storage, 'user-images/tUmz1C3i4uYB5z5xNrXZlEElc8M2/260173517_897738951115136_6239047353412484116_n.jpg'))
-  .then((url) => {
-    // `url` is the download URL for 'images/stars.jpg'
-    // This can be downloaded directly:
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
-    xhr.onload = (event) => {
-      const blob = xhr.response;
-    };
-    xhr.open('GET', url);
-    xhr.send();
-
-// let images = []
-// url
-//   
-
-    // Or inserted into an <img> element
-    const img = document.getElementById('myimg');
-    img.setAttribute('src', url);
-  })
-  .catch((error) => {
-    // Handle any errors
-  });
-
-
 
   //FETCHING SEVERAL IMAGES IN A FILE
     
@@ -679,7 +652,6 @@ background: #f0f2f5;
 .content{
    grid-column: 4/9; 
    grid-row: 1;
-   overflow-y: scroll;
    padding: 0 32px;
 }
 .part-2{

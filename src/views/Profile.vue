@@ -7,10 +7,12 @@
           <!-- <i class="fas fa-search"></i> -->
           </div>
           <div class="navigate">
-            <router-link to="/Navigation" style="text-decoration:none; color:#65675b"><span><i class="fas fa-home"></i></span></router-link>  
+            <router-link to="/Navigation" style="text-decoration:none; color:#65675b" class="home"><span><i class="fas fa-home"></i></span></router-link>  
+  <span class="tooltiptext">Home</span>
+
            <span><i class="fab fa-youtube"></i></span>
              <span><i class="fas fa-store"></i></span>
-             <!-- <span class="material-icons-outlined">storefront</span>  -->
+            
              <span><label class="user"><i class="fas fa-users"></i></label></span>
           </div>
           <div class="extras">
@@ -200,7 +202,7 @@ getDownloadURL(ref(storage, 'images/deadpool-image.jpg'))
 onAuthStateChanged(auth, (user) => {
   if (user) {
 const storage = getStorage();
-getDownloadURL(ref(storage, 'images/Rolls-Royce-Phantom-Black.jpg'))
+getDownloadURL(ref(storage, 'Rolls-Royce-Phantom-Black.jpg'))
   .then((url) => {
     // `url` is the download URL for 'images/stars.jpg'
 
@@ -450,6 +452,28 @@ onSnapshot(colRef, (snapshot)=>{
 }
 </script>
 <style scoped>
+ .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: rgb(54, 54, 54);
+  opacity: 0.8;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+margin-top: 50px;
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.home:hover+.tooltiptext {
+  visibility: visible;
+}
+
+
+
+
 
 .postimg{
     width:50%;

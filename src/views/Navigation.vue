@@ -1,5 +1,6 @@
 <template>
     <div id="fb">
+        <div id="opt">
       <nav>
           <div class="fb-point">
           <i class="fab fa-facebook"></i>
@@ -8,7 +9,9 @@
           </div>
           <div class="navigate">
               
-            <span><i class="fas fa-home"></i></span>
+            <span ><i class="fas fa-home"></i></span>
+            
+
            <span><i class="fab fa-youtube"></i></span>
              <span><i class="fas fa-store"></i></span>
              <!-- <span class="material-icons-outlined">storefront</span>  -->
@@ -22,7 +25,8 @@
              <span @click="open"><i class="fas fa-plus"></i></span>
               <!-- <span><i class="fab fa-facebook-messenger"></i></span> -->
               <!-- <span><i class="fas fa-bell"></i></span> -->
-              <span @click="operate"><i class="fas fa-caret-down"></i></span>
+              <span @click="operate" class="home"><i class="fas fa-caret-down"></i></span>
+              <div class="tooltiptext">Account</div>
           </div>
       </nav>
       <div class="container">
@@ -97,11 +101,11 @@
 </div>
 
 <div v-for="post in createdPosts" :key="post">
-<div class="card">
+<div class="card" >
     <div class="profile">
         <div>
         <img src="https://scontent.fnbo8-1.fna.fbcdn.net/v/t1.6435-9/72952939_2497393310353084_2684978412589678592_n.png?_nc_cat=1&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=J8WEpcIH96QAX8nGTK0&_nc_ht=scontent.fnbo8-1.fna&oh=08b336607eb86dc1c0e47bac51c298a4&oe=61B96121">
-        <!-- <a href="https://crypto.com/nft/register?utm_source=facebook&utm_medium=fb&utm_campaign=NEW-Facebook%3AWW-en%3Aall%3ANFT-Conversion_DailyDrop_Registration&utm_content=20210601%20-%20Sean%20Foley&fbclid=IwAR3RZxLX-DczbTZypgAnSffd-N2xKvEmP2ubm9QmzHSuuIIxenLE1oS8jtE">crypto.com</a> -->
+       
  <a>{{post.user}}</a>
  
    </div> 
@@ -111,9 +115,8 @@
       {{post.remarks}}
     </div>
     <div class="image">
-        <!-- <img src="https://scontent.fnbo8-1.fna.fbcdn.net/v/t45.1600-4/cp0/q75/spS444/p526x296/194484182_23848002198700391_4322638678952833879_n.jpg?_nc_cat=1&ccb=1-5&_nc_sid=68ce8d&_nc_ohc=OZxphRCudjUAX8UGyXf&_nc_ht=scontent.fnbo8-1.fna&oh=15ce24028cf1565c3efc01f0470ef16a&oe=6199D6F8"> -->
-   
-   <img src="" id="myimg">
+      
+   <img :src="post.url" class="myimg">
    
     </div>
     <div class="more"></div>
@@ -144,14 +147,95 @@
 
 
 </div>
-<div class="part-2"></div>
+
+<div class="part-2">
+<div id="notification">
+    <div class="saves">
+        <div class="view">
+            <div style="display:flex; align-items:center; gap:10px"> <i class="fas fa-bookmark"></i>
+            <p>Recently Saved</p>
+            </div>
+           
+          <i class="fas fa-times"></i>
+        </div>
+<div class="saved-views">
+       <div class="elements">
+            <img src="https://scontent.fnbo8-1.fna.fbcdn.net/v/t15.5256-10/p206x206/259609451_399867201839415_6512154037700001013_n.jpg?_nc_cat=1&ccb=1-5&_nc_sid=ad6a45&_nc_ohc=WlutnWgpDr8AX9oCcNs&_nc_ht=scontent.fnbo8-1.fna&oh=feadab0f0f08779fb70bb0ea89cb1db1&oe=61AD4694">
+      <div>
+        <p>C-Ram Weapon Defence System</p>
+        <a>video. Saved to saves</a>
+        </div>
+    </div>
+    <div class="elements">
+<img src="https://scontent.fnbo8-1.fna.fbcdn.net/v/t15.5256-10/p206x206/261916897_657370318588378_5654446893264068384_n.jpg?_nc_cat=1&ccb=1-5&_nc_sid=ad6a45&_nc_ohc=YuxB1p7X938AX_Jez9H&_nc_ht=scontent.fnbo8-1.fna&oh=16767c5458693a8b2152e33c771485a4&oe=61ACB0A4">        
+       <div>
+        <p>Harry Porter String art | People are awesome</p>
+        <a>video. Saved to saves</a>
+        </div>
+    </div>
+     <div class="elements">
+         <img src="https://scontent.fnbo8-1.fna.fbcdn.net/v/t15.5256-10/p206x206/259169297_252643683434167_4451648193960679391_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=ad6a45&_nc_ohc=ZZvRf6QnH4IAX_g-vNV&_nc_ht=scontent.fnbo8-1.fna&oh=416a8c65942970e66a24a65042a89fc3&oe=61AC3B16">
+     
+     <div>
+        <p>Distance Alert Safety function helps drivers to keep Distance</p>
+        <a>video. Saved to saves</a>
+        </div>
+    </div>
+</div>
+    </div>
+
+</div>
+<div id="sponsored">
+    <h3>Sponsored</h3>
+    <div class="companies">
+    <img src="street.jpg">
+    <div class="words">
+   <p>crypto.com</p>
+<a href="https://crypto.com/nft/register?utm_source=facebook&utm_medium=fb&utm_campaign=NEW-Facebook%3AWW-en%3Aall%3ANFT-Conversion_DailyDrop_Registration&utm_content=20210601%20-%20Sean%20Foley&fbclid=IwAR3RZxLX-DczbTZypgAnSffd-N2xKvEmP2ubm9QmzHSuuIIxenLE1oS8jtE">crypto.com</a>
+    </div>
+ 
+</div>
+
+   <div class="companies">
+    <img src="street.jpg">
+    <div class="words">
+   <p>crypto.com</p>
+<a href="https://crypto.com/nft/register?utm_source=facebook&utm_medium=fb&utm_campaign=NEW-Facebook%3AWW-en%3Aall%3ANFT-Conversion_DailyDrop_Registration&utm_content=20210601%20-%20Sean%20Foley&fbclid=IwAR3RZxLX-DczbTZypgAnSffd-N2xKvEmP2ubm9QmzHSuuIIxenLE1oS8jtE">crypto.com</a>
+    </div>
+ 
+</div>
+
+
+</div>
+<div id="contacts">
+    <h3>Contacts</h3>
+  <div class="post" @click="run">
+  <span><i class="fas fa-user"></i></span>
+  <p>{{name}} {{secondName}}</p>
+    </div>
+      <div class="post" @click="run">
+  <span><i class="fas fa-user"></i></span>
+  <p>{{name}} {{secondName}}</p>
+    </div>
+      <div class="post" @click="run">
+  <span><i class="fas fa-user"></i></span>
+  <p>{{name}} {{secondName}}</p>
+    </div>
+      <div class="post" @click="run">
+  <span><i class="fas fa-user"></i></span>
+  <p>{{name}} {{secondName}}</p>
+    </div>
+</div>
+
+</div>
 </div>
       </div>
-
-<div id="modal" v-if="modal">
+</div>
+<div id="modal" v-if="modal" >
     <div class="create">
         <h2>Create post</h2>
-      <button @click="open">X</button> 
+      <!-- <button @click="open" v-if="closed">X</button> -->
+      <button @click="close" >X</button> 
     </div>
       <div class="post" @click="run">
   <span><i class="fas fa-user"></i></span>
@@ -213,7 +297,7 @@
     </div>
 </template>
 <script>
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, doc, getDocs, getDoc, setDoc,  onSnapshot, query, where} from "firebase/firestore"
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
@@ -241,7 +325,7 @@ export default {
       absent:false,
       number:"",
       image:null,
-      
+    //   downloads:[],
        } 
     },
     methods: {
@@ -261,26 +345,20 @@ this.present = false
 //        });
         },
       open:function(){
-          this.modal=!this.modal
+          this.modal=true
+           const app = document.querySelector('#opt')
+         app.classList="active"   
+      },
+      close:function(){
+          this.modal= false
+   const app = document.querySelector('#opt')
+         app.classList=""   
       },
       run:function(){
 this.$router.push('/profile')
       },
-
       pickFile:function(){
     this.$ref.fileInput.click()
-      },
-      onFileSelected:function(event){
-const files = event.target.files
-let filename = files[0].name
-const fileReader = new FileReader()
-fileReader.addEventListener('load', () =>{
-    this.imageUrl = fileReader.result
-    console.log(filename)
-  
-})
-fileReader.readAsDataURL(files[0])
-this.image = files[0]
       },
 signOut:function(){
  signOut(auth).then(() => {
@@ -319,18 +397,14 @@ onSnapshot(q, (snapshot)=>{
     console.log(users)
 })
 
-  } else {
-   console.log("no user")
-   
-  }
+ 
 
-});
+
 
     const storage = getStorage();
-getDownloadURL(ref(storage, 'user-images/tUmz1C3i4uYB5z5xNrXZlEElc8M2'))
+getDownloadURL(ref(storage, 'user-images/tUmz1C3i4uYB5z5xNrXZlEElc8M2/260173517_897738951115136_6239047353412484116_n.jpg'))
   .then((url) => {
     // `url` is the download URL for 'images/stars.jpg'
-
     // This can be downloaded directly:
     const xhr = new XMLHttpRequest();
     xhr.responseType = 'blob';
@@ -340,6 +414,10 @@ getDownloadURL(ref(storage, 'user-images/tUmz1C3i4uYB5z5xNrXZlEElc8M2'))
     xhr.open('GET', url);
     xhr.send();
 
+// let images = []
+// url
+//   
+
     // Or inserted into an <img> element
     const img = document.getElementById('myimg');
     img.setAttribute('src', url);
@@ -347,7 +425,56 @@ getDownloadURL(ref(storage, 'user-images/tUmz1C3i4uYB5z5xNrXZlEElc8M2'))
   .catch((error) => {
     // Handle any errors
   });
+
+
+
+  //FETCHING SEVERAL IMAGES IN A FILE
     
+  const listRef = ref(storage, 'images');
+
+// Find all the prefixes and items.
+listAll(listRef)
+  .then((res) => {
+    res.prefixes.forEach((folderRef) => {
+      // All the prefixes under listRef.
+      // You may call listAll() recursively on them.
+    
+    });
+    res.items.forEach((itemRef) => {
+      // All the items under listRef.
+getDownloadURL(ref(storage, itemRef))
+  .then((url) => {
+    // `url` is the download URL for 'images/stars.jpg'
+    // This can be downloaded directly:
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'blob';
+    xhr.onload = (event) => {
+      const blob = xhr.response;
+    };
+    xhr.open('GET', url);
+    xhr.send();
+    console.log(url)
+
+    let images = []
+    images.push({url})
+    // this.downloads.push({url})
+    // this.createdPosts.push({url})
+   console.log(images)
+
+  })
+     
+
+    });
+  }).catch((error) => {
+    // Uh-oh, an error occurred!
+  });
+ } else {
+   console.log("no user")
+   
+  }
+
+});
+
 const infor = collection(db, 'created-post')
 
 onSnapshot(infor, (snapshot)=>{
@@ -360,12 +487,27 @@ onSnapshot(infor, (snapshot)=>{
         // console.log(lik[0])
         // console.log(lik[1])
         // console.log(lik[0].likes)
-        console.log(lik[0].likes)
+        console.log(lik)
 
         
     })
+console.log(this.createdPosts)
 })
 },
+  onFileSelected:function(event){
+const files = event.target.files
+let filename = files[0].name
+const fileReader = new FileReader()
+fileReader.addEventListener('load', () =>{
+    this.imageUrl = fileReader.result
+    console.log(filename)
+    
+//   console.log(this.imageUrl)
+})
+fileReader.readAsDataURL(files[0])
+this.image = files[0]
+console.log(this.image)
+      },
 upload:function(){
    const user = auth.currentUser;
 
@@ -374,6 +516,7 @@ upload:function(){
       id:user.uid,
       user:user.email,
       likes:0,
+      
     }
     
     );
@@ -387,7 +530,7 @@ const metadata = {
 };
 
 // Upload the file and metadata
-const uploadTask = uploadBytes(storageRef, this.image, metadata);
+const uploadTask = uploadBytes(storageRef, metadata);
 },
 
     },  
@@ -398,6 +541,7 @@ const uploadTask = uploadBytes(storageRef, this.image, metadata);
 }
 </script>
 <style scoped>
+
 #popup{
     position:fixed;
     background: #fff;
@@ -407,12 +551,18 @@ const uploadTask = uploadBytes(storageRef, this.image, metadata);
     padding: 16px;
     font-weight: 700;
 }
-#fb{
+#opt{
     font-family: 'Segoe UI';
     margin: 0;
     padding: 0;
     width: 100%;
     position: relative;
+}
+#opt.active{
+  opacity: 0.15;
+    pointer-events: none;
+    user-select: none;
+    transition: 0.1s;
 }
 .field:focus{
     outline: none;
@@ -521,7 +671,10 @@ background: #f0f2f5;
    grid-column: 1/4;
    overflow-y: scroll;
    grid-row: 1;
- 
+ position: fixed;
+}
+.part-1 .post{
+    width: 344px;
 }
 .content{
    grid-column: 4/9; 
@@ -530,10 +683,11 @@ background: #f0f2f5;
    padding: 0 32px;
 }
 .part-2{
-    grid-column: 9/12;
+    grid-column: 10/13;
     overflow-y: scroll;
     grid-row: 1;
-    /* position: fixed; */
+    margin-left:80%;
+    position: fixed;
 }
 .card{
     background: #fff;
@@ -739,9 +893,11 @@ button{
     position:fixed;
     background: #fff;
     top: 15%;
-    left: 70%;
+    left:40%;
     border-radius: 10px;
     padding: 16px;
+    z-index: 1;
+    box-shadow: 3px 3px 5px #ceced1, 3px 3px 5px #ceced1 ;
 }
 .create{
     display: flex;
@@ -858,6 +1014,100 @@ textarea:focus{
     width: 200px;
     height: 200px;
 }
+
+.part-2{
+    padding-top: 80px;
+  overflow-y: scroll;
+}
+#sponsored{
+   border-bottom: 0.5px solid #ceced1; 
+   padding: 8px;
+}
+.companies{
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    border-radius: 5px;
+    padding: 8px;
+    
+}
+.companies:hover{
+    background: #e4e6eb;
+}
+.companies img{
+    width: 130px;
+    height: 130px;
+    border-radius: 5px;
+}
+.words{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;  
+    
+}
+.words a{
+    color:#65676b;
+    text-decoration: none;
+    margin-top: -20px;
+    font-size: 14px;
+}
+.words p{
+    font-weight: 700;
+    font-size: 20px;
+}
+.view{
+   
+     display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#notification{
+     background: #fff;
+     border-radius: 5px;
+     padding: 16px;
+}
+.elements a{
+    color:#65676b;
+    text-decoration: none;
+    margin-top: -50px;
+    font-size: 13px; 
+}
+.elements p{
+    font-weight: 600;
+    font-size: 15px; 
+}
+.elements img{
+    width: 48px;
+    height: 48px;
+    border-radius: 5px;
+}
+.elements{
+    display:flex;
+    gap:10px;
+    align-items: center;
+}
+.tooltiptext {
+  visibility: hidden;
+  width: 100px;
+  background-color: rgb(54, 54, 54);
+  opacity: 0.8;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  margin-left:120px;
+margin-top: 50px;
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.home:hover+.tooltiptext {
+  visibility: visible;
+}
+
 @media all and (max-width: 850px){
     .part-1{
         display: none;
@@ -880,7 +1130,11 @@ textarea:focus{
 
 
 }
-
+@media all and (max-width:420px){
+  .content{
+        grid-column: 1/12;
+    }  
+}
 
 
 

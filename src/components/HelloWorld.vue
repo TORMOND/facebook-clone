@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-  <div id="opt">
+  <div id="opt" >
         <div class="grid">
             <div class="segment-1">
                 <div class="center">
@@ -33,7 +33,7 @@
       </div>  </div>
         </div>
     </div>
-<!--  <p v-bind::key="password">{{password}}</p> -->
+
     <div class="footer" >
         <div class="wrapper">
 <div class="wrap-1">
@@ -94,7 +94,8 @@
         <div class="ftp">
             <div class="box-1">
                 <h1>Sign Up</h1>
-                <img src="https://static.xx.fbcdn.net/rsrc.php/v3/y2/r/__geKiQnSG-.png" @click="toggle">
+                <img src="https://static.xx.fbcdn.net/rsrc.php/v3/y2/r/__geKiQnSG-.png" @click="toggle" v-if="opener">
+                <img src="https://static.xx.fbcdn.net/rsrc.php/v3/y2/r/__geKiQnSG-.png" @click="close" v-if="closer">
             </div>
             <div class="box-2">
                 <p>It's quick and easy.</p>
@@ -188,25 +189,33 @@ export default {
        female:'',
        male:'',
        custom:'',
+       closer:false,
+       opener:true,
 
       }
     },
     methods: {
+    close:function(){
+ const app = document.querySelector('#opt')
+         app.classList=""   
+         this.popup= false
+         this.opener=true
+         this.closer=false
+             
+    },
     toggle:function(){
-      this.popup =!this.popup
-//       if(this.popup=true){
-//       const app = document.querySelector('#opt')
-//         app.classList = "active";
-//         this.popup = true
-//         const popup = document.querySelector('#popup')
-//         popup.classList = "active"
-// }else{
-//     this.popup.classList = '';
-//      app.classList = '';
-// }
+      this.popup=true
+     this.closer = true
+     this.opener=false
+       const app = document.querySelector('#opt')
+         app.classList="active"   
 
-    //     const form = document.querySelector('#signupForm');
-    //  form.reset();
+// if(this.popup=true){
+//     app.classList = "active"; 
+// }else{
+//     app.classList ="";
+// }
+ 
     },
     customs:function(){
         this.customize = true
@@ -230,7 +239,7 @@ export default {
     }
     
     );
-
+this.popup=false
     console.log(user);
     alert("signed Up as " + this.email)
    
@@ -277,12 +286,33 @@ this.$router.push('/Login')
  }
     },
  
-
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+ #popup.active {
+    pointer-events: all;
+    transition: 0.8s;
+    visibility: visible;
+} 
+#opt.active {
+    opacity: 0.25;
+    pointer-events: none;
+    user-select: none;
+    transition: 0.1s;
+}
+#popup {
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    transition: 0.8s;
+    z-index: 1;
+  visibility: visible;
+}
+
 .textField:focus{
     outline-color:#1877f2;
 }
@@ -495,28 +525,9 @@ input{
 .languages{
     font-size: 40px;
 }
-#popup {
-    position: fixed;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #fff;
-    transition: 0.8s;
-    z-index: 1;
-}
 
- #popup.active {
-    position: fixed;
-    z-index: 10;
-    pointer-events: all;
-    transition: 0.8s;
-} 
-#opt.active {
-    opacity: 0.25;
-    pointer-events: none;
-    user-select: none;
-    transition: 0.1s;
-}
+
+
 
 .mypopup {
     box-shadow: 2px 2px 2px 2px rgb(202, 199, 199);
@@ -676,12 +687,7 @@ input{
     margin: 12px;
 }
 
-#responsive.active {
-   opacity: 0.25;
-   pointer-events: none;
-   user-select: none;
-   transition: 0.1s;
-}
+
 .form{
     padding: 16px;
     display: flex;

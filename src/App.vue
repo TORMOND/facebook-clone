@@ -105,6 +105,9 @@ background: #f0f2f5;
     align-items: center;
     cursor: pointer;
 }
+.extras span:hover{
+    background: #d1d2d4;
+}
 .fa-user{
     color: #fff;
 }

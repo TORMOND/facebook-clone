@@ -117,7 +117,6 @@
           </p>
         </div>
         <div class="reviews">
-
         <p>{{more.length}} comments</p>
         <p>2.6k Shares </p>
         </div>
@@ -139,14 +138,13 @@
     </div> 
 
 <div class="posted-comments" style="padding:16px 28px">
-    
+
   <!-- <span @click="showComments" class="more">More comments.....</span> -->
    <p>{{comments}}</p>
 <div v-show="moreComments" v-for="item in more" :key="item" class="item">
    <p><span style="color:#ceced1">{{item.user}}</span> :{{item.comments}}</p>
-   
     </div>
-<!-- v-for="comment in comments" :key="comment" -->
+
 </div>
  
     </div>
@@ -452,7 +450,6 @@ onSnapshot(colRef, (snapshot)=>{
 }
 </script>
 <style scoped>
- 
 .postimg{
     width:50%;
 }
@@ -467,7 +464,7 @@ onSnapshot(colRef, (snapshot)=>{
     padding: 10px;
     grid-column: 1/2;
     grid-row: 1;
-  
+  height: 600px;
 }
 .friends h1{
     font-size: 20px;
@@ -557,13 +554,16 @@ h1{
     background: #fff;
     border-radius: 10px;
    margin: 0 auto;
+   width: 600px;
 }
 .sent-img{
     margin: 0 auto;
      display: flex;
+
 }
 #postimg{   
     margin: 0 auto;
+    width: 100%;
 }
 .post span{
     width: 40px;
@@ -681,10 +681,15 @@ cursor: pointer;
     color: #ceced1;
     cursor: pointer;
 }
+.item{
+  max-height: 150px;
+  overflow: hidden;
+}
 .item p{
    background: #f0f2f5; 
    padding: 10px 16px;
    border-radius: 10px;
+  
 }
 #popup{
     position:fixed;
@@ -723,7 +728,6 @@ cursor: pointer;
 }
 @media all and(max-width:900px){
     .wrap{
-        display: grid;
         grid-template-columns: repeat(1, 1fr);
     }
     .friends{

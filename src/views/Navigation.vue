@@ -22,7 +22,8 @@
               <span><i class="fas fa-user"></i></span>
               {{name}}
               </label>
-             <span @click="open"><i class="fas fa-plus"></i></span>
+             <span @click="open" class="create"><i class="fas fa-plus"></i></span>
+             <div class="tooltip">Create Posts</div>
               <!-- <span><i class="fab fa-facebook-messenger"></i></span> -->
               <!-- <span><i class="fas fa-bell"></i></span> -->
               <span @click="operate" class="home"><i class="fas fa-caret-down"></i></span>
@@ -61,44 +62,6 @@
 </div>
 
 
-<div class="card">
-    <div class="profile">
-        <div>
-        <img src="https://scontent.fnbo8-1.fna.fbcdn.net/v/t1.6435-9/72952939_2497393310353084_2684978412589678592_n.png?_nc_cat=1&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=J8WEpcIH96QAX8nGTK0&_nc_ht=scontent.fnbo8-1.fna&oh=08b336607eb86dc1c0e47bac51c298a4&oe=61B96121">
-        <a href="https://crypto.com/nft/register?utm_source=facebook&utm_medium=fb&utm_campaign=NEW-Facebook%3AWW-en%3Aall%3ANFT-Conversion_DailyDrop_Registration&utm_content=20210601%20-%20Sean%20Foley&fbclid=IwAR3RZxLX-DczbTZypgAnSffd-N2xKvEmP2ubm9QmzHSuuIIxenLE1oS8jtE">crypto.com</a>
-   </div> 
-   <div class="elipsis"><i class="fas fa-ellipsis-h"></i></div>
-    </div>
-    <div class="description">
-        Hong Kong's neon signs are disappearing, and street photographer Sean Foley has made it his mission to capture them before it's too late."Fading Memories" is now live, exclusively on 
-    </div>
-    <div class="image">
-        <img src="https://scontent.fnbo8-1.fna.fbcdn.net/v/t45.1600-4/cp0/q75/spS444/p526x296/194484182_23848002198700391_4322638678952833879_n.jpg?_nc_cat=1&ccb=1-5&_nc_sid=68ce8d&_nc_ohc=OZxphRCudjUAX8UGyXf&_nc_ht=scontent.fnbo8-1.fna&oh=15ce24028cf1565c3efc01f0470ef16a&oe=6199D6F8">
-    </div>
-    <div class="more"></div>
-    <div class="engagement">
-        <div class="emoji">
-                <span @click="like" v-show="present" class="like"><i class="fas fa-thumbs-up"></i></span>
-        <span @click="like" v-show="present" class="heart"><i class="fas fa-heart"></i></span>
-
-          <span @click="unlike" v-show="absent " class="like"><i class="fas fa-thumbs-up"></i></span>
-        <span @click="unlike" v-show="absent" class="heart"><i class="fas fa-heart"></i></span>
-       <p>
-              <label>177000</label>
-       </p>
-        </div>
-        <div class="reviews">
-        <p>5.3k comments</p>
-        <p>2.6k Shares </p>
-        </div>
-    </div>
-    <div class="action">
-  <label @click="like" class="thumbs-up" v-show="present" ><i class="far fa-thumbs-up"></i>like</label>
-          <label @click="unlike" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
-             <label><i class="far fa-comment-alt"></i>comment</label>
-                  <label><i class="fas fa-share"></i>share</label>
-    </div>
-</div>
 
 <div v-for="post in createdPosts" :key="post">
 <div class="card" >
@@ -149,14 +112,14 @@
 </div>
 
 <div class="part-2">
-<div id="notification">
+<div id="notification" v-if="card">
     <div class="saves">
         <div class="view">
             <div style="display:flex; align-items:center; gap:10px"> <i class="fas fa-bookmark"></i>
             <p>Recently Saved</p>
             </div>
-           
-          <i class="fas fa-times"></i>
+           <span @click="closeCard" class="close-card"><i class="fas fa-times" ></i></span>
+          
         </div>
 <div class="saved-views">
        <div class="elements">
@@ -325,11 +288,13 @@ export default {
       absent:false,
       number:"",
       image:null,
- 
+      card:true,
        } 
     },
     methods: {
-
+        closeCard:function(){
+this.card=false
+        },
         unlike:function(){
            this.absent = false
           this.present = true
@@ -339,6 +304,7 @@ this.unliked =!this.unliked
 this.liked =!this.liked
 this.absent = true
 this.present = false
+
 // updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
 //     // const b = query(docRef, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ));
 //    likes:this.number
@@ -378,8 +344,8 @@ create:function(){
  onAuthStateChanged(auth, (user) => {
   if (user) {
     const uid = user.uid;
-    console.log("current users ID is",uid)
-    console.log(user.email)
+    // console.log("current users ID is",uid)
+    // console.log(user.email)
 
 let currentUser = auth.currentUser
 const userRef = collection(db, 'user-Details')
@@ -388,13 +354,13 @@ onSnapshot(q, (snapshot)=>{
     let users = []
     snapshot.docs.forEach((doc)=>{
         users.push({...doc.data(), id:doc.id})
-        console.log(doc.data().name)
-         console.log(doc.data().secondName)
+        // console.log(doc.data().name)
+        //  console.log(doc.data().secondName)
          this.name = doc.data().name
          this.secondName = doc.data().secondName
     })
     
-    console.log(users)
+    // console.log(users)
 })
 
  
@@ -426,13 +392,13 @@ getDownloadURL(ref(storage, itemRef))
     };
     xhr.open('GET', url);
     xhr.send();
-    console.log(url)
+    // console.log(url)
 
     let images = []
     images.push({url})
     // this.downloads.push({url})
     // this.createdPosts.push({url})
-   console.log(images)
+//    console.log(images)
 
   })
      
@@ -460,11 +426,10 @@ onSnapshot(infor, (snapshot)=>{
         // console.log(lik[0])
         // console.log(lik[1])
         // console.log(lik[0].likes)
-        console.log(lik)
+        // console.log(lik)
 
-        
     })
-console.log(this.createdPosts)
+// console.log(this.createdPosts)
 })
 },
   onFileSelected:function(event){
@@ -473,39 +438,53 @@ let filename = files[0].name
 const fileReader = new FileReader()
 fileReader.addEventListener('load', () =>{
     this.imageUrl = fileReader.result
-    console.log(filename)
-    
-//   console.log(this.imageUrl)
+//     console.log(filename)  
+//  console.log(this.imageUrl)
+
 })
 fileReader.readAsDataURL(files[0])
 this.image = files[0]
-console.log(this.image)
+// console.log(this.image)
       },
-upload:function(){
-   const user = auth.currentUser;
 
+upload:function(){
+  
+const storage = getStorage();
+const storageRef = ref(storage, 'images/' + this.image.name);
+
+const metadata = {
+  contentType: this.image.type,
+  size:this.image.size,
+  name:this.image.name,
+  type:this.image.type,
+};
+
+// Upload the file and metadata
+const uploadTask = uploadBytes(storageRef,this.image, metadata).then(()=>{
+ getDownloadURL(storageRef).then((url)=>{
+    //  console.log(url)
+     const xhr = new XMLHttpRequest();
+    xhr.responseType = 'blob';
+    xhr.onload = (event) => {
+      const blob = xhr.response;
+    };
+    xhr.open('GET', url);
+    xhr.send(); 
+  
+const user = auth.currentUser;
     setDoc(doc(db, "created-post", user.uid), {  
       remarks:this.remarks,
       id:user.uid,
       user:user.email,
       likes:0,
-      
-    }
-    
-    );
-const storage = getStorage();
-const storageRef = ref(storage, this.image);
+     url:url,
+    });
+  })
 
-// Create file metadata including the content type
-/** @type {image} */
-const metadata = {
-  contentType: 'image/jpg',
-};
+})
 
-// Upload the file and metadata
-const uploadTask = uploadBytes(storageRef, metadata);
 },
-
+ 
     },  
       beforeMount(){
     this.create()
@@ -523,6 +502,7 @@ const uploadTask = uploadBytes(storageRef, metadata);
     border-radius: 10px;
     padding: 16px;
     font-weight: 700;
+     box-shadow: 3px 3px 5px #ceced1, 3px 3px 5px #ceced1, 3px 3px 5px #ceced1 ;
 }
 #opt{
     font-family: 'Segoe UI';
@@ -552,6 +532,7 @@ nav{
     z-index: 1;
     background: #fff;
 }
+
 .fb-point i{
     font-size: 38px;
     color: #216FD8;
@@ -628,6 +609,9 @@ background: #f0f2f5;
     align-items: center;
     cursor: pointer;
 }
+.extras span:hover{
+    background: #d1d2d4;
+}
 .fa-user{
     color: #fff;
 }
@@ -641,8 +625,7 @@ background: #f0f2f5;
   
 }
 .part-1{
-   grid-column: 1/4;
-   overflow-y: scroll;
+   grid-column: 1/4; 
    grid-row: 1;
  position: fixed;
 }
@@ -656,7 +639,6 @@ background: #f0f2f5;
 }
 .part-2{
     grid-column: 10/13;
-    overflow-y: scroll;
     grid-row: 1;
     margin-left:80%;
     position: fixed;
@@ -1040,6 +1022,19 @@ textarea:focus{
      border-radius: 5px;
      padding: 16px;
 }
+.close-card{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.close-card:hover{
+    background: #e4e6eb;
+}
+
 .elements a{
     color:#65676b;
     text-decoration: none;
@@ -1059,6 +1054,11 @@ textarea:focus{
     display:flex;
     gap:10px;
     align-items: center;
+    border-radius: 5px;
+    padding: 8px;
+}
+.elements:hover{
+    background: #e4e6eb;
 }
 .tooltiptext {
   visibility: hidden;
@@ -1070,8 +1070,7 @@ textarea:focus{
   border-radius: 6px;
   padding: 5px 0;
   margin-left:120px;
-margin-top: 50px;
-  /* Position the tooltip */
+  margin-top: 50px;
   position: absolute;
   z-index: 1;
 }
@@ -1080,6 +1079,24 @@ margin-top: 50px;
   visibility: visible;
 }
 
+.tooltip {
+  visibility: hidden;
+  width: 100px;
+  background-color: rgb(54, 54, 54);
+  opacity: 0.8;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  margin-left:120px;
+  margin-top: 50px;
+  position: absolute;
+  z-index: 1;
+}
+
+.create:hover+.tooltip {
+  visibility: visible;
+}
 @media all and (max-width: 850px){
     .part-1{
         display: none;
@@ -1100,14 +1117,11 @@ margin-top: 50px;
     display: none;
 }
 
-
 }
 @media all and (max-width:420px){
   .content{
         grid-column: 1/12;
     }  
 }
-
-
 
 </style>

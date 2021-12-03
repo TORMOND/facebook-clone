@@ -19,7 +19,10 @@
           </div>
           <div class="extras">
               <label @click="run">
-              <span><i class="fas fa-user"></i></span>
+              <!-- <span><i class="fas fa-user"></i></span> -->
+                  <div class="user-pic">
+  <img :src="profilePic">
+</div>   
               {{name}}
               </label>
              <span @click="open" class="create"><i class="fas fa-plus"></i></span>
@@ -35,7 +38,10 @@
 
 <div class="part-1">
     <div class="post" @click="run">
-  <span><i class="fas fa-user"></i></span>
+    <div class="user-pic">
+  <img :src="profilePic">
+</div>   
+  <!-- <span><i class="fas fa-user"></i></span> -->
   <p>{{name}} {{secondName}}</p>
     </div>
     <label><i class="fas fa-users"></i>Friends</label>
@@ -112,6 +118,7 @@
 </div>
 
 <div class="part-2">
+    <div class="side-element">
 <div id="notification" v-if="card">
     <div class="saves">
         <div class="view">
@@ -173,7 +180,10 @@
 <div id="contacts">
     <h3>Contacts</h3>
   <div class="post" @click="run">
-  <span><i class="fas fa-user"></i></span>
+          <div class="user-pic">
+  <img :src="profilePic">
+</div>   
+  <!-- <span><i class="fas fa-user"></i></span> -->
   <p>{{name}} {{secondName}}</p>
     </div>
       <div class="post" @click="run">
@@ -189,7 +199,7 @@
   <p>{{name}} {{secondName}}</p>
     </div>
 </div>
-
+</div>
 </div>
 </div>
       </div>
@@ -211,9 +221,9 @@
   <div class="include">
       <input type="file" class="file" placeholder="select file"  @change="onFileSelected" accept="image/*">
       <div class="outline">
-          <div class="btn">
+          <!-- <div class="btn">
 <button>X</button>
-</div>
+</div> -->
 <i class="fas fa-plus-square"></i>
 <!-- <button @click="pickFile">Upload Image</button>
 <input type="file" style="display:none;" @change="onFileSelected" ref="fileInput"> -->
@@ -289,6 +299,7 @@ export default {
       number:"",
       image:null,
       card:true,
+      profilePic:[],
        } 
     },
     methods: {
@@ -297,17 +308,18 @@ this.card=false
         },
         unlike:function(){
            this.absent = false
-          this.present = true
+          this.present = true        
+
         },
          like:function(){
 this.unliked =!this.unliked
 this.liked =!this.liked
 this.absent = true
 this.present = false
-
+console.log(this.createdPosts)
 // updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
 //     // const b = query(docRef, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ));
-//    likes:this.number
+//    likes:this.number++
 //        });
         },
       open:function(){
@@ -358,6 +370,7 @@ onSnapshot(q, (snapshot)=>{
         //  console.log(doc.data().secondName)
          this.name = doc.data().name
          this.secondName = doc.data().secondName
+          this.profilePic = doc.data().url
     })
     
     // console.log(users)
@@ -366,10 +379,8 @@ onSnapshot(q, (snapshot)=>{
  
 
     const storage = getStorage();
-
-  //FETCHING SEVERAL IMAGES IN A FILE
-    
-  const listRef = ref(storage, 'images');
+  //FETCHING SEVERAL IMAGES IN A FILE  
+  const listRef = ref(storage, 'friends');
 
 // Find all the prefixes and items.
 listAll(listRef)
@@ -398,11 +409,10 @@ getDownloadURL(ref(storage, itemRef))
     images.push({url})
     // this.downloads.push({url})
     // this.createdPosts.push({url})
-//    console.log(images)
+//   console.log(images)
 
   })
      
-
     });
   }).catch((error) => {
     // Uh-oh, an error occurred!
@@ -423,7 +433,9 @@ onSnapshot(infor, (snapshot)=>{
          this.createdPosts.push(doc.data())
         // console.log(doc.data())
         // console.log(doc.data().likes)
-        // console.log(lik[0])
+
+
+        console.log(lik)
         // console.log(lik[1])
         // console.log(lik[0].likes)
         // console.log(lik)
@@ -767,6 +779,7 @@ label:hover{
     margin-top: 80px;
     padding: 12px 16px 10px;
     box-shadow: 1px 1px 1px #ceced1, 1px 1px 1px #ceced1 ;
+    width: 100%;
 }
 .post span{
     width: 40px;
@@ -827,6 +840,7 @@ cursor: pointer;
    display: grid;
     grid-template-columns: repeat(3, 1fr);
     padding: 12px 16px 16px;   
+    /* width: 100%; */
 }
 .fa-images{
     color: rgb(8, 250, 8);
@@ -971,7 +985,10 @@ textarea:focus{
 
 .part-2{
     padding-top: 80px;
-  overflow-y: scroll;
+  
+}
+.side-element{
+   overflow-y: scroll; 
 }
 #sponsored{
    border-bottom: 0.5px solid #ceced1; 
@@ -1011,7 +1028,6 @@ textarea:focus{
     font-size: 20px;
 }
 .view{
-   
      display: flex;
     align-items: center;
     justify-content: space-between;

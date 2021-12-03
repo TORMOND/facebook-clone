@@ -115,4 +115,11 @@ background: #f0f2f5;
     background: #f0f2f5;
     
 }
+.user-pic img{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
 </style>

@@ -256,7 +256,7 @@ this.$router.push('/Login')
     // Signed in 
     const user = userCredential.user;
     // console.log(user);
-    alert("You've Signed in as" + this.mail);
+    // alert("You've Signed in as" + this.mail);
       onAuthStateChanged(auth, user => {
           const querySnapshot = getDocs(collection(db, "user-Details"), {
 });
@@ -714,6 +714,9 @@ input{
     font-size: 15px;
     margin: 6px 0;
 }
+
+
+
 @media all and(max-width:1024px) {
     .card{
         width:100%;

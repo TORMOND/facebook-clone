@@ -43,59 +43,34 @@
             <!-- <a>See all Friends</a>
             <span>251 friends</span> -->
         </div>
+        
         <div class="persons">
-            <div class="images" >
-                <img src="https://images.theconversation.com/files/417198/original/file-20210820-25-1j3afhs.jpeg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip">
-                </div>
-                
-                            <div class="images">
-                                <img src="street.jpg">
-               <p>{{user}}</p>
-                </div>
-                            <div class="images">
-                                <img src="https://cdn.substack.com/image/fetch/w_1200,c_limit,f_jpg,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fb27d35ff-fab9-423f-a430-7b920fe9b412_640x902.jpeg">
-                <p>{{user}}</p>
-                </div>
-                            <div class="images">
-                                <img src="https://media.voguebusiness.com/photos/6111311e4a8a0fcfb2812122/1:1/w_2000,h_2000,c_limit/luxury-nfts-in-games-voguebus-burberry_mythical-games-aug-21-story.jpg">
-               <p>{{user}}</p>
-                </div>
-                            <div class="images">
-                                <img src="https://www.forbes.com/advisor/wp-content/uploads/2021/04/NFT.jpeg.jpg">
-               <p>{{user}}</p>
-                </div>
-                            <div class="images">
-                                <img src="https://miro.medium.com/max/1400/1*QK11i-7_WUrUHBcwIKh5Qg.jpeg">
-               <p>{{user}}</p>
-                </div>
-                            <div class="images">
-                                <img src="https://media.itpro.co.uk/image/upload/s--X-WVjvBW--/f_auto,t_content-image-full-desktop@1/v1618913451/itpro/2021/04/shutterstock_sculpture_art.jpg">
-             <p>{{user}}</p>
-                </div>
-                <div class="images">
-                    <img src="https://www.altcoinbuzz.io/wp-content/uploads/2021/01/Enjin-MetaverseMe-Partner-to-Merge-NFTs-and-Augmented-Reality-1.jpg">
-                <p>{{user}}</p>
+           <div class="images" v-for="friend in currentFriends" :key="friend" @click="pool">  
+              <img  :src="friend.url">
+              <p>{{friend.name}} {{friend.secondName}}</p>
                 </div>
 
-               <router-link :to="{name:'Users', params: {name:name}}" style="text-decoration:none; color:#65675b">
+               <!-- <router-link :to="{name:'Users', params: {name:name}}" style="text-decoration:none; color:#65675b">
                 <div class="images" @click="pool">                    
                     <img src="https://www.denofgeek.com/wp-content/uploads/2020/11/webstory-deadpool-image06-1.jpg?fit=1170%2C780">
                <p>DeadPool</p>
                 </div>
                 </router-link>
 
-                <div class="images">
-                    <img  src=""  id="myimg">
-                </div>
-                 
+             
+                  -->
         </div>
     </div>
 
     
-  <div class="right">
+  <div class="right"> 
     <div class="posts">
       <div class="post">
-  <span><i class="fas fa-user"></i></span>
+
+<div class="user-pic">
+  <img :src="profilePic">
+</div>
+  <!-- <span><i class="fas fa-user"></i></span> -->
  <p>{{name}} {{secondName}}</p>
     </div>
     <div class="sent-image">
@@ -138,17 +113,16 @@
     </div> 
 
 <div class="posted-comments" style="padding:16px 28px">
-
-  <!-- <span @click="showComments" class="more">More comments.....</span> -->
+  <span @click="showComments" class="more">More comments.....</span>
    <p>{{comments}}</p>
-<div v-show="moreComments" v-for="item in more" :key="item" class="item">
+<div v-show="moreComments" v-for="item in more" :key="item" class="item" >
    <p><span style="color:#ceced1">{{item.user}}</span> :{{item.comments}}</p>
     </div>
-
 </div>
  
+    </div> 
     </div>
-    </div>
+
 </div>
 </div>
 </div>
@@ -168,7 +142,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, doc, getDocs, getDoc, onSnapshot, query, where, setDoc, updateDoc} from "firebase/firestore"
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
-
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
  onAuthStateChanged(auth, (user) => {
@@ -268,13 +241,20 @@ more:[],
 person:[],
 moreComments:false,
 posts:[],
-
+profilePic:[],
+// createdPosts:[],
+currentFriends:[],
         }
     },
     methods: {
 //          run:function(){
 // this.$router.push('/profile')
 //       },
+
+showComments:function(){
+const moreInfor = document.querySelector('#posted-comments')
+moreInfor.style.overflow ="scroll"
+},
 operate:function(){
     this.popup =!this.popup;
     
@@ -331,6 +311,7 @@ send:function(){
        }
 },
 pool:function(){
+  this.$router.push('/profile/:name')
 const useRef = collection(db, 'user-Details')
 const m = query(useRef, where("email", "==", "deadpool@gmail.com"))
 onSnapshot(m, (snapshot)=>{
@@ -341,6 +322,7 @@ onSnapshot(m, (snapshot)=>{
          console.log(doc.data().secondName)
          this.name = doc.data().name
          this.secondName = doc.data().secondName
+       
     })
     // console.log(use)
 })
@@ -394,6 +376,24 @@ onSnapshot(like, (snapshot)=>{
 
   onAuthStateChanged(auth, (user) => {
   if (user) {
+
+
+
+    const friends = collection(db, 'user-Details')
+
+onSnapshot(friends, (snapshot)=>{
+    let y = []
+    snapshot.docs.forEach((doc)=>{
+        y.push({...doc.data(), id:doc.id})
+        //  this.createdPosts.push(doc.data())
+        // console.log(doc.data())
+      this.currentFriends.push({...doc.data()})
+    })
+// console.log(this.createdPosts)
+})
+
+
+
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/firebase.User
     const uid = user.uid;
@@ -411,9 +411,28 @@ onSnapshot(q, (snapshot)=>{
         //  console.log(doc.data().secondName)
          this.name = doc.data().name
          this.secondName = doc.data().secondName
+         this.profilePic = doc.data().url
     })
     
-    console.log(users)
+    // console.log(users)
+})
+
+const infor = collection(db, 'created-post')
+const x = query(infor, where("user", "==", currentUser.email))
+onSnapshot(x, (snapshot)=>{
+    let lik = []
+    snapshot.docs.forEach((doc)=>{
+        lik.push({...doc.data(), id:doc.id})
+        //  this.createdPosts.push(doc.data())
+        //  console.log(doc.data())
+        // console.log(doc.data().likes)
+        // console.log(lik[0])
+        // console.log(lik[1])
+        // console.log(lik[0].likes)
+        // console.log(lik)
+
+    })
+// console.log(this.createdPosts)
 })
 
   } else {
@@ -489,8 +508,9 @@ onSnapshot(colRef, (snapshot)=>{
     background: #f0f2f5;
      display: flex;
      flex-direction: column;
-    
+    width: 100%;
 }
+
 .container{
   background: #fff;
      display: flex;
@@ -543,7 +563,6 @@ h1{
     margin: 0 auto;
     padding: 20px 40px;
     gap: 30px;
-  
 }
 .right{
     grid-column: 2/2;
@@ -559,7 +578,6 @@ h1{
 .sent-img{
     margin: 0 auto;
      display: flex;
-
 }
 #postimg{   
     margin: 0 auto;
@@ -681,15 +699,14 @@ cursor: pointer;
     color: #ceced1;
     cursor: pointer;
 }
-.item{
-  max-height: 150px;
-  overflow: hidden;
+.posted-comments{
+max-height: 280px;
+  overflow-y:scroll;
 }
 .item p{
    background: #f0f2f5; 
    padding: 10px 16px;
    border-radius: 10px;
-  
 }
 #popup{
     position:fixed;
@@ -726,7 +743,7 @@ cursor: pointer;
 .home:hover+.tooltiptext {
   visibility: visible;
 }
-@media all and(max-width:900px){
+@media all and (max-width:900px){
     .wrap{
         grid-template-columns: repeat(1, 1fr);
     }
@@ -734,9 +751,12 @@ cursor: pointer;
         grid-column: 1/1;
         grid-row: 1;
     }
-    .posts{
+    .right{
           grid-column: 1/1;
         grid-row: 2;
+    }
+    .navigate{
+      display: none;
     }
 }
 </style>

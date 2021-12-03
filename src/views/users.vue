@@ -45,10 +45,10 @@
             <div class="images" >
                 <img src="https://images.theconversation.com/files/417198/original/file-20210820-25-1j3afhs.jpeg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip">
                 </div>
-                            <div class="images">
+                            <!-- <div class="images">
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Hashmask_15753.jpg/1200px-Hashmask_15753.jpg">
                <p>{{user}}</p>
-                </div>
+                </div> -->
                             <div class="images">
                                 <img src="https://cdn.substack.com/image/fetch/w_1200,c_limit,f_jpg,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fb27d35ff-fab9-423f-a430-7b920fe9b412_640x902.jpeg">
                 <p>{{user}}</p>
@@ -74,19 +74,25 @@
                 <p>{{user}}</p>
                 </div>
 
-                <router-link :to="{name:'Users', params: {name:name}}" style="text-decoration:none; color:#65675b">
+               
                 <div class="images" >
                     <img src="https://www.denofgeek.com/wp-content/uploads/2020/11/webstory-deadpool-image06-1.jpg?fit=1170%2C780">
                <p>DeadPool</p>
                 </div>
-                </router-link>
+                
                 <div class="images" @click="pool">
                     <img  src=""  id="mimg">
                 </div>
+                <!-- <router-link :to="{name:'Users', params: {name:name}}" style="text-decoration:none; color:#65675b">
+                <div class="images" @click="pool">                    
+                    <img src="https://www.denofgeek.com/wp-content/uploads/2020/11/webstory-deadpool-image06-1.jpg?fit=1170%2C780">
+               <p>DeadPool</p>
+                </div>
+                </router-link> -->
+
                  
         </div>
     </div>
-
 
 
 
@@ -139,10 +145,10 @@
     
   <!-- <span @click="showComments" class="more">More comments.....</span> -->
    <p>{{comments}}</p>
-<div v-show="moreComments" v-for="item in more" :key="item" class="item">
+<!-- <div v-show="moreComments" v-for="item in more" :key="item" class="item">
    <p><span style="color:#ceced1">{{item.user}}</span> :{{item.comments}}</p>
    
-    </div>
+    </div> -->
 <!-- v-for="comment in comments" :key="comment" -->
 </div>
  
@@ -296,7 +302,7 @@ send:function(){
 },
 pool:function(){
 const useRef = collection(db, 'user-Details')
-const m = query(useRef, where("email", "==", "deadpool@gmail.com"))
+const m = query(useRef, where("email", "==", "victormonderu@gmail.com"))
 onSnapshot(m, (snapshot)=>{
     let use = []
     snapshot.docs.forEach((doc)=>{
@@ -380,7 +386,7 @@ onSnapshot(colRef, (snapshot)=>{
          
     this.moreComments = true
     })
-    console.log(person)
+    
    console.log(this.more)
    console.log(this.person)
 })

@@ -5,13 +5,14 @@
           <div class="fb-point">
           <i class="fab fa-facebook"></i>
           <input type="text" placeholder="Search Facebook" class="field">
-          <!-- <i class="fas fa-search"></i> -->
+
+           <span class="search" @click="toggle"><i class="fas fa-search"></i></span>
           </div>
+          
           <div class="navigate">
               
             <span ><i class="fas fa-home"></i></span>
             
-
            <span><i class="fab fa-youtube"></i></span>
              <span><i class="fas fa-store"></i></span>
              <!-- <span class="material-icons-outlined">storefront</span>  -->
@@ -27,8 +28,8 @@
               </label>
              <span @click="open" class="create"><i class="fas fa-plus"></i></span>
              <div class="tooltip">Create Posts</div>
-              <!-- <span><i class="fab fa-facebook-messenger"></i></span> -->
-              <!-- <span><i class="fas fa-bell"></i></span> -->
+              <span><i class="fab fa-facebook-messenger"></i></span>
+              <span><i class="fas fa-bell"></i></span>
               <span @click="operate" class="home"><i class="fas fa-caret-down"></i></span>
               <div class="tooltiptext">Account</div>
           </div>
@@ -57,7 +58,10 @@
 <div class="content">
 <div class="wrap">
     <div class="post">
-  <span><i class="fas fa-user"></i></span>
+  <!-- <span><i class="fas fa-user"></i></span> -->
+     <div class="user-pic">
+  <img :src="profilePic">
+</div>   
   <input type="text" placeholder="Whats on Your mind?" @click="open">
     </div>
   <div class="post-2">
@@ -91,13 +95,13 @@
     <div class="more"></div>
     <div class="engagement">
         <div class="emoji">
-        <span @click="like" v-show="present" class="like"><i class="fas fa-thumbs-up"></i></span>
+        <span @click="like" v-show="present" class="like" ><i class="fas fa-thumbs-up"></i></span>
         <span @click="like" v-show="present" class="heart"><i class="fas fa-heart"></i></span>
 
           <span @click="unlike" v-show="absent " class="like"><i class="fas fa-thumbs-up"></i></span>
         <span @click="unlike" v-show="absent" class="heart"><i class="fas fa-heart"></i></span>
        <p>
-             <label>{{post.likes}}</label>
+             <label id="post-likes">{{post.likes}}</label>
        </p>
         </div>
         <div class="reviews">
@@ -204,6 +208,11 @@
 </div>
       </div>
 </div>
+<div id="emerge" @click="emerge">
+<i class="fas fa-arrow-alt-left"></i>
+<input type="text" placeholder="search facebook">
+</div>
+
 <div id="modal" v-if="modal" >
     <div class="create">
         <h2>Create post</h2>
@@ -211,7 +220,10 @@
       <button @click="close" >X</button> 
     </div>
       <div class="post" @click="run">
-  <span><i class="fas fa-user"></i></span>
+  <!-- <span><i class="fas fa-user"></i></span> -->
+     <div class="user-pic">
+  <img :src="profilePic">
+</div>   
   <p>View Profile</p>
  </div>
  <div class="text">
@@ -272,10 +284,9 @@
 <script>
 import { getStorage, ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, doc, getDocs, getDoc, setDoc,  onSnapshot, query, where} from "firebase/firestore"
+import { getFirestore, collection, addDoc, doc, getDocs, getDoc, setDoc,  onSnapshot, query, where, updateDoc} from "firebase/firestore"
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
 import { getAnalytics } from "firebase/analytics";
-
 
 import{ app, db, auth, firebaseConfig, user } from '@/firebase.js'
 
@@ -300,9 +311,13 @@ export default {
       image:null,
       card:true,
       profilePic:[],
+      emerge:false,
        } 
     },
     methods: {
+        toggle:function(){
+ this.emerge=!this.emerge
+        },
         closeCard:function(){
 this.card=false
         },
@@ -316,11 +331,53 @@ this.unliked =!this.unliked
 this.liked =!this.liked
 this.absent = true
 this.present = false
-console.log(this.createdPosts)
-// updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
-//     // const b = query(docRef, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ));
-//    likes:this.number++
+// console.log(this.createdPosts)
+
+
+ onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    // console.log("current users ID is",uid)
+    // console.log(user.email)
+
+let currentUser = auth.currentUser
+const upvote = collection(db, 'user-Details')
+const z = query(upvote, where("id", "==", currentUser.uid))
+onSnapshot(z, (snapshot)=>{
+    let k = []
+    snapshot.docs.forEach((doc)=>{
+       k.push({...doc.data(), id:doc.id})
+       console.log(doc.data())
+       
+    })
+//   updateDoc(doc(db, "user-Details", currentUser.uid ), {
+// likedOn:"newId"
+
 //        });
+
+// })
+// updateDoc(doc(db, "created-post", currentUser.uid ), {
+// likes:number.value++
+
+//        });
+
+const infor = collection(db, 'created-post')
+onSnapshot(infor, (snapshot)=>{
+    let lk = []
+    snapshot.docs.forEach((doc)=>{
+        lk.push({...doc.data(), id:doc.id})
+        console.log(lk)
+
+    })
+// console.log(this.createdPosts)
+})
+
+
+})
+
+        }
+        })
+ 
         },
       open:function(){
           this.modal=true
@@ -377,7 +434,6 @@ onSnapshot(q, (snapshot)=>{
 })
 
  
-
     const storage = getStorage();
   //FETCHING SEVERAL IMAGES IN A FILE  
   const listRef = ref(storage, 'friends');
@@ -430,11 +486,10 @@ onSnapshot(infor, (snapshot)=>{
     let lik = []
     snapshot.docs.forEach((doc)=>{
         lik.push({...doc.data(), id:doc.id})
-         this.createdPosts.push(doc.data())
+         this.createdPosts.push({...doc.data(), id:doc.id})
         // console.log(doc.data())
         // console.log(doc.data().likes)
-
-
+        
         console.log(lik)
         // console.log(lik[1])
         // console.log(lik[0].likes)
@@ -490,6 +545,7 @@ const user = auth.currentUser;
       user:user.email,
       likes:0,
      url:url,
+
     });
   })
 
@@ -505,7 +561,6 @@ const user = auth.currentUser;
 }
 </script>
 <style scoped>
-
 #popup{
     position:fixed;
     background: #fff;
@@ -545,7 +600,7 @@ nav{
     background: #fff;
 }
 
-.fb-point i{
+.fa-facebook{
     font-size: 38px;
     color: #216FD8;
 }
@@ -561,7 +616,30 @@ nav{
     padding: 7px 16px 9px 36px;
     font-size: 16px;
 }
-
+.search{
+    font-size: 14px;
+    background: #e4e6eb;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    visibility: hidden;
+}
+.fa-search{
+ font-size: 16px;
+ color: #65676b;
+}
+#emerge{
+    position: fixed;
+    background: #fff;
+    margin-top: 0px;
+    margin-left:10px;
+    z-index: 10;
+    box-shadow: 3px 3px 5px #ceced1, 3px 3px 5px #ceced1;
+    padding: 8px 16px;
+}
 .navigate{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -780,6 +858,9 @@ label:hover{
     padding: 12px 16px 10px;
     box-shadow: 1px 1px 1px #ceced1, 1px 1px 1px #ceced1 ;
     width: 100%;
+   display: flex;
+   flex-direction: column;
+   margin-left: auto;
 }
 .post span{
     width: 40px;
@@ -836,11 +917,11 @@ cursor: pointer;
     outline: none;
 }
 .post-2{
-    border-top: 1px solid #65676b;
-   display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    padding: 12px 16px 16px;   
-    /* width: 100%; */
+    border-top: 0.5px solid #65676b;
+    display: flex;
+    padding: 12px 16px 16px;  
+  justify-content: space-around;
+  width: calc(100% - 30px); 
 }
 .fa-images{
     color: rgb(8, 250, 8);
@@ -999,8 +1080,7 @@ textarea:focus{
     display: grid;
     grid-template-columns: repeat(2,1fr);
     border-radius: 5px;
-    padding: 8px;
-    
+    padding: 8px;    
 }
 .companies:hover{
     background: #e4e6eb;
@@ -1014,8 +1094,7 @@ textarea:focus{
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;  
-    
+    justify-content: center;      
 }
 .words a{
     color:#65676b;
@@ -1123,6 +1202,13 @@ textarea:focus{
     .content{
         grid-column: 2/10;
     }
+    .navigate{
+        display: none;
+    }
+    #modal{
+        top:50px;
+        left: 20%;
+    }
 }
 
 @media all and (max-width:600px){
@@ -1132,12 +1218,35 @@ textarea:focus{
 .navigate{
     display: none;
 }
-
+    #modal{
+        top:50px;
+        left:15%;
+    }
+nav input{
+    display: none;
 }
-@media all and (max-width:420px){
+.search{
+    visibility: visible;
+}
+}
+@media all and (max-width:425px){
   .content{
         grid-column: 1/12;
     }  
+      #modal{
+        top:50px;
+        left:5%;
+    }
+    .post-2 label:last-child{
+        display: none;
+    }
+   
+}
+@media all and (max-width:320px){
+   .reviews{
+        font-size: 14px;
+    }
+
 }
 
 </style>

@@ -17,8 +17,8 @@
           <div class="extras">
               <span><i class="fas fa-user"></i></span>
              <span><i class="fas fa-plus"></i></span>
-              <span><i class="fab fa-facebook-messenger"></i></span>
-              <span><i class="fas fa-bell"></i></span>
+              <!-- <span><i class="fab fa-facebook-messenger"></i></span>
+              <span><i class="fas fa-bell"></i></span> -->
               <span @click="operate"><i class="fas fa-caret-down"></i></span>
           </div>
       </nav>
@@ -95,7 +95,7 @@
     </div>
 
 
-
+<div class="right">
     <div class="posts">
       <div class="post">
   <span><i class="fas fa-user"></i></span>
@@ -152,6 +152,7 @@
 <!-- v-for="comment in comments" :key="comment" -->
 </div>
  
+    </div>
     </div>
     </div>
 </div>
@@ -405,12 +406,18 @@ onSnapshot(colRef, (snapshot)=>{
 .postimg{
     width:50%;
 }
+.post{
+    display: flex;
+    gap: 20px;
+    padding: 12px 16px 16px;
+}
 .friends{
     background: #fff;
     border-radius: 10px;
     padding: 10px;
     grid-column: 1/2;
     grid-row: 1;
+  height: 600px;
 }
 .friends h1{
     font-size: 20px;
@@ -435,7 +442,9 @@ onSnapshot(colRef, (snapshot)=>{
     background: #f0f2f5;
      display: flex;
      flex-direction: column;
+    width: 100%;
 }
+
 .container{
   background: #fff;
      display: flex;
@@ -443,7 +452,6 @@ onSnapshot(colRef, (snapshot)=>{
      flex-direction: column;
 }
 .back-image{
-/* background-image: url(); */
 background: #ceced1;
 margin: 0 auto;
 border-radius: 10px;
@@ -490,20 +498,24 @@ h1{
     padding: 20px 40px;
     gap: 30px;
 }
+.right{
+    grid-column: 2/2;
+    grid-row: 1;
+    display: flex;
+}
 .posts{
     background: #fff;
     border-radius: 10px;
-    grid-column: 2/2;
-    grid-row: 1;
+   margin: 0 auto;
+   width: 600px;
 }
 .sent-img{
-    width:500px;
     margin: 0 auto;
      display: flex;
 }
-#postimg{
-   
+#postimg{   
     margin: 0 auto;
+    width: 100%;
 }
 .post span{
     width: 40px;
@@ -621,24 +633,64 @@ cursor: pointer;
     color: #ceced1;
     cursor: pointer;
 }
+.posted-comments{
+max-height: 280px;
+  overflow-y:auto;
+}
 .item p{
    background: #f0f2f5; 
    padding: 10px 16px;
    border-radius: 10px;
 }
+#popup{
+    position:fixed;
+    background: #fff;
+    top: 5%;
+    left: 80%;
+    border-radius: 10px;
+    padding: 16px;
+    font-weight: 700;
+    box-shadow: 3px 3px 5px #ceced1, 3px 3px 5px #ceced1, 3px 3px 5px #ceced1 ;
+}
+#popup label{
+    cursor: pointer;
+    padding: 10px 24px;
+    border-radius: 5px;
+}
+#popup label:hover{
+    background: #f0f2f5;
+}
+.tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: rgb(54, 54, 54);
+  opacity: 0.8;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  margin-top: 50px;
+  position: absolute;
+  z-index: 1;
+}
 
-@media all and(max-width:900px){
+.home:hover+.tooltiptext {
+  visibility: visible;
+}
+@media all and (max-width:900px){
     .wrap{
-        display: grid;
         grid-template-columns: repeat(1, 1fr);
     }
     .friends{
         grid-column: 1/1;
         grid-row: 1;
     }
-    .posts{
+    .right{
           grid-column: 1/1;
         grid-row: 2;
+    }
+    .navigate{
+      display: none;
     }
 }
 </style>

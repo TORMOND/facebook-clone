@@ -353,7 +353,7 @@ this.$router.push('/Login')
     display: grid;
     grid-template-columns: repeat(12, 1fr);
      padding:62px 0 102px;
-    height: 536px;
+   /* height: 80%; */
 }
 .segment-1{
     height: 266px;

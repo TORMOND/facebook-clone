@@ -7,7 +7,7 @@
           <!-- <i class="fas fa-search"></i> -->
           </div>
           <div class="navigate">
-            <router-link to="/Navigation" style="text-decoration:none; color:#65675b" class="home"><span><i class="fas fa-home"></i></span></router-link>  
+            <router-link to="/Navigation" style="text-decoration:none; color:#65675b" class="home"><span><i class="fas fa-home" ></i></span></router-link>  
   <span class="tooltiptext">Home</span>
 
            <span><i class="fab fa-youtube"></i></span>
@@ -49,7 +49,6 @@
               <img  :src="friend.url">
               <p>{{friend.name}} {{friend.secondName}}</p>
                 </div>
-
                <!-- <router-link :to="{name:'Users', params: {name:name}}" style="text-decoration:none; color:#65675b">
                 <div class="images" @click="pool">                    
                     <img src="https://www.denofgeek.com/wp-content/uploads/2020/11/webstory-deadpool-image06-1.jpg?fit=1170%2C780">
@@ -57,10 +56,75 @@
                 </div>
                 </router-link>
 
-             
                   -->
         </div>
     </div>
+
+
+     <div class="right-2" v-show="false"> 
+    <div class="posts">
+      <div class="post" v-for="post in userPosts" :key="post">
+
+<div class="user-pic">
+  <img :src="profilePic">
+</div>
+  <!-- <span><i class="fas fa-user"></i></span> -->
+ <p>{{post.email}} </p>
+    </div>
+    <div class="sent-image">
+        <img src="" id="postimg">
+    </div>
+      <div class="more"></div>
+    <div class="engagement">
+        <div class="emoji">
+        <span @click="like" v-show="present" class="like"><i class="fas fa-thumbs-up"></i></span>
+        <span @click="like" v-show="present" class="heart"><i class="fas fa-heart"></i></span>
+
+          <span @click="unlike" v-show="absent " class="like"><i class="fas fa-thumbs-up"></i></span>
+        <span @click="unlike" v-show="absent" class="heart"><i class="fas fa-heart"></i></span>
+       <p>
+           <!-- <label v-show="unliked">177k</label>
+           <label v-show="liked">You and 177k others</label> -->
+
+           <label v-if="number">{{number}}</label>
+          </p>
+        </div>
+        <div class="reviews">
+        <p>{{more.length}} comments</p>
+        <p>2.6k Shares </p>
+        </div>
+    </div>
+    <div class="action">
+        <label @click="like" class="thumbs-up" v-show="present" ><i class="far fa-thumbs-up"></i>like</label>
+          <label @click="unlike" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
+             <label><i class="far fa-comment-alt"></i>comment</label>
+                  <label><i class="fas fa-share"></i>share</label>
+    </div>
+    <div class="write-comment">
+        <div class="post">
+  <!-- <span><i class="fas fa-user"></i></span> -->
+  <div class="user-pic">
+  <img :src="profilePic">
+</div>
+ <input type="text" placeholder="write a comment" v-model="comments" >
+ <div @click="send" style="cursor:pointer" class="sent">
+ <i class="far fa-paper-plane"></i>
+ <p>Send</p>
+ </div>
+    </div> 
+
+<div class="posted-comments" style="padding:16px 28px">
+  <span @click="showComments" class="more">More comments.....</span>
+   <p>{{comments}}</p>
+<div v-show="moreComments" v-for="item in more" :key="item" class="item" >
+   <p><span style="color:#ceced1">{{item.user}}</span> :{{item.comments}}</p>
+    </div>
+</div>
+ 
+    </div> 
+    </div>
+
+</div>
 
     
   <div class="right"> 
@@ -104,7 +168,10 @@
     </div>
     <div class="write-comment">
         <div class="post">
-  <span><i class="fas fa-user"></i></span>
+  <!-- <span><i class="fas fa-user"></i></span> -->
+  <div class="user-pic">
+  <img :src="profilePic">
+</div>
  <input type="text" placeholder="write a comment" v-model="comments" >
  <div @click="send" style="cursor:pointer" class="sent">
  <i class="far fa-paper-plane"></i>
@@ -242,7 +309,7 @@ person:[],
 moreComments:false,
 posts:[],
 profilePic:[],
-// createdPosts:[],
+userPosts:[],
 currentFriends:[],
         }
     },
@@ -250,7 +317,6 @@ currentFriends:[],
 //          run:function(){
 // this.$router.push('/profile')
 //       },
-
 showComments:function(){
 const moreInfor = document.querySelector('#posted-comments')
 moreInfor.style.overflow ="scroll"
@@ -283,7 +349,6 @@ this.absent = true
 this.present = false
  updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
     // const b = query(docRef, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ));
-
    likes:this.number
      
        });
@@ -376,9 +441,6 @@ onSnapshot(like, (snapshot)=>{
 
   onAuthStateChanged(auth, (user) => {
   if (user) {
-
-
-
     const friends = collection(db, 'user-Details')
 
 onSnapshot(friends, (snapshot)=>{
@@ -391,8 +453,6 @@ onSnapshot(friends, (snapshot)=>{
     })
 // console.log(this.createdPosts)
 })
-
-
 
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/firebase.User
@@ -423,7 +483,7 @@ onSnapshot(x, (snapshot)=>{
     let lik = []
     snapshot.docs.forEach((doc)=>{
         lik.push({...doc.data(), id:doc.id})
-        //  this.createdPosts.push(doc.data())
+         this.userPosts.push(doc.data())
         //  console.log(doc.data())
         // console.log(doc.data().likes)
         // console.log(lik[0])
@@ -569,6 +629,13 @@ h1{
     grid-row: 1;
     display: flex;
 }
+
+.right-2{
+    grid-column: 2/2;
+    grid-row: 2;
+    display: flex;
+}
+
 .posts{
     background: #fff;
     border-radius: 10px;
@@ -701,7 +768,7 @@ cursor: pointer;
 }
 .posted-comments{
 max-height: 280px;
-  overflow-y:scroll;
+  overflow-y:auto;
 }
 .item p{
    background: #f0f2f5; 

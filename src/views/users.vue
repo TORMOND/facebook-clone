@@ -403,9 +403,7 @@ onSnapshot(colRef, (snapshot)=>{
 </script>
 
 <style scoped>
-.postimg{
-    width:50%;
-}
+
 .post{
     display: flex;
     gap: 20px;
@@ -513,7 +511,7 @@ h1{
     margin: 0 auto;
      display: flex;
 }
-#postimg{   
+#pstimg{   
     margin: 0 auto;
     width: 100%;
 }

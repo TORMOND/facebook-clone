@@ -161,8 +161,6 @@
 
 <script>
 
-// import { computed } from '@vue/reactivity'
-
 //Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, doc, getDocs, setDoc} from "firebase/firestore"
@@ -236,15 +234,17 @@ export default {
       secondName: this.surName,
       password:this.password,
       id:user.uid,
-    }
-    
-    );
+    });
 this.popup=false
     console.log(user);
     alert("signed Up as " + this.email)
    
     });    
-  
+  const app = document.querySelector('#opt')
+         app.classList=""   
+         this.popup= false
+         this.opener=true
+         this.closer=false
   },
  
  login:function(){

@@ -45,9 +45,9 @@
         </div>
         
         <div class="persons">
-           <div class="images" v-for="friend in currentFriends" :key="friend" @click="pool">  
-              <img  :src="friend.url">
-              <p>{{friend.name}} {{friend.secondName}}</p>
+           <div class="images" v-for="friend in currentFriends" :key="friend" >  
+              <img :src="friend.url" @click="pool(friend.id)">
+              <p ref="friendName">{{friend.name}} {{friend.secondName}}</p>
                 </div>
                <!-- <router-link :to="{name:'Users', params: {name:name}}" style="text-decoration:none; color:#65675b">
                 <div class="images" @click="pool">                    
@@ -114,7 +114,7 @@
     </div> 
 
 <div class="posted-comments" style="padding:16px 28px">
-  <span @click="showComments" class="more">More comments.....</span>
+  <!-- <span @click="showComments" class="more">More comments.....</span> -->
    <p>{{comments}}</p>
 <div v-show="moreComments" v-for="item in more" :key="item" class="item" >
    <p><span style="color:#ceced1">{{item.user}}</span> :{{item.comments}}</p>
@@ -354,7 +354,6 @@ this.present = false
        });
    console.log(this.number)
      
-   
         },
 
    
@@ -375,10 +374,11 @@ send:function(){
     //    console.log(user)
        }
 },
-pool:function(){
+pool:function(id){
+  console.log(id)
   this.$router.push('/profile/:name')
 const useRef = collection(db, 'user-Details')
-const m = query(useRef, where("email", "==", "deadpool@gmail.com"))
+const m = query(useRef, where("id", "==", "id"))
 onSnapshot(m, (snapshot)=>{
     let use = []
     snapshot.docs.forEach((doc)=>{
@@ -387,7 +387,7 @@ onSnapshot(m, (snapshot)=>{
          console.log(doc.data().secondName)
          this.name = doc.data().name
          this.secondName = doc.data().secondName
-       
+     
     })
     // console.log(use)
 })
@@ -529,9 +529,7 @@ onSnapshot(colRef, (snapshot)=>{
 }
 </script>
 <style scoped>
-.postimg{
-    width:50%;
-}
+
 .post{
     display: flex;
     gap: 20px;
@@ -589,8 +587,7 @@ display: flex;
 .circle img{
     width:168px;
     height: 168px;
-    border-radius: 50%;
-    
+    border-radius: 50%;    
 }
 .circle{
      width:178px;
@@ -606,7 +603,6 @@ display: flex;
 }
 h1{
     margin: 0 auto;
-
 }
 .information{
     display: flex;

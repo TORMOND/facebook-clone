@@ -7,30 +7,32 @@
           <!-- <i class="fas fa-search"></i> -->
           </div>
           <div class="navigate">
-              
-            <router-link to="/Navigation" style="text-decoration:none; color:#65675b"><span><i class="fas fa-home"></i></span></router-link> 
+            <router-link to="/Navigation" style="text-decoration:none; color:#65675b" class="home"><span><i class="fas fa-home" ></i></span></router-link>  
+  <span class="tooltiptext">Home</span>
+
            <span><i class="fab fa-youtube"></i></span>
              <span><i class="fas fa-store"></i></span>
-             <!-- <span class="material-icons-outlined">storefront</span>  -->
+            
              <span><label class="user"><i class="fas fa-users"></i></label></span>
           </div>
           <div class="extras">
+  <!-- <label @click="run">
               <span><i class="fas fa-user"></i></span>
-             <span><i class="fas fa-plus"></i></span>
-              <!-- <span><i class="fab fa-facebook-messenger"></i></span>
-              <span><i class="fas fa-bell"></i></span> -->
+              {{name}}
+              </label> -->
+              <span><i class="fab fa-facebook-messenger"></i></span>
+              <span><i class="fas fa-bell"></i></span>
               <span @click="operate"><i class="fas fa-caret-down"></i></span>
           </div>
       </nav>
         <div class="container">
            <div class="back-image">
                <div class="circle">
-<img src="" id="profilemg">
+<img :src="profilePic" id="profileimg">
                </div>        
            </div>
            <div class="information">
                <h1 >{{name}} {{secondName}}</h1>
-               <!-- <h1>{{$route.params.name}}</h1> -->
            </div>
 </div>
 <div class="wrapper">
@@ -41,68 +43,40 @@
             <!-- <a>See all Friends</a>
             <span>251 friends</span> -->
         </div>
+        
         <div class="persons">
-            <div class="images" >
-                <img src="https://images.theconversation.com/files/417198/original/file-20210820-25-1j3afhs.jpeg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip">
+           <div class="images" v-for="friend in currentFriends" :key="friend" > 
+              <img :src="friend.url" @click="pool(friend.id)"> 
+                    <p ref="friendName">{{friend.name}} {{friend.secondName}}</p>
+            <!-- <router-link :to="{ name:'users', params: { name:friend.name }}">
+         
+             </router-link> -->
+             
                 </div>
-                            <!-- <div class="images">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Hashmask_15753.jpg/1200px-Hashmask_15753.jpg">
-               <p>{{user}}</p>
-                </div> -->
-                            <div class="images">
-                                <img src="https://cdn.substack.com/image/fetch/w_1200,c_limit,f_jpg,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fb27d35ff-fab9-423f-a430-7b920fe9b412_640x902.jpeg">
-                <p>{{user}}</p>
-                </div>
-                            <div class="images">
-                                <img src="https://media.voguebusiness.com/photos/6111311e4a8a0fcfb2812122/1:1/w_2000,h_2000,c_limit/luxury-nfts-in-games-voguebus-burberry_mythical-games-aug-21-story.jpg">
-               <p>{{user}}</p>
-                </div>
-                            <div class="images">
-                                <img src="https://www.forbes.com/advisor/wp-content/uploads/2021/04/NFT.jpeg.jpg">
-               <p>{{user}}</p>
-                </div>
-                            <div class="images">
-                                <img src="https://miro.medium.com/max/1400/1*QK11i-7_WUrUHBcwIKh5Qg.jpeg">
-               <p>{{user}}</p>
-                </div>
-                            <div class="images">
-                                <img src="https://media.itpro.co.uk/image/upload/s--X-WVjvBW--/f_auto,t_content-image-full-desktop@1/v1618913451/itpro/2021/04/shutterstock_sculpture_art.jpg">
-             <p>{{user}}</p>
-                </div>
-                <div class="images">
-                    <img src="https://www.altcoinbuzz.io/wp-content/uploads/2021/01/Enjin-MetaverseMe-Partner-to-Merge-NFTs-and-Augmented-Reality-1.jpg">
-                <p>{{user}}</p>
-                </div>
-
-               
-                <div class="images" >
-                    <img src="https://www.denofgeek.com/wp-content/uploads/2020/11/webstory-deadpool-image06-1.jpg?fit=1170%2C780">
-               <p>DeadPool</p>
-                </div>
-                
-                <div class="images" @click="pool">
-                    <img  src=""  id="mimg">
-                </div>
-                <!-- <router-link :to="{name:'Users', params: {name:name}}" style="text-decoration:none; color:#65675b">
+               <!-- <router-link :to="{name:'Users', params: {name:name}}" style="text-decoration:none; color:#65675b">
                 <div class="images" @click="pool">                    
                     <img src="https://www.denofgeek.com/wp-content/uploads/2020/11/webstory-deadpool-image06-1.jpg?fit=1170%2C780">
                <p>DeadPool</p>
                 </div>
-                </router-link> -->
+                </router-link>
 
-                 
+                  -->
         </div>
     </div>
 
-
-<div class="right">
+    
+  <div class="right"> 
     <div class="posts">
       <div class="post">
-  <span><i class="fas fa-user"></i></span>
+
+<div class="user-pic">
+  <img :src="profilePic">
+</div>
+  <!-- <span><i class="fas fa-user"></i></span> -->
  <p>{{name}} {{secondName}}</p>
     </div>
     <div class="sent-image">
-        <img src="" id="pstimg">
+        <img src="" id="postimg">
     </div>
       <div class="more"></div>
     <div class="engagement">
@@ -120,20 +94,22 @@
           </p>
         </div>
         <div class="reviews">
-
         <p>{{more.length}} comments</p>
         <p>2.6k Shares </p>
         </div>
     </div>
     <div class="action">
-        <label @click="like" class="thumbs-up" v-show="present" ><i class="fas fa-thumbs-up"></i>like</label>
-          <label @click="unlike" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up"></i>like</label>
+        <label @click="like" class="thumbs-up" v-show="present" ><i class="far fa-thumbs-up"></i>like</label>
+          <label @click="unlike" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
              <label><i class="far fa-comment-alt"></i>comment</label>
                   <label><i class="fas fa-share"></i>share</label>
     </div>
     <div class="write-comment">
         <div class="post">
-  <span><i class="fas fa-user"></i></span>
+  <!-- <span><i class="fas fa-user"></i></span> -->
+  <div class="user-pic">
+  <img :src="profilePic">
+</div>
  <input type="text" placeholder="write a comment" v-model="comments" >
  <div @click="send" style="cursor:pointer" class="sent">
  <i class="far fa-paper-plane"></i>
@@ -142,19 +118,26 @@
     </div> 
 
 <div class="posted-comments" style="padding:16px 28px">
-    
-  <!-- <span @click="showComments" class="more">More comments.....</span> -->
+  <span @click="showComments" class="more">More comments.....</span>
    <p>{{comments}}</p>
-<!-- <div v-show="moreComments" v-for="item in more" :key="item" class="item">
+<div v-show="moreComments" v-for="item in more" :key="item" class="item" >
    <p><span style="color:#ceced1">{{item.user}}</span> :{{item.comments}}</p>
-   
-    </div> -->
-<!-- v-for="comment in comments" :key="comment" -->
+    </div>
 </div>
  
+    </div> 
     </div>
-    </div>
-    </div>
+
+</div>
+</div>
+</div>
+<div id="popup" v-if="popup">
+     <!-- <div class="post">
+   <label @click="operate"> <span><i class="fas fa-user"></i></span>
+  <p><router-link to="/profile" class="view">View Profile</router-link></p></label>
+ </div> -->
+<div @click="operate" >
+    <label @click="signOut"><i class="fas fa-sign-out-alt" style="margin-top:20px; "></i>Log Out</label>
 </div>
 </div>
     </div>
@@ -162,41 +145,16 @@
 <script>
 
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, doc, getDocs, getDoc, onSnapshot, query, where} from "firebase/firestore"
+import { getFirestore, collection, addDoc, doc, getDocs, getDoc, onSnapshot, query, where, setDoc, updateDoc} from "firebase/firestore"
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
-
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
- onAuthStateChanged(auth, (user) => {
-  if (user) {
-const storage = getStorage();
-getDownloadURL(ref(storage, 'user-images/HGsJfplvmhhhyVTthCbZm7J7cW53/2021-bugatti-chiron-pur-sport.jpg'))
-  .then((url) => {
-    // `url` is the download URL for 'images/stars.jpg'
-
-    // This can be downloaded directly:
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
-    xhr.onload = (event) => {
-      const blob = xhr.response;
-    };
-    xhr.open('GET', url);
-    xhr.send();
-
-    // Or inserted into an <img> element
-    const img = document.getElementById('mimg');
-    img.setAttribute('src', url);
-  })
-  .catch((error) => {
-    // Handle any errors
-  });
-  }
- })
+ 
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
 const storage = getStorage();
-getDownloadURL(ref(storage, 'images/grandteton.jpg'))
+getDownloadURL(ref(storage, 'Rolls-Royce-Phantom-Black.jpg'))
   .then((url) => {
     // `url` is the download URL for 'images/stars.jpg'
 
@@ -210,7 +168,7 @@ getDownloadURL(ref(storage, 'images/grandteton.jpg'))
     xhr.send();
 
     // Or inserted into an <img> element
-    const img = document.getElementById('pstimg');
+    const img = document.getElementById('postimg');
     img.setAttribute('src', url);
   })
   .catch((error) => {
@@ -219,71 +177,78 @@ getDownloadURL(ref(storage, 'images/grandteton.jpg'))
   }
  })
 
- onAuthStateChanged(auth, (user) => {
-  if (user) {
-const storage = getStorage();
-getDownloadURL(ref(storage, 'images/deadpool-image.jpg'))
-  .then((url) => {
-    // `url` is the download URL for 'images/stars.jpg'
-
-    // This can be downloaded directly:
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
-    xhr.onload = (event) => {
-      const blob = xhr.response;
-    };
-    xhr.open('GET', url);
-    xhr.send();
-
-    // Or inserted into an <img> element
-    const img = document.getElementById('profilemg');
-    img.setAttribute('src', url);
-  })
-  .catch((error) => {
-    // Handle any errors
-  });
-  }
- })
+ 
 
  import{ app, db, auth, firebaseConfig, user } from '@/firebase.js'
 
 export default {
-    name:'Users',
     data() {
         return{
+popup:false,
 name:"",
 secondName:"",
 comments:'',
 user:"friends",
 unliked:true,
 liked:false,
-number: 177,
+number: "",
 present:true,
 absent:false,
 more:[],
 person:[],
 moreComments:false,
 posts:[],
-
+profilePic:[],
+userPosts:[],
+currentFriends:{},
+userId:this.$route.params.id,
         }
     },
     methods: {
-
+//          run:function(){
+// this.$router.push('/profile')
+//       },
+showComments:function(){
+const moreInfor = document.querySelector('#posted-comments')
+moreInfor.style.overflow ="scroll"
+},
+operate:function(){
+    this.popup =!this.popup;
+    
+},
         unlike:function(){
-    const thumb = document.querySelector('.thumbs-up');
-thumb.style.color = "#65675b"; 
+//     const thumb = document.querySelector('.thumbs-up');
+// thumb.style.color = "#65675b"; 
 this.number--
 this.absent = false
 this.present = true
+updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
+    // const b = query(docRef, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ));
+
+   likes:this.number
+     
+       });
+//    console.log(this.number)
+     
 
         },
         like:function(){
-    const thumb = document.querySelector('.thumbs-up');
-thumb.style.color = "#216fd8"; 
+// const thumb = document.querySelector('.thumbs-up');
+// thumb.style.color = "#216fd8"; 
 this.number++
 this.absent = true
 this.present = false
+
+ updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
+    // const b = query(docRef, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ));
+   likes:this.number
+     
+       });
+   console.log(this.number)
+     
         },
+
+   
 send:function(){
     
     if(this.comments===""){
@@ -298,80 +263,100 @@ send:function(){
        });
         // this.more.push (this.comments)
         //  this.person.push(user.email)
-       console.log(user)
+    //    console.log(user)
        }
 },
-pool:function(){
-const useRef = collection(db, 'user-Details')
-const m = query(useRef, where("email", "==", "victormonderu@gmail.com"))
-onSnapshot(m, (snapshot)=>{
-    let use = []
+pool:function(id){
+  console.log(id)
+  this.$router.push({ name: 'Users', params: { id: id }})
+
+},
+signOut:function(){
+ signOut(auth).then(() => {
+    // Sign-out successful.
+    alert("user Signed out");
+    this.$router.push('/')
+  }).catch((error) => {
+    // An error happened.
+  });
+},
+names:function(){
+const like = collection(db, 'information')
+// const like = query(infor, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ))
+onSnapshot(like, (snapshot)=>{
+    let likes = []
     snapshot.docs.forEach((doc)=>{
-        use.push({...doc.data(), id:doc.id})
-        console.log(doc.data().name)
-         console.log(doc.data().secondName)
-         this.name = doc.data().name
-         this.secondName = doc.data().secondName
+        likes.push({...doc.data(), id:doc.id})
+       
+        this.number = doc.data().likes
+        
     })
-    console.log(use)
 })
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-const storage = getStorage();
-getDownloadURL(ref(storage, 'images/deadpool-image.jpg'))
-  .then((url) => {
-    // `url` is the download URL for 'images/stars.jpg'
-    // This can be downloaded directly:
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
-    xhr.onload = (event) => {
-      const blob = xhr.response;
-    };
-    xhr.open('GET', url);
-    xhr.send();
-
-    // Or inserted into an <img> element
-    const img = document.getElementById('profileimg');
-    img.setAttribute('src', url);
-  })
-  .catch((error) => {
-    // Handle any errors
-  });
-  }
- })
-},
-
-names:function(){
   onAuthStateChanged(auth, (user) => {
   if (user) {
+    const friends = collection(db, 'user-Details')
+
+onSnapshot(friends, (snapshot)=>{
+    let y = []
+    snapshot.docs.forEach((doc)=>{
+        y.push({...doc.data(), id:doc.id})
+        //  this.createdPosts.push(doc.data())
+        // console.log(doc.data())
+      // this.currentFriends.push({...doc.data()})
+
+
+      this.currentFriends[doc.id] = {...doc.data(), id:doc.id}
+    })
+
+// console.log(this.createdPosts)
+})
+
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/firebase.User
     const uid = user.uid;
-    console.log("current users ID is",uid)
-    console.log(user.email)
+    // console.log("current users ID is",uid)
+    // console.log(user.email)
 
 let currentUser = auth.currentUser
 const userRef = collection(db, 'user-Details')
-const q = query(userRef, where("email", "==", "deadpool@gmail.com"))
+const q = query(userRef, where("id", "==", this.userId))
 onSnapshot(q, (snapshot)=>{
     let users = []
     snapshot.docs.forEach((doc)=>{
         users.push({...doc.data(), id:doc.id})
-        console.log(doc.data().name)
-         console.log(doc.data().secondName)
+        // console.log(doc.data().name)
+        //  console.log(doc.data().secondName)
          this.name = doc.data().name
          this.secondName = doc.data().secondName
+         this.profilePic = doc.data().url
     })
     
-    console.log(users)
+    // console.log(users)
+})
+
+const infor = collection(db, 'created-post')
+const x = query(infor, where("user", "==", currentUser.email))
+onSnapshot(x, (snapshot)=>{
+    let lik = []
+    snapshot.docs.forEach((doc)=>{
+        lik.push({...doc.data(), id:doc.id})
+         this.userPosts.push(doc.data())
+        //  console.log(doc.data())
+        // console.log(doc.data().likes)
+        // console.log(lik[0])
+        // console.log(lik[1])
+        // console.log(lik[0].likes)
+        // console.log(lik)
+
+    })
+// console.log(this.createdPosts)
 })
 
   } else {
    console.log("no user")
    
   }
-
 
 });
 
@@ -381,15 +366,15 @@ onSnapshot(colRef, (snapshot)=>{
     let posts = []
     snapshot.docs.forEach((doc)=>{
         posts.push({...doc.data(), id:doc.id})
-        console.log(doc.data())
+        // console.log(doc.data())
          this.more.push (doc.data())
          this.person.push(doc.data().user)
          
     this.moreComments = true
     })
-    
-   console.log(this.more)
-   console.log(this.person)
+//     console.log(person)
+//    console.log(this.more)
+//    console.log(this.person)
 })
 },
 
@@ -401,7 +386,6 @@ onSnapshot(colRef, (snapshot)=>{
  },
 }
 </script>
-
 <style scoped>
 
 .post{
@@ -461,8 +445,7 @@ display: flex;
 .circle img{
     width:168px;
     height: 168px;
-    border-radius: 50%;
-    
+    border-radius: 50%;    
 }
 .circle{
      width:178px;
@@ -478,7 +461,6 @@ display: flex;
 }
 h1{
     margin: 0 auto;
-
 }
 .information{
     display: flex;
@@ -501,6 +483,13 @@ h1{
     grid-row: 1;
     display: flex;
 }
+
+.right-2{
+    grid-column: 2/2;
+    grid-row: 2;
+    display: flex;
+}
+
 .posts{
     background: #fff;
     border-radius: 10px;
@@ -511,7 +500,7 @@ h1{
     margin: 0 auto;
      display: flex;
 }
-#pstimg{   
+#postimg{   
     margin: 0 auto;
     width: 100%;
 }

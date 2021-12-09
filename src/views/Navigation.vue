@@ -97,7 +97,7 @@
         <span @click="like(post.id)" v-show="present" class="like" ><i class="fas fa-thumbs-up"></i></span>
         <span @click="like(post.id)" v-show="present" class="heart"><i class="fas fa-heart"></i></span>
 
-          <span @click="unlike(post.id)" v-show="absent " class="like"><i class="fas fa-thumbs-up"></i></span>
+          <span @click="unlike(post.id)" v-show="absent" class="like"><i class="fas fa-thumbs-up"></i></span>
         <span @click="unlike(post.id)" v-show="absent" class="heart"><i class="fas fa-heart"></i></span>
        <p>
              <label id="post-likes" ref="likeInput">{{post.likes}}</label>
@@ -111,16 +111,25 @@
     <div class="action">
         <label @click="like(post.id)" class="thumbs-up" v-show="present"><i class="far fa-thumbs-up"></i>like</label>
           <label @click="unlike(post.id)" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
+
              <label @click="comment"><i class="far fa-comment-alt"></i>comment</label>
                   <label><i class="fas fa-share"></i>share</label>
     </div>
-    <div class="comments" v-if="commented">
-        
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores accusantium voluptatum assumenda esse! Fugiat laboriosam iure consequatur commodi, corporis porro labore sapiente illum quibusdam? Inventore obcaecati totam consequuntur eius quas?</p>
+    <div class="write-comment" v-if="commented">    
+              <div class="post">
+  <!-- <span><i class="fas fa-user"></i></span> -->
+  <div class="user-pic">
+  <img :src="profilePic">
+</div>
+ <input type="text" placeholder="write a comment" v-model="comments" >
+ <div @click="send(post.id)" style="cursor:pointer" class="sent">
+ <i class="far fa-paper-plane"></i>
+ <p>Send</p>
+ </div>
+              </div>
     </div>
     </div>
 </div>
-
 
 </div>
 
@@ -274,7 +283,11 @@
 <div id="popup" v-if="popup">
   
  <div class="post">
-   <label @click="operate"> <span><i class="fas fa-user"></i></span>
+   <label @click="operate">
+     <!--    <span><i class="fas fa-user"></i></span> -->
+   <div class="user-pic" style="margin-right:5px">
+  <img :src="profilePic">
+</div>   
   <p><router-link to="/profile" class="view">View Profile</router-link></p></label>
  </div>
 <div @click="operate">
@@ -287,7 +300,7 @@
 <script>
 import { getStorage, ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, doc, getDocs, getDoc, setDoc,  onSnapshot, query, where, updateDoc, Firestore} from "firebase/firestore"
+import { getFirestore, collection, addDoc, doc, getDocs, getDoc, setDoc,  onSnapshot, query, where, updateDoc, Firestore, serverTimestamp, orderBy} from "firebase/firestore"
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
 import { getAnalytics } from "firebase/analytics";
 
@@ -298,8 +311,8 @@ export default {
        return{
       modal:false,
       popup:false,
-      unliked:true,
-      liked:false,
+    //   unliked:true,
+    //   liked:false,
       remarks:'',
       selectedFile:null,
       expression:"",
@@ -316,6 +329,7 @@ export default {
       profilePic:[],
       emerge:false,
       commented:false,
+      comments:"",
        } 
     },
     methods: {
@@ -329,56 +343,84 @@ this.commented=!this.commented
 this.card=false
         },
         unlike:function(id){
-            console.log(id)
-           this.absent = false
-          this.present = true        
-//  const factor = this.$refs.likeInput.innerHTML--
-//  console.log(factor)
-//  console.log(this.$refs.likeInput)
-const b = this.createdPosts[id]
-b.likes-= 1
-console.log(b)
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
+const userRef = collection(db, 'user-Details')
+const q = query(userRef, where("likedOn", "==", [id]))
+onSnapshot(q, (snapshot)=>{
+    let users = []
+    snapshot.docs.forEach((doc)=>{
+        users.push({...doc.data(), id:doc.id})
+
+ console.log(doc.data().likedOn)
+
+ if(id==doc.data().likedOn){
+   console.log(id)
+           this.absent =false
+          this.present = true      
+console.log("unliked")
+ }else{
+   this.absent = true
+          this.present = false
+ }
+       
+    })    
+    console.log(users)
+})
+const b = this.createdPosts[id]
+b.likes-= 1
+// console.log(b)
  updateDoc(doc(db, "created-post", id ), { 
    likes:b.likes 
        });
 
-//   updateDoc(doc(db, "user-Details", user.uid), {
-//     likedOn:[{id}]
-//     });
+  updateDoc(doc(db, "user-Details", user.uid), {
+    likedOn:[]
+    });
   }
  })
 
-
+       
         },
          like:function(id){
-console.log(id)
-console.log(this.createdPosts[id])
-const o = this.createdPosts[id]
-o.likes+= 1
-console.log(o)
-this.unliked =!this.unliked
-this.liked =!this.liked
+
+ onAuthStateChanged(auth, (user) => {
+const userRef = collection(db, 'user-Details')
+const q = query(userRef, where("likedOn", "==", [id]))
+onSnapshot(q, (snapshot)=>{
+    let users = []
+    snapshot.docs.forEach((doc)=>{
+        users.push({...doc.data(), id:doc.id})
+ console.log(doc.data().likedOn)
+ if(id!==doc.data().likedOn){
 this.absent = true
 this.present = false  
+console.log("liked")
+ }else{
+   this.absent =false
+   this.present = true   
+        
+ }      
+    })
+    console.log(users)
+})
 
-// const factor = this.$refs.likeInput.innerHTML++
-//  console.log(factor)
-//  console.log(this.$refs.likeInput)
-  
- onAuthStateChanged(auth, (user) => {
-  if (user) {
+const o = this.createdPosts[id]
+o.likes+= 1
+
  updateDoc(doc(db, "created-post", id ), { 
-   likes:o.likes 
+   likes:o.likes,
+      likedBy:[user.uid, user.email]
        });
 
   updateDoc(doc(db, "user-Details", user.uid), {
     likedOn:[id]
     });
-  }
+ 
+
  })
+
         },
       open:function(){
           this.modal=true
@@ -395,8 +437,21 @@ this.$router.push('/profile')
       },
       pickFile:function(){
     this.$refs.fileInput.click()
-
       },
+      send:function(id){
+    
+    if(this.comments===""){
+
+    }else{
+        let user = auth.currentUser
+       updateDoc(doc(db, "created-post", id ), { 
+
+
+
+ userRemarks:[this.comments, user.email]
+       });
+       }
+},
 signOut:function(){
  signOut(auth).then(() => {
     // Sign-out successful.
@@ -430,12 +485,12 @@ onSnapshot(q, (snapshot)=>{
          this.name = doc.data().name
          this.secondName = doc.data().secondName
           this.profilePic = doc.data().url
+         
     })
     
     // console.log(users)
 })
 
- 
     const storage = getStorage();
   //FETCHING SEVERAL IMAGES IN A FILE  
   const listRef = ref(storage, 'friends');
@@ -479,28 +534,26 @@ getDownloadURL(ref(storage, itemRef))
    console.log("no user")
    
   }
-
 });
 
 const infor = collection(db, 'created-post')
-
-onSnapshot(infor, (snapshot)=>{
+const i = query(infor, orderBy('createdAt', 'desc') )
+onSnapshot(i, (snapshot)=>{
     let lik = []
     snapshot.docs.forEach((doc)=>{
         lik.push({...doc.data(), id:doc.id})
         //  this.createdPosts.push({...doc.data(), id:doc.id})
  this.createdPosts[doc.id] = {...doc.data(), id:doc.id}
-console.log(this.createdPosts)
-        // console.log(doc.data())
-        // console.log(doc.data().likes)
-        
-        console.log(lik)
-        // console.log(lik[1])
-        // console.log(lik[0].likes)
-        // console.log(lik)
+
+//  if(this.createdPosts[doc.id].id ==this.createdPosts[doc.id].id){
+// this.absent = false
+// this.present = true  
+// console.log("liked")
+// console.log(this.createdPosts[doc.id].id )
+//  }
 
     })
-// console.log(this.createdPosts)
+console.log(this.createdPosts)
 })
 },
   onFileSelected:function(event){
@@ -547,9 +600,9 @@ const user = auth.currentUser;
       remarks:this.remarks,
       id:user.uid,
       user:user.email,
-      likes:"",
+      likes:null,
      url:url,
-
+    createdAt:serverTimestamp(),
     });
       
   })
@@ -568,6 +621,7 @@ this.modal=false
 }
 </script>
 <style scoped>
+
 #popup{
     position:fixed;
     background: #fff;
@@ -1214,6 +1268,18 @@ textarea:focus{
 .create:hover+.tooltip {
   visibility: visible;
 }
+.write-comment input{
+  padding: 2px 10px;
+  height: 32px;
+}
+.sent{
+    display: flex;
+     border-radius: 12px;
+     gap:10px;
+     background: #f0f2f5;
+     align-items: center;
+     padding:0px 16px;
+}
 @media all and (max-width: 850px){
     .part-1{
         display: none;
@@ -1233,7 +1299,6 @@ textarea:focus{
         width: 45vw;
     }
 }
-
 @media all and (max-width:600px){
 .content{
         grid-column: 1/12;

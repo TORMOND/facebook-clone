@@ -28,7 +28,7 @@
         <div class="container">
            <div class="back-image">
                <div class="circle">
-<img src="" id="profileimg">
+<img :src="profilePic" id="profileimg">
                </div>        
            </div>
            <div class="information">
@@ -40,23 +40,15 @@
     <div class="friends">
         <div class="all-friends">
             <h1>Friends</h1>
-            <!-- <a>See all Friends</a>
-            <span>251 friends</span> -->
+
         </div>
         
         <div class="persons">
-           <div class="images" v-for="friend in currentFriends" :key="friend" >  
-              <img :src="friend.url" @click="pool(friend.id)">
-              <p ref="friendName">{{friend.name}} {{friend.secondName}}</p>
+           <div class="images" v-for="friend in currentFriends" :key="friend" > 
+              <img :src="friend.url" @click="pool(friend.id)"> 
+                    <p ref="friendName">{{friend.name}} {{friend.secondName}}</p>
                 </div>
-               <!-- <router-link :to="{name:'Users', params: {name:name}}" style="text-decoration:none; color:#65675b">
-                <div class="images" @click="pool">                    
-                    <img src="https://www.denofgeek.com/wp-content/uploads/2020/11/webstory-deadpool-image06-1.jpg?fit=1170%2C780">
-               <p>DeadPool</p>
-                </div>
-                </router-link>
-
-                  -->
+              
         </div>
     </div>
 
@@ -211,31 +203,7 @@ import { getFirestore, collection, addDoc, doc, getDocs, getDoc, onSnapshot, que
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
- onAuthStateChanged(auth, (user) => {
-  if (user) {
-const storage = getStorage();
-getDownloadURL(ref(storage, 'images/deadpool-image.jpg'))
-  .then((url) => {
-    // `url` is the download URL for 'images/stars.jpg'
-
-    // This can be downloaded directly:
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
-    xhr.onload = (event) => {
-      const blob = xhr.response;
-    };
-    xhr.open('GET', url);
-    xhr.send();
-
-    // Or inserted into an <img> element
-    const img = document.getElementById('myimg');
-    img.setAttribute('src', url);
-  })
-  .catch((error) => {
-    // Handle any errors
-  });
-  }
- })
+ 
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -263,31 +231,6 @@ getDownloadURL(ref(storage, 'Rolls-Royce-Phantom-Black.jpg'))
   }
  })
 
- onAuthStateChanged(auth, (user) => {
-  if (user) {
-const storage = getStorage();
-getDownloadURL(ref(storage, 'images/cool-Benjamin.jpeg'))
-  .then((url) => {
-    // `url` is the download URL for 'images/stars.jpg'
-
-    // This can be downloaded directly:
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
-    xhr.onload = (event) => {
-      const blob = xhr.response;
-    };
-    xhr.open('GET', url);
-    xhr.send();
-
-    // Or inserted into an <img> element
-    const img = document.getElementById('profileimg');
-    img.setAttribute('src', url);
-  })
-  .catch((error) => {
-    // Handle any errors
-  });
-  }
- })
 
  import{ app, db, auth, firebaseConfig, user } from '@/firebase.js'
 
@@ -310,7 +253,7 @@ moreComments:false,
 posts:[],
 profilePic:[],
 userPosts:[],
-currentFriends:[],
+currentFriends:{},
         }
     },
     methods: {
@@ -347,6 +290,7 @@ updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
 this.number++
 this.absent = true
 this.present = false
+
  updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
     // const b = query(docRef, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ));
    likes:this.number
@@ -369,53 +313,14 @@ send:function(){
 
     
        });
-        // this.more.push (this.comments)
-        //  this.person.push(user.email)
-    //    console.log(user)
+
        }
 },
 pool:function(id){
   console.log(id)
-  this.$router.push('/profile/:name')
+  this.$router.push({ name: 'Users', params: { id: id }})
 const useRef = collection(db, 'user-Details')
-const m = query(useRef, where("id", "==", "id"))
-onSnapshot(m, (snapshot)=>{
-    let use = []
-    snapshot.docs.forEach((doc)=>{
-        use.push({...doc.data(), id:doc.id})
-        console.log(doc.data().name)
-         console.log(doc.data().secondName)
-         this.name = doc.data().name
-         this.secondName = doc.data().secondName
-     
-    })
-    // console.log(use)
-})
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-const storage = getStorage();
-getDownloadURL(ref(storage, 'images/deadpool-image.jpg'))
-  .then((url) => {
-    // `url` is the download URL for 'images/stars.jpg'
-    // This can be downloaded directly:
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
-    xhr.onload = (event) => {
-      const blob = xhr.response;
-    };
-    xhr.open('GET', url);
-    xhr.send();
-
-    // Or inserted into an <img> element
-    const img = document.getElementById('profileimg');
-    img.setAttribute('src', url);
-  })
-  .catch((error) => {
-    // Handle any errors
-  });
-  }
- })
 },
 signOut:function(){
  signOut(auth).then(() => {
@@ -449,8 +354,12 @@ onSnapshot(friends, (snapshot)=>{
         y.push({...doc.data(), id:doc.id})
         //  this.createdPosts.push(doc.data())
         // console.log(doc.data())
-      this.currentFriends.push({...doc.data()})
+      // this.currentFriends.push({...doc.data()})
+
+
+      this.currentFriends[doc.id] = {...doc.data(), id:doc.id}
     })
+
 // console.log(this.createdPosts)
 })
 
@@ -806,6 +715,7 @@ max-height: 280px;
 .home:hover+.tooltiptext {
   visibility: visible;
 }
+
 @media all and (max-width:900px){
     .wrap{
         grid-template-columns: repeat(1, 1fr);

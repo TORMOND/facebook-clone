@@ -542,12 +542,17 @@ onSnapshot(i, (snapshot)=>{
     let lik = []
     snapshot.docs.forEach((doc)=>{
         lik.push({...doc.data(), id:doc.id})
-        //  this.createdPosts.push({...doc.data(), id:doc.id})
+    
+    let j ={}
+    
+    j[doc.id] = {...doc.data(), id:doc.id}
+
  this.createdPosts[doc.id] = {...doc.data(), id:doc.id}
 
-//  if(this.createdPosts[doc.id].id ==this.createdPosts[doc.id].id){
-// this.absent = false
-// this.present = true  
+
+//  if(this.createdPosts[doc.id].id =j.likedOn){
+// this.absent = true
+// this.present = false 
 // console.log("liked")
 // console.log(this.createdPosts[doc.id].id )
 //  }
@@ -555,6 +560,7 @@ onSnapshot(i, (snapshot)=>{
     })
 console.log(this.createdPosts)
 })
+
 },
   onFileSelected:function(event){
 const files = event.target.files
@@ -616,6 +622,7 @@ this.modal=false
     },  
       beforeMount(){
     this.create()
+
  },
      
 }

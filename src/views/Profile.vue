@@ -385,7 +385,7 @@ onSnapshot(colRef, (snapshot)=>{
     padding: 10px;
     grid-column: 1/2;
     grid-row: 1;
-  height: 600px;
+   height: 600px;
 }
 .friends h1{
     font-size: 20px;
@@ -474,7 +474,7 @@ h1{
     background: #fff;
     border-radius: 10px;
    margin: 0 auto;
-   width: 600px;
+   max-width: 600px;
 }
 .sent-img{
     margin: 0 auto;
@@ -667,4 +667,9 @@ visibility: hidden;
         visibility: visible;
     }
 }
+ @media all and (max-width:450px){
+
+ }
+
+
 </style>

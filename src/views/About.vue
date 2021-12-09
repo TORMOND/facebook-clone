@@ -188,7 +188,6 @@ input{
   margin-bottom: 20px;
 }
 
-
 .footer{
     background: #fff;
     margin-bottom: 0;

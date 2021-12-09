@@ -28,8 +28,8 @@
               </label>
              <span @click="open" class="create"><i class="fas fa-plus"></i></span>
              <div class="tooltip">Create Posts</div>
-              <span><i class="fab fa-facebook-messenger"></i></span>
-              <span><i class="fas fa-bell"></i></span>
+              <span class="messenger"><i class="fab fa-facebook-messenger"></i></span>
+              <span class="bells"><i class="fas fa-bell"></i></span>
               <span @click="operate" class="home"><i class="fas fa-caret-down"></i></span>
               <div class="tooltiptext">Account</div>
           </div>
@@ -57,8 +57,8 @@
 
 <div class="content">
 <div class="wrap">
-    <div class="post">
-  <!-- <span><i class="fas fa-user"></i></span> -->
+    <div class="postz">
+
      <div class="user-pic">
   <img :src="profilePic">
 </div>   
@@ -879,7 +879,7 @@ label:hover{
     margin-top: 80px;
     padding: 12px 16px 10px;
     box-shadow: 1px 1px 1px #ceced1, 1px 1px 1px #ceced1 ;
-    width: 100%;
+   width: calc(100% - 40px);
    display: flex;
    flex-direction: column;
    margin-left: auto;
@@ -898,8 +898,14 @@ label:hover{
 }
 .post{
     display: flex;
-    gap: 20px;
-    padding: 12px 16px 16px;
+    gap: 15px;
+    padding: 12px 16px;
+}
+.postz{
+    display: flex;
+    gap: 15px;
+    padding: 12px 0;
+    
 }
 /* .part-1{
     position: fixed;
@@ -925,6 +931,16 @@ label:hover{
 .part-1 label:hover{
 background: #e4e6eb;
 }
+.postz input{
+padding: 8px 12px;
+font-size: 17px;
+color: #65676b;
+background: #f0f2f5;
+border-radius: 36px;
+border: none;
+width:calc(100% - 50px);
+cursor: pointer;
+}
 .post input{
 padding: 8px 12px;
 font-size: 17px;
@@ -932,8 +948,11 @@ color: #65676b;
 background: #f0f2f5;
 border-radius: 36px;
 border: none;
-width: 80%;
+width:calc(100% - 30%);
 cursor: pointer;
+}
+.postz input:focus{
+    outline: none;
 }
 .post input:focus{
     outline: none;
@@ -941,7 +960,7 @@ cursor: pointer;
 .post-2{
     border-top: 0.5px solid #65676b;
     display: flex;
-    padding: 12px 16px 16px;  
+    padding: 12px 0;  
   justify-content: space-around;
   width: calc(100% - 30px); 
 }
@@ -1279,6 +1298,12 @@ nav{
 .search{
     visibility: visible;
 }
+.messenger{
+    visibility: hidden;
+}
+.bells{
+    display: none;
+}
 }
 @media all and (max-width:425px){
   .content{
@@ -1292,14 +1317,19 @@ nav{
     .post-2 label:last-child{
         display: none;
     }
-   
+   .messenger{
+    display: none;
+}
+.bells{
+    display: none;
+}
 }
 @media all and (max-width:320px){
    .reviews{
         font-size: 14px;
     }
     .content{
-        width: 280px;
+        width: calc(100% - 20px);
     }
 }
 

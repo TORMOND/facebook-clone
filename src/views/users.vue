@@ -48,49 +48,42 @@
            <div class="images" v-for="friend in currentFriends" :key="friend" > 
               <img :src="friend.url" @click="pool(friend.id)"> 
                     <p ref="friendName">{{friend.name}} {{friend.secondName}}</p>
-            <!-- <router-link :to="{ name:'users', params: { name:friend.name }}">
-         
-             </router-link> -->
-             
+                    
                 </div>
-               <!-- <router-link :to="{name:'Users', params: {name:name}}" style="text-decoration:none; color:#65675b">
-                <div class="images" @click="pool">                    
-                    <img src="https://www.denofgeek.com/wp-content/uploads/2020/11/webstory-deadpool-image06-1.jpg?fit=1170%2C780">
-               <p>DeadPool</p>
-                </div>
-                </router-link>
-
-                  -->
+            
         </div>
     </div>
 
     
   <div class="right"> 
-    <div class="posts">
+    <div class="posts" v-for="post in userPosts" :key="post">
       <div class="post">
 
 <div class="user-pic">
   <img :src="profilePic">
 </div>
   <!-- <span><i class="fas fa-user"></i></span> -->
- <p>{{name}} {{secondName}}</p>
-    </div>
+   <p>{{name}} {{secondName}}</p>
+   <br>
+   <div class="elipsis"><i class="fas fa-ellipsis-h"></i></div>
+    </div> 
+     <div class="paragraph">
+ <p>{{post.remarks}}</p>
+ </div>
     <div class="sent-image">
-        <img src="" id="postimg">
+        <img :src="post.url" id="myimg">
     </div>
       <div class="more"></div>
     <div class="engagement">
         <div class="emoji">
-        <span @click="like" v-show="present" class="like"><i class="fas fa-thumbs-up"></i></span>
-        <span @click="like" v-show="present" class="heart"><i class="fas fa-heart"></i></span>
+        <span @click="like(post.id)" v-show="present" class="like"><i class="fas fa-thumbs-up"></i></span>
+        <span @click="like(post.id)" v-show="present" class="heart"><i class="fas fa-heart"></i></span>
 
-          <span @click="unlike" v-show="absent " class="like"><i class="fas fa-thumbs-up"></i></span>
-        <span @click="unlike" v-show="absent" class="heart"><i class="fas fa-heart"></i></span>
+          <span @click="unlike(post.id)" v-show="absent " class="like"><i class="fas fa-thumbs-up"></i></span>
+        <span @click="unlike(post.id)" v-show="absent" class="heart"><i class="fas fa-heart"></i></span>
        <p>
-           <!-- <label v-show="unliked">177k</label>
-           <label v-show="liked">You and 177k others</label> -->
-
-           <label v-if="number">{{number}}</label>
+        
+           <label v-if="number">{{post.likes}}</label>
           </p>
         </div>
         <div class="reviews">
@@ -99,8 +92,8 @@
         </div>
     </div>
     <div class="action">
-        <label @click="like" class="thumbs-up" v-show="present" ><i class="far fa-thumbs-up"></i>like</label>
-          <label @click="unlike" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
+        <label @click="like(post.id)" class="thumbs-up" v-show="present" ><i class="far fa-thumbs-up"></i>like</label>
+          <label @click="unlike(post.id)" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
              <label><i class="far fa-comment-alt"></i>comment</label>
                   <label><i class="fas fa-share"></i>share</label>
     </div>
@@ -111,7 +104,7 @@
   <img :src="profilePic">
 </div>
  <input type="text" placeholder="write a comment" v-model="comments" >
- <div @click="send" style="cursor:pointer" class="sent">
+ <div @click="send(post.id)" style="cursor:pointer" class="sent">
  <i class="far fa-paper-plane"></i>
  <p>Send</p>
  </div>
@@ -150,35 +143,6 @@ import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWith
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
  
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-const storage = getStorage();
-getDownloadURL(ref(storage, 'Rolls-Royce-Phantom-Black.jpg'))
-  .then((url) => {
-    // `url` is the download URL for 'images/stars.jpg'
-
-    // This can be downloaded directly:
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
-    xhr.onload = (event) => {
-      const blob = xhr.response;
-    };
-    xhr.open('GET', url);
-    xhr.send();
-
-    // Or inserted into an <img> element
-    const img = document.getElementById('postimg');
-    img.setAttribute('src', url);
-  })
-  .catch((error) => {
-    // Handle any errors
-  });
-  }
- })
-
- 
-
  import{ app, db, auth, firebaseConfig, user } from '@/firebase.js'
 
 export default {
@@ -199,9 +163,10 @@ person:[],
 moreComments:false,
 posts:[],
 profilePic:[],
-userPosts:[],
+userPosts:{},
 currentFriends:{},
 userId:this.$route.params.id,
+
         }
     },
     methods: {
@@ -216,54 +181,97 @@ operate:function(){
     this.popup =!this.popup;
     
 },
-        unlike:function(){
-//     const thumb = document.querySelector('.thumbs-up');
-// thumb.style.color = "#65675b"; 
-this.number--
-this.absent = false
-this.present = true
-updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
-    // const b = query(docRef, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ));
+ unlike:function(id){
 
-   likes:this.number
-     
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+const userRef = collection(db, 'user-Details')
+const q = query(userRef, where("likedOn", "==", [id]))
+onSnapshot(q, (snapshot)=>{
+    let users = []
+    snapshot.docs.forEach((doc)=>{
+        users.push({...doc.data(), id:doc.id})
+
+ console.log(doc.data().likedOn)
+
+ if(id==doc.data().likedOn){
+   console.log(id)
+           this.absent =false
+          this.present = true      
+console.log("unliked")
+ }else{
+   this.absent = true
+          this.present = false
+ }
+       
+    })    
+    console.log(users)
+})
+const b = this.userPosts[id]
+b.likes-= 1
+// console.log(b)
+ updateDoc(doc(db, "created-post", id ), { 
+   likes:b.likes 
        });
-//    console.log(this.number)
-     
 
+  updateDoc(doc(db, "user-Details", user.uid), {
+    likedOn:[]
+    });
+  }
+ })
+
+       
         },
-        like:function(){
-// const thumb = document.querySelector('.thumbs-up');
-// thumb.style.color = "#216fd8"; 
-this.number++
+         like:function(id){
+
+ onAuthStateChanged(auth, (user) => {
+const userRef = collection(db, 'user-Details')
+const q = query(userRef, where("likedOn", "==", [id]))
+onSnapshot(q, (snapshot)=>{
+    let users = []
+    snapshot.docs.forEach((doc)=>{
+        users.push({...doc.data(), id:doc.id})
+ console.log(doc.data().likedOn)
+ if(id!==doc.data().likedOn){
 this.absent = true
-this.present = false
+this.present = false  
+console.log("liked")
+ }else{
+   this.absent =false
+   this.present = true   
+        
+ }      
+    })
+    console.log(users)
+})
 
- updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
-    // const b = query(docRef, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ));
-   likes:this.number
-     
+const o = this.userPosts[id]
+o.likes+= 1
+
+ updateDoc(doc(db, "created-post", id ), { 
+   likes:o.likes,
+      likedBy:[user.uid, user.email]
        });
-   console.log(this.number)
-     
-        },
 
-   
-send:function(){
+  updateDoc(doc(db, "user-Details", user.uid), {
+    likedOn:[id]
+    });
+ 
+
+ })
+
+        },
+  
+send:function(id){
     
-    if(this.comments===""){
+   if(this.comments===""){
 
     }else{
         let user = auth.currentUser
-       const docRef = addDoc(collection(db, "Posts"), {
-     comments:this.comments,    
-     user:user.email,
-
-    
+       updateDoc(doc(db, "created-post", id ), { 
+postedAt:serverTimestamp(),
+ userRemarks:[this.comments, user.email]
        });
-        // this.more.push (this.comments)
-        //  this.person.push(user.email)
-    //    console.log(user)
        }
 },
 pool:function(id){
@@ -282,12 +290,10 @@ signOut:function(){
 },
 names:function(){
 const like = collection(db, 'information')
-// const like = query(infor, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ))
 onSnapshot(like, (snapshot)=>{
     let likes = []
     snapshot.docs.forEach((doc)=>{
-        likes.push({...doc.data(), id:doc.id})
-       
+        likes.push({...doc.data(), id:doc.id})       
         this.number = doc.data().likes
         
     })
@@ -296,7 +302,6 @@ onSnapshot(like, (snapshot)=>{
   onAuthStateChanged(auth, (user) => {
   if (user) {
     const friends = collection(db, 'user-Details')
-
 onSnapshot(friends, (snapshot)=>{
     let y = []
     snapshot.docs.forEach((doc)=>{
@@ -305,15 +310,13 @@ onSnapshot(friends, (snapshot)=>{
         // console.log(doc.data())
       // this.currentFriends.push({...doc.data()})
 
-
       this.currentFriends[doc.id] = {...doc.data(), id:doc.id}
     })
 
 // console.log(this.createdPosts)
 })
 
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/firebase.User
+    
     const uid = user.uid;
     // console.log("current users ID is",uid)
     // console.log(user.email)
@@ -336,12 +339,13 @@ onSnapshot(q, (snapshot)=>{
 })
 
 const infor = collection(db, 'created-post')
-const x = query(infor, where("user", "==", currentUser.email))
+const x = query(infor, where("id", "==", this.userId))
 onSnapshot(x, (snapshot)=>{
     let lik = []
     snapshot.docs.forEach((doc)=>{
         lik.push({...doc.data(), id:doc.id})
-         this.userPosts.push(doc.data())
+        //  this.userPosts.push(doc.data())
+         this.userPosts[doc.id] = {...doc.data(), id:doc.id}
         //  console.log(doc.data())
         // console.log(doc.data().likes)
         // console.log(lik[0])
@@ -354,6 +358,9 @@ onSnapshot(x, (snapshot)=>{
 })
 
   } else {
+      const right = document.querySelector('.right')
+      right.innerHTML = "No Posts"
+
    console.log("no user")
    
   }
@@ -361,7 +368,6 @@ onSnapshot(x, (snapshot)=>{
 });
 
 const colRef = collection(db, 'Posts')
-
 onSnapshot(colRef, (snapshot)=>{
     let posts = []
     snapshot.docs.forEach((doc)=>{
@@ -387,7 +393,12 @@ onSnapshot(colRef, (snapshot)=>{
 }
 </script>
 <style scoped>
-
+.sent-img{
+    width: 100%;
+}
+#myimg{
+   width: 100%; 
+}
 .post{
     display: flex;
     gap: 20px;
@@ -495,6 +506,25 @@ h1{
     border-radius: 10px;
    margin: 0 auto;
    width: 600px;
+}
+.elipsis{
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.elipsis:hover{
+   background: #f0f2f5; 
+}
+.elipsis i{
+    color: #65676b;
+}
+.paragraph{
+    margin-top:-15px;
+    padding:0px 16px;
 }
 .sent-img{
     margin: 0 auto;

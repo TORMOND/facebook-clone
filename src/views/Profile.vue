@@ -20,6 +20,7 @@
               <span><i class="fas fa-user"></i></span>
               {{name}}
               </label> -->
+              <router-link to="/Navigation" style="text-decoration:none; color:#65675b" class="home-2"><span><i class="fas fa-home" ></i></span></router-link> 
               <span><i class="fab fa-facebook-messenger"></i></span>
               <span><i class="fas fa-bell"></i></span>
               <span @click="operate"><i class="fas fa-caret-down"></i></span>
@@ -52,73 +53,7 @@
         </div>
     </div>
 
-
-     <div class="right-2" v-show="false"> 
-    <div class="posts">
-      <div class="post" v-for="post in userPosts" :key="post">
-
-<div class="user-pic">
-  <img :src="profilePic">
-</div>
-  <!-- <span><i class="fas fa-user"></i></span> -->
- <p>{{post.email}} </p>
-    </div>
-    <div class="sent-image">
-        <img src="" id="postimg">
-    </div>
-      <div class="more"></div>
-    <div class="engagement">
-        <div class="emoji">
-        <span @click="like" v-show="present" class="like"><i class="fas fa-thumbs-up"></i></span>
-        <span @click="like" v-show="present" class="heart"><i class="fas fa-heart"></i></span>
-
-          <span @click="unlike" v-show="absent " class="like"><i class="fas fa-thumbs-up"></i></span>
-        <span @click="unlike" v-show="absent" class="heart"><i class="fas fa-heart"></i></span>
-       <p>
-           <!-- <label v-show="unliked">177k</label>
-           <label v-show="liked">You and 177k others</label> -->
-
-           <label v-if="number">{{number}}</label>
-          </p>
-        </div>
-        <div class="reviews">
-        <p>{{more.length}} comments</p>
-        <p>2.6k Shares </p>
-        </div>
-    </div>
-    <div class="action">
-        <label @click="like" class="thumbs-up" v-show="present" ><i class="far fa-thumbs-up"></i>like</label>
-          <label @click="unlike" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
-             <label><i class="far fa-comment-alt"></i>comment</label>
-                  <label><i class="fas fa-share"></i>share</label>
-    </div>
-    <div class="write-comment">
-        <div class="post">
-  <!-- <span><i class="fas fa-user"></i></span> -->
-  <div class="user-pic">
-  <img :src="profilePic">
-</div>
- <input type="text" placeholder="write a comment" v-model="comments" >
- <div @click="send" style="cursor:pointer" class="sent">
- <i class="far fa-paper-plane"></i>
- <p>Send</p>
- </div>
-    </div> 
-
-<div class="posted-comments" style="padding:16px 28px">
-  <!-- <span @click="showComments" class="more">More comments.....</span> -->
-   <p>{{comments}}</p>
-<div v-show="moreComments" v-for="item in more" :key="item" class="item" >
-   <p><span style="color:#ceced1">{{item.user}}</span> :{{item.comments}}</p>
-    </div>
-</div>
  
-    </div> 
-    </div>
-
-</div>
-
-    
   <div class="right"> 
     <div class="posts">
       <div class="post">
@@ -535,12 +470,6 @@ h1{
     display: flex;
 }
 
-.right-2{
-    grid-column: 2/2;
-    grid-row: 2;
-    display: flex;
-}
-
 .posts{
     background: #fff;
     border-radius: 10px;
@@ -715,6 +644,9 @@ max-height: 280px;
 .home:hover+.tooltiptext {
   visibility: visible;
 }
+.home-2{
+visibility: hidden;
+}
 
 @media all and (max-width:900px){
     .wrap{
@@ -730,6 +662,9 @@ max-height: 280px;
     }
     .navigate{
       display: none;
+    }
+    .home-2{
+        visibility: visible;
     }
 }
 </style>

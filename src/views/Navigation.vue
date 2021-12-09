@@ -94,11 +94,12 @@
     <div class="more"></div>
     <div class="engagement">
         <div class="emoji">
-        <span @click="like(post.id)" v-show="present" class="like" ><i class="fas fa-thumbs-up"></i></span>
-        <span @click="like(post.id)" v-show="present" class="heart"><i class="fas fa-heart"></i></span>
 
-          <span @click="unlike(post.id)" v-show="absent" class="like"><i class="fas fa-thumbs-up"></i></span>
-        <span @click="unlike(post.id)" v-show="absent" class="heart"><i class="fas fa-heart"></i></span>
+          <span @click="unlike(post.id)" v-if="post.likedBy.includes(this.currentUserId)" class="like"><i class="fas fa-thumbs-up"></i></span>
+            <span @click="like(post.id)" v-else class="like" ><i class="fas fa-thumbs-up"></i></span>
+        <span @click="unlike(post.id)" v-if="post.likedBy.includes(this.currentUserId)" class="heart"><i class="fas fa-heart"></i></span>
+        <span @click="like(post.id)" v-else class="heart"><i class="fas fa-heart"></i></span>
+
        <p>
              <label id="post-likes" ref="likeInput">{{post.likes}}</label>
        </p>
@@ -109,13 +110,15 @@
         </div>
     </div>
     <div class="action">
-        <label @click="like(post.id)" class="thumbs-up" v-show="present"><i class="far fa-thumbs-up"></i>like</label>
-          <label @click="unlike(post.id)" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
-
-             <label @click="comment"><i class="far fa-comment-alt"></i>comment</label>
+       
+        
+          <label @click="unlike(post.id)" class="thumbs-up" v-if="post.likedBy.includes(this.currentUserId)"><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
+ <label @click="like(post.id)" class="thumbs-up"  v-else><i class="far fa-thumbs-up"></i>like</label>
+             <label @click="comment(post.id)" ><i class="far fa-comment-alt"></i>comment</label>
+            
                   <label><i class="fas fa-share"></i>share</label>
     </div>
-    <div class="write-comment" v-if="commented">    
+    <div class="write-comment" v-if="commented" >
               <div class="post">
   <!-- <span><i class="fas fa-user"></i></span> -->
   <div class="user-pic">
@@ -311,8 +314,6 @@ export default {
        return{
       modal:false,
       popup:false,
-    //   unliked:true,
-    //   liked:false,
       remarks:'',
       selectedFile:null,
       expression:"",
@@ -330,11 +331,22 @@ export default {
       emerge:false,
       commented:false,
       comments:"",
+      postId:"XBVzaoAnQaTYZLli6P0y7rLJidD2",
+      currentUserId:"",
+      commentInfor:"",
+      userComments:"",
        } 
     },
     methods: {
-        comment:function(){
-this.commented=!this.commented
+        comment:function(id){
+this.commentInfor = id
+    this.commented=!this.commented
+    onAuthStateChanged(auth, (user) => {
+this.userComments=user.uid
+updateDoc(doc(db, "created-post", id ), { 
+  commentDetails:[user.uid]
+       });
+    })  
         },
         toggle:function(){
  this.emerge=!this.emerge
@@ -354,17 +366,7 @@ onSnapshot(q, (snapshot)=>{
         users.push({...doc.data(), id:doc.id})
 
  console.log(doc.data().likedOn)
-
- if(id==doc.data().likedOn){
-   console.log(id)
-           this.absent =false
-          this.present = true      
-console.log("unliked")
- }else{
-   this.absent = true
-          this.present = false
- }
-       
+     
     })    
     console.log(users)
 })
@@ -372,7 +374,8 @@ const b = this.createdPosts[id]
 b.likes-= 1
 // console.log(b)
  updateDoc(doc(db, "created-post", id ), { 
-   likes:b.likes 
+   likes:b.likes, 
+   likedBy:[]
        });
 
   updateDoc(doc(db, "user-Details", user.uid), {
@@ -384,6 +387,8 @@ b.likes-= 1
        
         },
          like:function(id){
+             this.postId=id
+console.log(this.postId)
 
  onAuthStateChanged(auth, (user) => {
 const userRef = collection(db, 'user-Details')
@@ -393,15 +398,7 @@ onSnapshot(q, (snapshot)=>{
     snapshot.docs.forEach((doc)=>{
         users.push({...doc.data(), id:doc.id})
  console.log(doc.data().likedOn)
- if(id!==doc.data().likedOn){
-this.absent = true
-this.present = false  
-console.log("liked")
- }else{
-   this.absent =false
-   this.present = true   
-        
- }      
+
     })
     console.log(users)
 })
@@ -411,7 +408,7 @@ o.likes+= 1
 
  updateDoc(doc(db, "created-post", id ), { 
    likes:o.likes,
-      likedBy:[user.uid, user.email]
+      likedBy:[user.uid]
        });
 
   updateDoc(doc(db, "user-Details", user.uid), {
@@ -439,16 +436,14 @@ this.$router.push('/profile')
     this.$refs.fileInput.click()
       },
       send:function(id){
-    
     if(this.comments===""){
 
     }else{
         let user = auth.currentUser
        updateDoc(doc(db, "created-post", id ), { 
-
-
-
+postedAt:serverTimestamp(),
  userRemarks:[this.comments, user.email]
+ 
        });
        }
 },
@@ -484,52 +479,13 @@ onSnapshot(q, (snapshot)=>{
         //  console.log(doc.data().secondName)
          this.name = doc.data().name
          this.secondName = doc.data().secondName
-          this.profilePic = doc.data().url
-         
+          this.profilePic = doc.data().url      
+          this.currentUserId = doc.data().id   
     })
     
     // console.log(users)
 })
 
-    const storage = getStorage();
-  //FETCHING SEVERAL IMAGES IN A FILE  
-  const listRef = ref(storage, 'friends');
-
-// Find all the prefixes and items.
-listAll(listRef)
-  .then((res) => {
-    res.prefixes.forEach((folderRef) => {
-      // All the prefixes under listRef.
-      // You may call listAll() recursively on them.
-    
-    });
-    res.items.forEach((itemRef) => {
-      // All the items under listRef.
-getDownloadURL(ref(storage, itemRef))
-  .then((url) => {
-    // `url` is the download URL for 'images/stars.jpg'
-    // This can be downloaded directly:
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
-    xhr.onload = (event) => {
-      const blob = xhr.response;
-    };
-    xhr.open('GET', url);
-    xhr.send();
-    // console.log(url)
-
-    let images = []
-    images.push({url})
-    // this.downloads.push({url})
-    // this.createdPosts.push({url})
-//   console.log(images)
-
-  })
-     
-    });
-  }).catch((error) => {
-    // Uh-oh, an error occurred!
-  });
  } else {
    console.log("no user")
    
@@ -544,19 +500,16 @@ onSnapshot(i, (snapshot)=>{
         lik.push({...doc.data(), id:doc.id})
     
     let j ={}
-    
     j[doc.id] = {...doc.data(), id:doc.id}
-
  this.createdPosts[doc.id] = {...doc.data(), id:doc.id}
 
-
-//  if(this.createdPosts[doc.id].id =j.likedOn){
+//  if(this.createdPosts[doc.id]==this.postId){
 // this.absent = true
-// this.present = false 
+// this.present = false
 // console.log("liked")
-// console.log(this.createdPosts[doc.id].id )
-//  }
 
+//  }
+// console.log(this.createdPosts[doc.id])
     })
 console.log(this.createdPosts)
 })
@@ -576,7 +529,6 @@ fileReader.readAsDataURL(files[0])
 this.image = files[0]
 // console.log(this.image)
       },
-
 upload:function(){
   
 const storage = getStorage();
@@ -1321,6 +1273,9 @@ textarea:focus{
 nav input{
     display: none;
 }
+nav{
+    gap: 40px;
+}
 .search{
     visibility: visible;
 }
@@ -1343,7 +1298,9 @@ nav input{
    .reviews{
         font-size: 14px;
     }
-
+    .content{
+        width: 280px;
+    }
 }
 
 </style>

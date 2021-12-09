@@ -391,6 +391,8 @@ onSnapshot(colRef, (snapshot)=>{
     this.names()
  },
 }
+
+
 </script>
 <style scoped>
 .sent-img{

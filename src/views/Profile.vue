@@ -17,9 +17,16 @@
           </div>
           <div class="extras">
   <!-- <label @click="run">
-              <span><i class="fas fa-user"></i></span>
-              {{name}}
+      <div class="post">
+      <div class="user-pic">
+  <img :src="profilePic">
+</div>
+{{name}}
+</div>
+         <span><i class="fas fa-user"></i></span>
+              
               </label> -->
+
               <router-link to="/Navigation" style="text-decoration:none; color:#65675b" class="home-2"><span><i class="fas fa-home" ></i></span></router-link> 
               <span><i class="fab fa-facebook-messenger"></i></span>
               <span><i class="fas fa-bell"></i></span>
@@ -34,6 +41,19 @@
            </div>
            <div class="information">
                <h1 >{{name}} {{secondName}}</h1>
+           </div>
+           <div>
+               <span></span>
+               <span></span>
+               <span></span>
+               <span></span>
+               <span></span>
+               <span></span>
+               <span></span>
+
+               <button @click="addStory">Add to Story</button>
+               <button @click="editProfile">Edit Profile</button>
+               <span></span>
            </div>
 </div>
 <div class="wrapper">
@@ -613,7 +633,7 @@ max-height: 280px;
     position:fixed;
     background: #fff;
     top: 5%;
-    left: 80%;
+    left: 90%;
     border-radius: 10px;
     padding: 16px;
     font-weight: 700;
@@ -647,7 +667,9 @@ max-height: 280px;
 .home-2{
 visibility: hidden;
 }
-
+.posts-xoxo{
+    display: flex;
+}
 @media all and (max-width:900px){
     .wrap{
         grid-template-columns: repeat(1, 1fr);

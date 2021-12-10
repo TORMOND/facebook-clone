@@ -94,6 +94,8 @@ background: #f0f2f5;
 .extras{
  display: flex;
  gap: 10px;
+ justify-content: flex-end;
+ padding: 0 24px;
 }
 .extras span{
     width: 40px;

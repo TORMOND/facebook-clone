@@ -118,7 +118,8 @@
             
                   <label><i class="fas fa-share"></i>share</label>
     </div>
-    <div class="write-comment" v-if="commented" >
+    <div v-if="commented">
+    <div class="write-comment" v-if="post.id.includes(this.commentInfor)" >
               <div class="post">
   <!-- <span><i class="fas fa-user"></i></span> -->
   <div class="user-pic">
@@ -129,8 +130,16 @@
  <i class="far fa-paper-plane"></i>
  <p>Send</p>
  </div>
+
               </div>
+ <div  v-for="some in awesome" :key="some" >
+     <p v-if="post.id.includes(this.commentInfor)"  class="shown-comments"><a>{{some.userEmail}}</a>:{{some.userRemarks}}</p>
+     <p v-else></p>
+     </div>
+
     </div>
+    </div>
+
     </div>
 </div>
 
@@ -232,7 +241,7 @@
     <div class="create">
         <h2>Create post</h2>
       <!-- <button @click="open" v-if="closed">X</button> -->
-      <button @click="close" >X</button> 
+      <button @click="close">X</button> 
     </div>
       <div class="post" @click="run">
   <!-- <span><i class="fas fa-user"></i></span> -->
@@ -335,18 +344,35 @@ export default {
       currentUserId:"",
       commentInfor:"",
       userComments:"",
+      awesome:{}
        } 
     },
     methods: {
         comment:function(id){
-this.commentInfor = id
+this.commentInfor=id
     this.commented=!this.commented
     onAuthStateChanged(auth, (user) => {
+ const userComments = collection(db, 'created-post', this.commentInfor, "comments")
+// const t = query(userComments, where("user", "==", this.commentInfor)) 
+onSnapshot(userComments, (snapshot)=>{
+snapshot.docs.forEach((doc)=>{
+let m = []
+m.push({...doc.data(), id:doc.id})
+
+this.awesome[doc.id] = {...doc.data(), id:doc.id}
+console.log(m)
+console.log(this.awesome)
+})
+
+});
+
 this.userComments=user.uid
 updateDoc(doc(db, "created-post", id ), { 
   commentDetails:[user.uid]
        });
     })  
+   
+
         },
         toggle:function(){
  this.emerge=!this.emerge
@@ -440,11 +466,18 @@ this.$router.push('/profile')
 
     }else{
         let user = auth.currentUser
-       updateDoc(doc(db, "created-post", id ), { 
+//        updateDoc(doc(db, "created-post", id ), { 
+// postedAt:serverTimestamp(),
+//  userRemarks:[this.comments, user.email]
+//        });
+
+    setDoc(doc(db, "created-post", id, "comments", user.uid), { 
 postedAt:serverTimestamp(),
- userRemarks:[this.comments, user.email]
- 
+ userRemarks:this.comments,
+ user:user.uid,
+ userEmail:user.email
        });
+
        }
 },
 signOut:function(){
@@ -468,6 +501,9 @@ create:function(){
     // console.log("current users ID is",uid)
     // console.log(user.email)
 
+
+
+
 let currentUser = auth.currentUser
 const userRef = collection(db, 'user-Details')
 const q = query(userRef, where("email", "==", currentUser.email))
@@ -483,7 +519,7 @@ onSnapshot(q, (snapshot)=>{
           this.currentUserId = doc.data().id   
     })
     
-    // console.log(users)
+    console.log(users)
 })
 
  } else {
@@ -603,6 +639,7 @@ this.modal=false
     pointer-events: none;
     user-select: none;
     transition: 1s;
+    
 }
 .field:focus{
     outline: none;
@@ -1258,6 +1295,18 @@ textarea:focus{
      align-items: center;
      padding:0px 16px;
 }
+.shown-comments{
+    background: #e4e6eb;
+    padding: 8px 16px;
+    margin: 0 auto;
+    width: calc(100% - 20%);
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+.shown-comments a{
+    color:#87888a;
+}
+
 @media all and (max-width: 850px){
     .part-1{
         display: none;

@@ -17,18 +17,19 @@
              <span><label class="user"><i class="fas fa-users"></i></label></span>
           </div>
           <div class="extras">
-  <!-- <label @click="run">
-      <div class="post">
+  <label @click="run">
+   
       <div class="user-pic">
   <img :src="profilePic">
+ {{name}} 
 </div>
-{{name}}
-</div>
-         <span><i class="fas fa-user"></i></span>
-              
-              </label> -->
 
-              <router-link to="/Navigation" style="text-decoration:none; color:#65675b" class="home-2"><span><i class="fas fa-home" ></i></span></router-link> 
+
+         <!-- <span><i class="fas fa-user"></i></span> -->
+              
+              </label>
+
+              <!-- <router-link to="/Navigation" style="text-decoration:none; color:#65675b" class="home-2"><span><i class="fas fa-home" ></i></span></router-link>  -->
               <span><i class="fab fa-facebook-messenger"></i></span>
               <span><i class="fas fa-bell"></i></span>
               <span @click="operate"><i class="fas fa-caret-down"></i></span>
@@ -143,13 +144,14 @@
 <div class="posted-comments" style="padding:16px 28px">
   <span @click="showComments" class="more">More comments.....</span>
    <p>{{comments}}</p>
-<div v-show="moreComments" v-for="item in more" :key="item" class="item" >
+<!-- <div v-show="moreComments" v-for="item in more" :key="item" class="item" >
    <p><span style="color:#ceced1">{{item.user}}</span> :{{item.comments}}</p>
-    </div>
+    </div> -->
 </div>
  
     </div> 
     </div>
+ 
 
 </div>
 </div>
@@ -301,6 +303,10 @@ bio:"",
         }
     },
     methods: {
+
+            run:function(){
+this.$router.push('/profile')
+      },
         showDescribe:function(){
 this.describe=!this.describe
         },
@@ -520,9 +526,7 @@ if(this.bio!==""){
 }
 },
 
-
     },
-
 
      beforeMount(){
     this.names()

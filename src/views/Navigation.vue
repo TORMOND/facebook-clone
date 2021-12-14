@@ -78,7 +78,7 @@
         <div>
         <img src="https://scontent.fnbo8-1.fna.fbcdn.net/v/t1.6435-9/72952939_2497393310353084_2684978412589678592_n.png?_nc_cat=1&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=J8WEpcIH96QAX8nGTK0&_nc_ht=scontent.fnbo8-1.fna&oh=08b336607eb86dc1c0e47bac51c298a4&oe=61B96121">
        
- <a>{{post.user}}</a>
+ <a>{{post.userName}}</a>
  
    </div> 
    <div class="elipsis"><i class="fas fa-ellipsis-h"></i></div>
@@ -105,7 +105,7 @@
        </p>
         </div>
         <div class="reviews">
-        <p @click="comment" style="cursor:pointer;">5.3k comments</p>
+        <p @click="comment" style="cursor:pointer;">{{post.comments}} comments</p>
         <p>2.6k Shares </p>
         </div>
     </div>
@@ -133,7 +133,7 @@
 
               </div>
  <div  v-for="some in awesome" :key="some" >
-     <p v-if="post.id.includes(this.commentInfor)"  class="shown-comments"><a>{{some.userEmail}}</a>:{{some.userRemarks}}</p>
+     <p v-if="post.id.includes(this.commentInfor)" class="shown-comments"><a>{{some.userName}}</a>:{{some.userRemarks}}</p>
      <p v-else></p>
      </div>
 
@@ -470,14 +470,21 @@ this.$router.push('/profile')
 // postedAt:serverTimestamp(),
 //  userRemarks:[this.comments, user.email]
 //        });
+const r = this.createdPosts[id]
+r.comments+= 1
 
     setDoc(doc(db, "created-post", id, "comments", user.uid), { 
 postedAt:serverTimestamp(),
  userRemarks:this.comments,
  user:user.uid,
- userEmail:user.email
+ userEmail:user.email,
+ userName: this.name + this.secondName,
+ comments:r.comments,
        });
 
+updateDoc(doc(db, "created-post", id ), { 
+ comments:r.comments,
+       });
        }
 },
 signOut:function(){
@@ -501,9 +508,6 @@ create:function(){
     // console.log("current users ID is",uid)
     // console.log(user.email)
 
-
-
-
 let currentUser = auth.currentUser
 const userRef = collection(db, 'user-Details')
 const q = query(userRef, where("email", "==", currentUser.email))
@@ -524,7 +528,6 @@ onSnapshot(q, (snapshot)=>{
 
  } else {
    console.log("no user")
-   
   }
 });
 
@@ -539,15 +542,10 @@ onSnapshot(i, (snapshot)=>{
     j[doc.id] = {...doc.data(), id:doc.id}
  this.createdPosts[doc.id] = {...doc.data(), id:doc.id}
 
-//  if(this.createdPosts[doc.id]==this.postId){
-// this.absent = true
-// this.present = false
-// console.log("liked")
+console.log(doc.id)
 
-//  }
-// console.log(this.createdPosts[doc.id])
     })
-console.log(this.createdPosts)
+// console.log(this.createdPosts)
 })
 
 },
@@ -595,8 +593,10 @@ const user = auth.currentUser;
       id:user.uid,
       user:user.email,
       likes:null,
+      comments:null,
      url:url,
     createdAt:serverTimestamp(),
+    userName:this.name + this.secondName
     });
       
   })
@@ -610,6 +610,7 @@ this.modal=false
     },  
       beforeMount(){
     this.create()
+ 
 
  },
      

@@ -1,5 +1,6 @@
 <template>
     <div id="profile">
+      <div id="opt">  
          <nav>
           <div class="fb-point">
           <i class="fab fa-facebook"></i>
@@ -16,10 +17,15 @@
              <span><label class="user"><i class="fas fa-users"></i></label></span>
           </div>
           <div class="extras">
-  <!-- <label @click="run">
-              <span><i class="fas fa-user"></i></span>
-              {{name}}
-              </label> -->
+  <label @click="run">
+              <!-- <span><i class="fas fa-user"></i></span> -->
+                 <div class="user-pic">
+  <img :src="pic">
+  {{currentUserName}}
+</div>   
+              
+              </label>
+              <span><i class="fas fa-ellipsis-v"></i><i class="fas fa-ellipsis-v"></i><i class="fas fa-ellipsis-v"></i></span>
               <span><i class="fab fa-facebook-messenger"></i></span>
               <span><i class="fas fa-bell"></i></span>
               <span @click="operate"><i class="fas fa-caret-down"></i></span>
@@ -34,6 +40,38 @@
            <div class="information">
                <h1 >{{name}} {{secondName}}</h1>
            </div>
+
+     <a class="add-bio" @click="showDescribe">Add Bio</a>
+
+           <div class="description-text" v-if="describe">
+        <input type="text" placeholder="Describe who you are" v-model="bio">
+        <span>101 characters remaining</span>
+
+        <div class="user-requests">
+        <p><i class="fas fa-globe-africa"></i>Public</p>
+        <button class="cancel" @click="showDescribe">Cancel</button>
+        <button class="save" @click="save">Save</button>
+</div>
+
+        </div>
+           <div class="togglebar">
+               <span>Posts</span>
+               <span>About</span>
+               <span>Friends</span>
+               <span>Photos</span>
+               <span>Videos</span>
+               <span>More<i class="fas fa-caret-down"></i></span>
+               
+               <button @click="addStory" class="story"><i class="fas fa-plus-circle"></i>Add to Story</button>
+               <button @click="editProfile" class="edit-btn"><i class="fas fa-pen"></i>Edit Profile</button>
+               <span><i class="fas fa-ellipsis-h"></i></span>
+           </div>
+
+
+
+
+
+
 </div>
 <div class="wrapper">
 <div class="wrap">
@@ -56,8 +94,13 @@
 
     
   <div class="right"> 
+
+      
+
     <div class="posts" v-for="post in userPosts" :key="post">
-      <div class="post">
+
+       <p v-if="post.id==null" class="no-posts">No Posts</p>  
+      <div class="post" v-else>
 
 <div class="user-pic">
   <img :src="profilePic">
@@ -87,7 +130,7 @@
           </p>
         </div>
         <div class="reviews">
-        <p>{{more.length}} comments</p>
+        <p>{{post.comments}} comments</p>
         <p>2.6k Shares </p>
         </div>
     </div>
@@ -113,14 +156,15 @@
 <div class="posted-comments" style="padding:16px 28px">
   <span @click="showComments" class="more">More comments.....</span>
    <p>{{comments}}</p>
-<div v-show="moreComments" v-for="item in more" :key="item" class="item" >
+<!-- <div v-show="moreComments" v-for="item in more" :key="item" class="item" >
    <p><span style="color:#ceced1">{{item.user}}</span> :{{item.comments}}</p>
-    </div>
+    </div> -->
 </div>
  
     </div> 
     </div>
 
+  
 </div>
 </div>
 </div>
@@ -133,7 +177,82 @@
     <label @click="signOut"><i class="fas fa-sign-out-alt" style="margin-top:20px; "></i>Log Out</label>
 </div>
 </div>
+
+
     </div>
+<div id="profile-edit" v-if="profileEdit">
+    <div class="top">
+        <h2>Edit Profile</h2>
+        <span @click="closeProfileEdit">X</span>
+    </div>
+    <div class="profilepic">
+        <div class="filepic">
+        <h2>Profile Picture</h2>
+        <label  @click="pickFile">Add</label> 
+        <input type="file" style="display:none;" @change="onFileSelected" ref="fileInput" accept="image/*">
+        </div>
+       <span><i class="fas fa-user"></i></span> 
+        </div>
+                 
+   
+    <div class="cover-pic">
+<div class="filephoto">
+    <h2>Cover Photo</h2>  
+       <label @click="selectFile">Add</label> 
+      <input type="file" style="display:none;" @change="onSelected" ref="fileInput" accept="image/*">   
+</div>
+     
+      <div class="cover-photo"></div>
+   
+    </div>
+    <div class="bio">
+        <div class="filebio">
+          <h2>Bio</h2>
+        <label @click="showDescribe">Add</label>   
+        </div>
+       
+        <p class="self-description">Describe Yourself...</p>
+<div class="description-text" v-if="describe">
+        <input type="text" placeholder="Describe who you are" v-model="bio">
+        <span>101 characters remaining</span>
+
+        <div class="user-requests">
+        <p><i class="fas fa-globe-africa"></i>Public</p>
+        <button class="cancel" @click="showDescribe">Cancel</button>
+        <button class="save">Save</button>
+</div>
+
+        </div>
+    </div>
+    <div class="intro">
+        <div class="fileintro">
+            <h2>Customize Your Intro</h2>
+            <label>Edit</label> 
+        </div>
+        
+        <p><i class="fas fa-home-lg"></i>Lives in
+         <a> Nairobi,Kenya</a>
+       </p>
+    </div>
+    <div class="hobbies">
+        <div class="filehobbies">
+             <h2>Hobbies</h2>
+        <label>Add</label>
+        </div>
+       
+    </div>
+    <div class="featured">
+<div class="filefeatured">
+    <h2>Featured</h2>
+        <label>Add</label>
+</div>
+    <p>Feature your favourite photos and stories here for all of your friends to see.</p>    
+    </div>
+</div>
+    </div>
+
+
+
 </template>
 <script>
 
@@ -166,13 +285,37 @@ profilePic:[],
 userPosts:{},
 currentFriends:{},
 userId:this.$route.params.id,
-
+describe:false,
+bio:"",
+profileEdit:false,
+pic:"",
+currentUserName:"",
         }
     },
     methods: {
-//          run:function(){
-// this.$router.push('/profile')
-//       },
+         run:function(){
+this.$router.push('/profile')
+      },
+     showDescribe:function(){
+this.describe=!this.describe
+        },
+    pickFile:function(){
+    this.$refs.fileInput.click()
+      },
+      selectFile:function(){
+    this.$refs.fileInput.click()
+      },
+closeProfileEdit:function(){
+ this.profileEdit=false
+ const app = document.querySelector('#opt')
+         app.classList="" 
+},
+
+editProfile:function(){
+ this.profileEdit=true
+ const app = document.querySelector('#opt')
+         app.classList="active" 
+},
 showComments:function(){
 const moreInfor = document.querySelector('#posted-comments')
 moreInfor.style.overflow ="scroll"
@@ -267,6 +410,12 @@ send:function(id){
    if(this.comments===""){
 
     }else{
+        const r = this.userPosts[id]
+r.comments+= 1
+updateDoc(doc(db, "created-post", id ), { 
+ comments:r.comments,
+       });
+
         let user = auth.currentUser
        updateDoc(doc(db, "created-post", id ), { 
 postedAt:serverTimestamp(),
@@ -301,6 +450,23 @@ onSnapshot(like, (snapshot)=>{
 
   onAuthStateChanged(auth, (user) => {
   if (user) {
+// let currentUser = auth.currentUser
+const aq = collection(db, 'user-Details')
+const c = query(aq, where("email", "==", user.email))
+onSnapshot(c, (snapshot)=>{
+    let us = []
+    snapshot.docs.forEach((doc)=>{
+        us.push({...doc.data(), id:doc.id})
+      this.pic = doc.data().url
+    this.currentUserName = doc.data().name
+    })
+ 
+})
+
+
+
+
+
     const friends = collection(db, 'user-Details')
 onSnapshot(friends, (snapshot)=>{
     let y = []
@@ -386,7 +552,6 @@ onSnapshot(colRef, (snapshot)=>{
 
     },
 
-
      beforeMount(){
     this.names()
  },
@@ -395,6 +560,9 @@ onSnapshot(colRef, (snapshot)=>{
 
 </script>
 <style scoped>
+.extras label{
+    display: flex;
+}
 .sent-img{
     width: 100%;
 }
@@ -438,8 +606,22 @@ onSnapshot(colRef, (snapshot)=>{
      display: flex;
      flex-direction: column;
     width: 100%;
+    position: relative;  
 }
-
+#opt{
+    background: #f0f2f5;
+     display: flex;
+     flex-direction: column;
+    width: 100%;
+    position: relative;
+}
+#opt.active{
+  opacity: 0.15;
+    pointer-events: none;
+    user-select: none;
+    transition: 1s;
+    position: fixed;
+}
 .container{
   background: #fff;
      display: flex;
@@ -696,6 +878,194 @@ max-height: 280px;
 .home:hover+.tooltiptext {
   visibility: visible;
 }
+
+.add-bio{
+    margin: 0 auto;
+    color: #0f70e7;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+.add-bio:hover{
+    text-decoration: underline;
+
+}
+#profile-edit{
+    background:#fff;
+    border-radius: 10px;
+    position:absolute;
+    margin-top:3%;
+    margin-left: 30%;
+    box-shadow: 3px 3px 5px #ceced1, 3px 3px 5px #ceced1;
+    border-top: 0.5px solid #9d9ea0;
+    /* padding: 0 16px; */
+    width: 700px;
+}
+.top{
+    display: flex;
+    align-items: center;
+    padding:0 16px;
+    height: 58px;
+    border-bottom: 0.5px solid #8a8d91;
+}
+.top h2{
+    margin: 0 auto;
+}
+.top span{
+    width: 40px;
+    height: 40px;
+    border-radius:50%;
+    background: #e4e6eb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.filepic{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+}
+.profilepic, .coverpic, .bio, .featured, .intro, .hobbies{
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 20px;
+}
+.profilepic span{
+    width: 168px;
+    height: 168px;
+    border-radius: 50%;
+    background: #e4e6eb;
+    margin: 0 auto;
+     display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.profilepic .fa-user{
+    font-size: 120px;
+}
+.filephoto, .filebio, .fileintro, .filehobbies, .filefeatured{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+}
+.cover-photo{
+    margin:0 auto;
+    background: #e4e6eb;
+    width: 500px;
+    height: 185px;
+    border-radius: 5px;
+}
+.self-description{
+    margin: 0 auto;
+    color: #8a8d91;
+}
+#profile-edit label{
+    color: #216FD8;
+      padding: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+}
+#profile-edit label:hover{
+    background: #e4e6eb;
+  
+}
+.togglebar{
+    margin: 0 auto;
+    display:flex;
+    gap:10px;
+    align-items: center;
+    height: 60px;
+}
+.togglebar span{
+    color: #65676b;
+   padding: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+ display: flex;
+ gap: 5px;
+}
+.togglebar span:hover{
+    background: #eff0f3;
+}
+.story{
+    border: none;
+    color: #fff;
+    background: #1b74E4;
+    border-radius: 5px;
+    padding:  12px;
+    cursor: pointer;
+    display: flex;
+    gap: 5px;
+}
+.edit-btn{
+    border: none;
+    background: #e4e6eb;
+    border-radius: 5px;
+    padding:  12px;
+    cursor: pointer;
+    display: flex;
+    gap: 5px;
+}
+.description-text{
+    display: flex;
+    flex-direction: column;
+}
+.description-text input{
+    background: #e4e6eb;
+    height: 78px;
+    padding:8px 12px;
+    border: none;
+    border-radius: 5px;
+    margin: 0 auto;
+}
+.description-text input:focus{
+    outline-color: #1b74E4;
+    background: #fff;
+}
+.description-text span{
+    color: #8a8d91;
+    font-size: 14px;
+    margin: 0 auto;
+}
+.cancel{
+    background: #e4e6eb;
+    border: none;
+    cursor: pointer;
+    padding: 0 12px;
+    border-radius: 5px;
+}
+.save{
+   background: #e4e6eb;
+    border: none;
+    cursor: not-allowed;
+    padding: 0 12px;
+    border-radius: 5px;
+}
+.user-requests{
+    display: flex;
+    gap: 10px;
+    margin: 0 auto;
+}
+.no-posts{
+    margin: auto;
+    color: #65676b;
+    font-weight: 700;
+  
+}
+
+
+
+
+
+
+
+
+
+
+
 @media all and (max-width:900px){
     .wrap{
         grid-template-columns: repeat(1, 1fr);

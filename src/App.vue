@@ -117,6 +117,16 @@ background: #f0f2f5;
     background: #f0f2f5;
     
 }
+.user-pic{
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    cursor: pointer;
+    color: #1b74E4;
+    background: #e7f3ff;
+    border-radius:32px ;
+    padding: 2px 5px;
+}
 .user-pic img{
   width: 40px;
   height: 40px;

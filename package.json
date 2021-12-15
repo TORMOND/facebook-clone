@@ -7,7 +7,9 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "cssnano": "^5.0.12",
     "firebase": "^9.4.1",
+    "postcss": "^8.4.5",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0"
   },

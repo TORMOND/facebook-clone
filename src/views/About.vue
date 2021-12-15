@@ -228,6 +228,7 @@ input{
 }
 .meta{
     color: #737373;  
+
     font-size: 12px;
     margin-top: 20px;
 }

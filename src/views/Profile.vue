@@ -38,7 +38,8 @@
         <div class="container">
            <div class="back-image">
                <div class="circle">
-<img :src="profilePic" id="profileimg">
+<img :src="profilePic" id="profileimg" v-if="profilePic !=='' ">
+<span v-else><i class="fas fa-user"></i></span>
                </div>        
            </div>
            <div class="information">
@@ -95,9 +96,10 @@
       <div class="post">
 
 <div class="user-pic">
-  <img :src="profilePic">
+  <img :src="profilePic" v-if="profilePic !=='' ">
+   <span v-else><i class="fas fa-user" ></i></span>
 </div>
-  <!-- <span><i class="fas fa-user"></i></span> -->
+ 
  <p>{{name}} {{secondName}}</p>
     </div>
     <div class="sent-image">
@@ -131,9 +133,13 @@
     </div>
     <div class="write-comment">
         <div class="post">
-  <!-- <span><i class="fas fa-user"></i></span> -->
+  
+
   <div class="user-pic">
-  <img :src="profilePic">
+
+
+  <img :src="profilePic" v-if="profilePic !=='' ">
+<span v-else><i class="fas fa-user"></i></span>
 </div>
  <input type="text" placeholder="write a comment" v-model="comments" >
  <div @click="send" style="cursor:pointer" class="sent">
@@ -304,20 +310,20 @@ bio:"",
     },
     methods: {
 
-            run:function(){
+ run:function(){
 this.$router.push('/profile')
       },
-        showDescribe:function(){
+showDescribe:function(){
 this.describe=!this.describe
         },
-        cancel:function(){
+cancel:function(){
 this.describe=false
 this.bio = ""
         },
-    pickFile:function(){
+pickFile:function(){
     this.$refs.fileInput.click()
       },
-      selectFile:function(){
+selectFile:function(){
     this.$refs.fileInput.click()
       },
 closeProfileEdit:function(){
@@ -325,7 +331,6 @@ closeProfileEdit:function(){
  const app = document.querySelector('#opt')
          app.classList="" 
 },
-
 editProfile:function(){
  this.profileEdit=true
  const app = document.querySelector('#opt')
@@ -339,7 +344,7 @@ operate:function(){
     this.popup =!this.popup;
     
 },
-        unlike:function(){
+unlike:function(){
 //     const thumb = document.querySelector('.thumbs-up');
 // thumb.style.color = "#65675b"; 
 this.number--
@@ -355,7 +360,7 @@ updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
      
 
         },
-        like:function(){
+like:function(){
 // const thumb = document.querySelector('.thumbs-up');
 // thumb.style.color = "#216fd8"; 
 this.number++
@@ -384,7 +389,7 @@ fileReader.readAsDataURL(files[0])
 this.image = files[0]
 // console.log(this.image)
       },
-   onSelected:function(event){
+onSelected:function(event){
 const files = event.target.files
 let filename = files[0].name
 const fileReader = new FileReader()

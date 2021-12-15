@@ -356,7 +356,7 @@ export default {
        } 
     },
     methods: {
-        comment:function(id){
+comment:function(id){
 this.commentInfor=id
     this.commented=!this.commented
     onAuthStateChanged(auth, (user) => {
@@ -381,13 +381,13 @@ updateDoc(doc(db, "created-post", id ), {
     })  
    
         },
-        toggle:function(){
+toggle:function(){
  this.emerge=!this.emerge
         },
-        closeCard:function(){
+closeCard:function(){
 this.card=false
         },
-        unlike:function(id){
+unlike:function(id){
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -419,7 +419,7 @@ b.likes-= 1
 
        
         },
-         like:function(id){
+ like:function(id){
              this.postId=id
 console.log(this.postId)
 
@@ -452,25 +452,25 @@ o.likes+= 1
  })
 
         },
-      open:function(){
+open:function(){
           this.modal=true
            const app = document.querySelector('#opt')
          app.classList="active"   
       },
-      close:function(){
+close:function(){
           this.modal= false
    const app = document.querySelector('#opt')
          app.classList=""   
          this.videoUrl=null
          this.imageUrl= null
       },
-      run:function(){
+run:function(){
 this.$router.push('/profile')
       },
-      pickFile:function(){
+pickFile:function(){
     this.$refs.fileInput.click()
       },
-      send:function(id){
+send:function(id){
     if(this.comments===""){
 
     }else{
@@ -561,7 +561,7 @@ onSnapshot(i, (snapshot)=>{
 
 
 },
-  onFileSelected:function(event){
+onFileSelected:function(event){
 const files = event.target.files
 let filename = files[0].name
 const fileReader = new FileReader()
@@ -639,7 +639,7 @@ this.modal=false
          app.classList=""   
 }, 
     },  
-      beforeMount(){
+ beforeMount(){
     this.create()
  
 
@@ -824,6 +824,10 @@ background: #f0f2f5;
     margin-left:80%;
     position: fixed;
 }
+/* .part-2:hover{
+    position:absolute;
+    overflow-y:auto;
+} */
 .card{
     background: #fff;
     display: flex;
@@ -1253,7 +1257,7 @@ textarea:focus{
     background: #e4e6eb;
 }
 .fa-bookmark{
-   background: linear-gradient(-135deg, #c512b9, #4158d0);
+   background: linear-gradient(-135deg, #c512b9, #4158d0); 
    -webkit-background-clip: text;
    -webkit-text-fill-color:transparent ;
 }

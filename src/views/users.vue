@@ -78,10 +78,9 @@
 
     
   <div class="right"> 
-
     <div class="posts" v-for="post in userPosts" :key="post">
 
-       <p v-if="this.userPosts=='' " class="no-posts">No Posts</p>  
+       <p v-if="this.userPosts==null " class="no-posts">No Posts</p>  
       <div class="post" v-else>
 
 <div class="user-pic">

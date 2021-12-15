@@ -79,8 +79,6 @@
     
   <div class="right"> 
 
-      
-
     <div class="posts" v-for="post in userPosts" :key="post">
 
        <p v-if="this.userPosts=='' " class="no-posts">No Posts</p>  
@@ -304,8 +302,7 @@ const moreInfor = document.querySelector('#posted-comments')
 moreInfor.style.overflow ="scroll"
 },
 operate:function(){
-    this.popup =!this.popup;
-    
+    this.popup =!this.popup;   
 },
  unlike:function(id){
 
@@ -447,8 +444,6 @@ onSnapshot(c, (snapshot)=>{
 
 
 
-
-
     const friends = collection(db, 'user-Details')
 onSnapshot(friends, (snapshot)=>{
     let y = []
@@ -469,7 +464,7 @@ onSnapshot(friends, (snapshot)=>{
     // console.log("current users ID is",uid)
     // console.log(user.email)
 
-let currentUser = auth.currentUser
+// let currentUser = auth.currentUser
 const userRef = collection(db, 'user-Details')
 const q = query(userRef, where("id", "==", this.userId))
 onSnapshot(q, (snapshot)=>{
@@ -496,9 +491,7 @@ onSnapshot(x, (snapshot)=>{
          this.userPosts[doc.id] = {...doc.data(), id:doc.id}
         //  console.log(doc.data())
         // console.log(doc.data().likes)
-        // console.log(lik[0])
-        // console.log(lik[1])
-        // console.log(lik[0].likes)
+       
         // console.log(lik)
 
     })

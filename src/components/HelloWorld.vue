@@ -199,7 +199,11 @@ export default {
          this.popup= false
          this.opener=true
          this.closer=false
-             
+         this.firstName=null
+         this.surName=null
+         this.email=null
+         this.password=null
+          
     },
     toggle:function(){
       this.popup=true
@@ -258,6 +262,7 @@ this.$router.push('/Login')
     // console.log(user);
     // alert("You've Signed in as" + this.mail);
       onAuthStateChanged(auth, user => {
+
           const querySnapshot = getDocs(collection(db, "user-Details"), {
 });
  querySnapshot.then((collection) => {

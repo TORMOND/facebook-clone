@@ -75,8 +75,8 @@
 <div v-for="post in createdPosts" :key="post">
 <div class="card" >
     <div class="profile">
-        <div>
-        <img src="https://scontent.fnbo8-1.fna.fbcdn.net/v/t1.6435-9/72952939_2497393310353084_2684978412589678592_n.png?_nc_cat=1&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=J8WEpcIH96QAX8nGTK0&_nc_ht=scontent.fnbo8-1.fna&oh=08b336607eb86dc1c0e47bac51c298a4&oe=61B96121">
+        <div style="display:flex; align-items:center; gap:10px;">
+        <img :src="post.userProfilePic">
        
  <a>{{post.userName}}</a>
  
@@ -88,7 +88,8 @@
     </div>
     <div class="image">
       
-   <img :src="post.url" class="myimg">
+   <img :src="post.url" class="myimg" v-if="post.type !=='video/mp4' ">
+   <iframe :src="post.url" v-else></iframe>
    
     </div>
     <div class="more"></div>
@@ -133,7 +134,10 @@
 
               </div>
  <div  v-for="some in awesome" :key="some" >
-     <p v-if="post.id.includes(this.commentInfor)" class="shown-comments"><a>{{some.userName}}</a>:{{some.userRemarks}}</p>
+     
+     <p v-if="post.id.includes(this.commentInfor)" class="shown-comments">
+       <!-- <img :src="post.userProfilePic" v-if="post.id.includes(some.id)" style="width:40px; height:40px; border-radius:50%;">   -->
+         <a>{{some.userName}}</a>:{{some.userRemarks}}</p>
      <p v-else></p>
      </div>
 
@@ -158,21 +162,21 @@
         </div>
 <div class="saved-views">
        <div class="elements">
-            <img src="https://scontent.fnbo8-1.fna.fbcdn.net/v/t15.5256-10/p206x206/259609451_399867201839415_6512154037700001013_n.jpg?_nc_cat=1&ccb=1-5&_nc_sid=ad6a45&_nc_ohc=WlutnWgpDr8AX9oCcNs&_nc_ht=scontent.fnbo8-1.fna&oh=feadab0f0f08779fb70bb0ea89cb1db1&oe=61AD4694">
+            <img src="SeaRAM_hero.jpg">
       <div>
         <p>C-Ram Weapon Defence System</p>
         <a>video. Saved to saves</a>
         </div>
     </div>
     <div class="elements">
-<img src="https://scontent.fnbo8-1.fna.fbcdn.net/v/t15.5256-10/p206x206/261916897_657370318588378_5654446893264068384_n.jpg?_nc_cat=1&ccb=1-5&_nc_sid=ad6a45&_nc_ohc=YuxB1p7X938AX_Jez9H&_nc_ht=scontent.fnbo8-1.fna&oh=16767c5458693a8b2152e33c771485a4&oe=61ACB0A4">        
+<img src="7-harry-potter-aaron-sramek.jpg">        
        <div>
         <p>Harry Porter String art | People are awesome</p>
         <a>video. Saved to saves</a>
         </div>
     </div>
      <div class="elements">
-         <img src="https://scontent.fnbo8-1.fna.fbcdn.net/v/t15.5256-10/p206x206/259169297_252643683434167_4451648193960679391_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=ad6a45&_nc_ohc=ZZvRf6QnH4IAX_g-vNV&_nc_ht=scontent.fnbo8-1.fna&oh=416a8c65942970e66a24a65042a89fc3&oe=61AC3B16">
+         <img src="nikola-pr.jpg">
      
      <div>
         <p>Distance Alert Safety function helps drivers to keep Distance</p>
@@ -262,8 +266,9 @@
 </div> -->
 <i class="fas fa-plus-square"></i>
 
-<input type="file" style="display:none;" @change="onFileSelected" ref="fileInput" accept="image/*">
-<img :src="imageUrl" >
+<input type="file" style="display:none;" @change="onFileSelected" ref="fileInput" >
+<img :src="imageUrl" v-if="picture">
+<iframe :src="videoUrl" class="video" v-if="video"></iframe>
 
 <h3>Add photos/videos</h3>
 <h6>or drag and drop</h6>
@@ -336,7 +341,7 @@ export default {
       number:"",
       image:null,
       card:true,
-      profilePic:[],
+      profilePic:"",
       emerge:false,
       commented:false,
       comments:"",
@@ -344,7 +349,10 @@ export default {
       currentUserId:"",
       commentInfor:"",
       userComments:"",
-      awesome:{}
+      awesome:{},
+      videoUrl:"",
+      picture:false,
+      video:false,
        } 
     },
     methods: {
@@ -360,8 +368,8 @@ let m = []
 m.push({...doc.data(), id:doc.id})
 
 this.awesome[doc.id] = {...doc.data(), id:doc.id}
-console.log(m)
-console.log(this.awesome)
+// console.log(m)
+// console.log(this.awesome)
 })
 
 });
@@ -453,6 +461,8 @@ o.likes+= 1
           this.modal= false
    const app = document.querySelector('#opt')
          app.classList=""   
+         this.videoUrl=null
+         this.imageUrl= null
       },
       run:function(){
 this.$router.push('/profile')
@@ -522,13 +532,9 @@ onSnapshot(q, (snapshot)=>{
           this.currentUserId = doc.data().id   
     })
     
-    console.log(users)
-})
+    // console.log(users)
 
- } else {
-   console.log("no user")
-  }
-});
+})
 
 const infor = collection(db, 'created-post')
 const i = query(infor, orderBy('createdAt', 'desc') )
@@ -541,11 +547,18 @@ onSnapshot(i, (snapshot)=>{
     j[doc.id] = {...doc.data(), id:doc.id}
  this.createdPosts[doc.id] = {...doc.data(), id:doc.id}
 
-console.log(doc.id)
+// console.log(doc.id)
 
     })
 // console.log(this.createdPosts)
 })
+
+ } else {
+   console.log("no user")
+  }
+});
+
+
 
 },
   onFileSelected:function(event){
@@ -553,14 +566,32 @@ const files = event.target.files
 let filename = files[0].name
 const fileReader = new FileReader()
 fileReader.addEventListener('load', () =>{
-    this.imageUrl = fileReader.result
-//     console.log(filename)  
-//  console.log(this.imageUrl)
+  
+if(this.image.type== "image/jpeg"){
+  this.imageUrl = fileReader.result
+  this.videoUrl = ""
+this.picture= true,
+this.video = false
+// console.log(this.imageUrl)
+}else{
+      this.videoUrl = fileReader.result
+      this.imageUrl = ""
+      this.picture= false
+      this.video= true
+// console.log(this.videoUrl)
 
+}
+    // console.log(filename)  
+ 
 })
 fileReader.readAsDataURL(files[0])
 this.image = files[0]
-// console.log(this.image)
+// console.log(this.image.type)
+
+// if(this.image.type== "video/mp4"){
+// this.videoUrl = fileReader.result
+// console.log(this.videoUrl)
+// }
       },
 upload:function(){
   
@@ -595,7 +626,9 @@ const user = auth.currentUser;
       comments:null,
      url:url,
     createdAt:serverTimestamp(),
-    userName:this.name + this.secondName
+    userName:this.name + this.secondName,
+    type:this.image.type,
+    userProfilePic:this.profilePic,
     });
       
   })
@@ -843,6 +876,13 @@ background: #f0f2f5;
     margin: 0 auto;
     object-fit: cover;
 }
+iframe{
+   width: 100%;
+    margin: 0 auto;
+    object-fit: cover;   
+    height: 100%;
+    border: none;
+}
 .description{
     padding: 4px 16px 16px;
     border-bottom: 1px solid #65676b;
@@ -1083,7 +1123,7 @@ button{
     margin:  auto;
 }
 h3, h6{
- margin:  auto;
+ margin: auto;
 
 }
 h6{

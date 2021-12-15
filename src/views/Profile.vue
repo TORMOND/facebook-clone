@@ -48,13 +48,13 @@
            <a class="add-bio" @click="showDescribe">Add Bio</a>
 
            <div class="description-text" v-if="describe">
-        <input type="text" placeholder="Describe who you are" v-model="bio">
+        <input type="text" placeholder="Describe who you are" v-model="bio" class="text-description">
         <span>101 characters remaining</span>
 
         <div class="user-requests">
         <p><i class="fas fa-globe-africa"></i>Public</p>
-        <button class="cancel" @click="showDescribe">Cancel</button>
-        <button class="save" @click="save" v-if="this.bio==''  ">Save</button>
+        <button class="cancel" @click="cancel">Cancel</button>
+        <button class="save" @click="save" v-if="this.bio=='' ">Save</button>
          <button  class="save2" v-else>Save</button>
 </div>
 
@@ -248,7 +248,6 @@ import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWith
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
  
-
 onAuthStateChanged(auth, (user) => {
   if (user) {
 const storage = getStorage();
@@ -311,6 +310,10 @@ this.$router.push('/profile')
         showDescribe:function(){
 this.describe=!this.describe
         },
+        cancel:function(){
+this.describe=false
+this.bio = ""
+        },
     pickFile:function(){
     this.$refs.fileInput.click()
       },
@@ -364,7 +367,7 @@ this.present = false
    likes:this.number
      
        });
-   console.log(this.number)
+//    console.log(this.number)
      
         },
  onFileSelected:function(event){
@@ -411,7 +414,7 @@ send:function(){
        }
 },
 pool:function(id){
-  console.log(id)
+//   console.log(id)
   this.$router.push({ name: 'Users', params: { id: id }})
 const useRef = collection(db, 'user-Details')
 
@@ -431,10 +434,8 @@ const like = collection(db, 'information')
 onSnapshot(like, (snapshot)=>{
     let likes = []
     snapshot.docs.forEach((doc)=>{
-        likes.push({...doc.data(), id:doc.id})
-       
-        this.number = doc.data().likes
-        
+        likes.push({...doc.data(), id:doc.id})       
+        this.number = doc.data().likes        
     })
 })
 
@@ -449,7 +450,6 @@ onSnapshot(friends, (snapshot)=>{
         //  this.createdPosts.push(doc.data())
         // console.log(doc.data())
       // this.currentFriends.push({...doc.data()})
-
 
       this.currentFriends[doc.id] = {...doc.data(), id:doc.id}
     })
@@ -489,9 +489,7 @@ onSnapshot(x, (snapshot)=>{
          this.userPosts.push(doc.data())
         //  console.log(doc.data())
         // console.log(doc.data().likes)
-        // console.log(lik[0])
-        // console.log(lik[1])
-        // console.log(lik[0].likes)
+        
         // console.log(lik)
 
     })

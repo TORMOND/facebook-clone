@@ -2,6 +2,21 @@
   <div id="nav">
     <!-- <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link> -->
+
+
+    <!-- service cloud.firestore {
+  match /databases/{database}/documents {
+    // For attribute-based access control, Check a boolean `admin` attribute
+    allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.admin == true;
+    allow read: true;
+
+    // Alterntatively, for role-based access, assign specific roles to users
+    match /some_collection/{document} {
+     allow read: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "Reader"
+     allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "Writer"
+   }
+  }
+} -->
   </div>
   <router-view/>
 </template>
@@ -115,9 +130,9 @@ background: #f0f2f5;
 }
 .container{
     background: #f0f2f5;
-    
+  
 }
-.user-pic{
+nav .user-pic{
     display: flex;
     gap: 5px;
     align-items: center;
@@ -135,3 +150,4 @@ background: #f0f2f5;
   cursor: pointer;
 }
 </style>
+

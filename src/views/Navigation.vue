@@ -372,7 +372,6 @@ updateDoc(doc(db, "created-post", id ), {
        });
     })  
    
-
         },
         toggle:function(){
  this.emerge=!this.emerge
@@ -605,8 +604,7 @@ const user = auth.currentUser;
 this.modal=false
            const app = document.querySelector('#opt')
          app.classList=""   
-},
- 
+}, 
     },  
       beforeMount(){
     this.create()

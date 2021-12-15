@@ -41,34 +41,18 @@
                <h1 >{{name}} {{secondName}}</h1>
            </div>
 
-     <a class="add-bio" @click="showDescribe">Add Bio</a>
-
-           <div class="description-text" v-if="describe">
-        <input type="text" placeholder="Describe who you are" v-model="bio">
-        <span>101 characters remaining</span>
-
-        <div class="user-requests">
-        <p><i class="fas fa-globe-africa"></i>Public</p>
-        <button class="cancel" @click="showDescribe">Cancel</button>
-        <button class="save" @click="save">Save</button>
-</div>
-
-        </div>
            <div class="togglebar">
-               <span>Posts</span>
-               <span>About</span>
-               <span>Friends</span>
-               <span>Photos</span>
-               <span>Videos</span>
+               <span class="bar">Posts</span>
+               <span class="bar">About</span>
+               <span class="bar">Friends</span>
+               <span class="bar">Photos</span>
+               <span class="bar">Videos</span>
                <span>More<i class="fas fa-caret-down"></i></span>
                
-               <button @click="addStory" class="story"><i class="fas fa-plus-circle"></i>Add to Story</button>
-               <button @click="editProfile" class="edit-btn"><i class="fas fa-pen"></i>Edit Profile</button>
+               <button @click="addStory" class="story"><i class="fab fa-facebook-messenger"></i>Message</button>
+               <button @click="editProfile" class="edit-btn"><i class="fas fa-user-check"></i>Friend</button>
                <span><i class="fas fa-ellipsis-h"></i></span>
            </div>
-
-
-
 
 
 
@@ -99,7 +83,7 @@
 
     <div class="posts" v-for="post in userPosts" :key="post">
 
-       <p v-if="post.id==null" class="no-posts">No Posts</p>  
+       <p v-if="this.userPosts=='' " class="no-posts">No Posts</p>  
       <div class="post" v-else>
 
 <div class="user-pic">
@@ -293,24 +277,23 @@ currentUserName:"",
         }
     },
     methods: {
-         run:function(){
+ run:function(){
 this.$router.push('/profile')
-      },
-     showDescribe:function(){
+},
+showDescribe:function(){
 this.describe=!this.describe
-        },
-    pickFile:function(){
+},
+pickFile:function(){
     this.$refs.fileInput.click()
-      },
-      selectFile:function(){
+},
+selectFile:function(){
     this.$refs.fileInput.click()
-      },
+},
 closeProfileEdit:function(){
  this.profileEdit=false
  const app = document.querySelector('#opt')
          app.classList="" 
 },
-
 editProfile:function(){
  this.profileEdit=true
  const app = document.querySelector('#opt')
@@ -364,8 +347,8 @@ b.likes-= 1
  })
 
        
-        },
-         like:function(id){
+},
+like:function(id){
 
  onAuthStateChanged(auth, (user) => {
 const userRef = collection(db, 'user-Details')
@@ -403,8 +386,7 @@ o.likes+= 1
 
  })
 
-        },
-  
+},
 send:function(id){
     
    if(this.comments===""){
@@ -552,7 +534,7 @@ onSnapshot(colRef, (snapshot)=>{
 
     },
 
-     beforeMount(){
+ beforeMount(){
     this.names()
  },
 }
@@ -581,6 +563,7 @@ onSnapshot(colRef, (snapshot)=>{
     grid-column: 1/2;
     grid-row: 1;
   height: 600px;
+  /* margin: 0 auto; */
 }
 .friends h1{
     font-size: 20px;
@@ -592,8 +575,7 @@ onSnapshot(colRef, (snapshot)=>{
     padding: 16px;
 }
 .images{
-   cursor: pointer;
-    width: 101.98px;
+   cursor: pointer; 
     height: 120px;
 }
 .images img{
@@ -664,6 +646,7 @@ h1{
 .wrapper{
     display: flex;
     justify-content: center;
+    align-items: center;
     margin: 0 auto;
 }
 .wrap{
@@ -672,6 +655,7 @@ h1{
     margin: 0 auto;
     padding: 20px 40px;
     gap: 30px;
+    width: 60%;
 }
 .right{
     grid-column: 2/2;
@@ -679,17 +663,11 @@ h1{
     display: flex;
 }
 
-.right-2{
-    grid-column: 2/2;
-    grid-row: 2;
-    display: flex;
-}
-
 .posts{
     background: #fff;
     border-radius: 10px;
-   margin: 0 auto;
-   width: 600px;
+    margin: 0 auto;
+  
 }
 .elipsis{
     width: 30px;
@@ -951,13 +929,7 @@ max-height: 280px;
     justify-content: space-between;
     padding: 0 16px;
 }
-.cover-photo{
-    margin:0 auto;
-    background: #e4e6eb;
-    width: 500px;
-    height: 185px;
-    border-radius: 5px;
-}
+
 .self-description{
     margin: 0 auto;
     color: #8a8d91;
@@ -1056,16 +1028,6 @@ max-height: 280px;
   
 }
 
-
-
-
-
-
-
-
-
-
-
 @media all and (max-width:900px){
     .wrap{
         grid-template-columns: repeat(1, 1fr);
@@ -1082,4 +1044,34 @@ max-height: 280px;
       display: none;
     }
 }
+@media all and (max-width:600px){
+   .togglebar .bar{
+        display: none;  
+    }
+   nav .user-pic{
+        display: none;
+    }
+    .post{
+        width: calc(100% - 20px);
+    }
+    nav{
+        gap: 20px;
+    }
+    .fb-point input{
+        display: none;
+    }
+    
+    .wrap{
+        width: 100%;
+        padding: 20px 10px;
+    }
+}
+
+@media all and (max-width:400px){
+    .wrap{
+        padding: 20px 0;
+    }
+
+}
+
 </style>

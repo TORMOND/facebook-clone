@@ -24,12 +24,12 @@
  {{name}} 
 </div>
 
-
          <!-- <span><i class="fas fa-user"></i></span> -->
               
               </label>
 
               <!-- <router-link to="/Navigation" style="text-decoration:none; color:#65675b" class="home-2"><span><i class="fas fa-home" ></i></span></router-link>  -->
+              <span><i class="fas fa-ellipsis-v"></i><i class="fas fa-ellipsis-v"></i><i class="fas fa-ellipsis-v"></i></span>
               <span><i class="fab fa-facebook-messenger"></i></span>
               <span><i class="fas fa-bell"></i></span>
               <span @click="operate"><i class="fas fa-caret-down"></i></span>
@@ -54,16 +54,17 @@
         <div class="user-requests">
         <p><i class="fas fa-globe-africa"></i>Public</p>
         <button class="cancel" @click="showDescribe">Cancel</button>
-        <button class="save" @click="save">Save</button>
+        <button class="save" @click="save" v-if="this.bio==''  ">Save</button>
+         <button  class="save2" v-else>Save</button>
 </div>
 
         </div>
            <div class="togglebar">
-               <span>Posts</span>
-               <span>About</span>
-               <span>Friends</span>
-               <span>Photos</span>
-               <span>Videos</span>
+               <span class="bar">Posts</span>
+               <span class="bar">About</span>
+               <span class="bar">Friends</span>
+               <span class="bar">Photos</span>
+               <span class="bar">Videos</span>
                <span>More<i class="fas fa-caret-down"></i></span>
                
                <button @click="addStory" class="story"><i class="fas fa-plus-circle"></i>Add to Story</button>
@@ -534,190 +535,6 @@ if(this.bio!==""){
 }
 </script>
 <style scoped>
-.add-bio{
-    margin: 0 auto;
-    color: #0f70e7;
-    font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-}
-.add-bio:hover{
-    text-decoration: underline;
-
-}
-#profile-edit{
-    background:#fff;
-    border-radius: 10px;
-    position:absolute;
-    margin-top:3%;
-    margin-left: 30%;
-    box-shadow: 3px 3px 5px #ceced1, 3px 3px 5px #ceced1;
-    border-top: 0.5px solid #9d9ea0;
-    /* padding: 0 16px; */
-    width: 700px;
-}
-.top{
-    display: flex;
-    align-items: center;
-    padding:0 16px;
-    height: 58px;
-    border-bottom: 0.5px solid #8a8d91;
-}
-.top h2{
-    margin: 0 auto;
-}
-.top span{
-    width: 40px;
-    height: 40px;
-    border-radius:50%;
-    background: #e4e6eb;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-}
-.filepic{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 16px;
-}
-.profilepic, .coverpic, .bio, .featured, .intro, .hobbies{
-    display: flex;
-    flex-direction: column;
-    padding: 0 0 20px;
-}
-.profilepic span{
-    width: 168px;
-    height: 168px;
-    border-radius: 50%;
-    background: #e4e6eb;
-    margin: 0 auto;
-     display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.profilepic .fa-user{
-    font-size: 120px;
-}
-.filephoto, .filebio, .fileintro, .filehobbies, .filefeatured{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 16px;
-}
-.cover-photo{
-    margin:0 auto;
-    background: #e4e6eb;
-    width: 500px;
-    height: 185px;
-    border-radius: 5px;
-}
-.self-description{
-    margin: 0 auto;
-    color: #8a8d91;
-}
-#profile-edit label{
-    color: #216FD8;
-      padding: 5px;
-      border-radius: 5px;
-      cursor: pointer;
-}
-#profile-edit label:hover{
-    background: #e4e6eb;
-  
-}
-.togglebar{
-    margin: 0 auto;
-    display:flex;
-    gap:10px;
-    align-items: center;
-    height: 60px;
-}
-.togglebar span{
-    color: #65676b;
-   padding: 16px;
-      border-radius: 5px;
-      cursor: pointer;
- display: flex;
- gap: 5px;
-}
-.togglebar span:hover{
-    background: #eff0f3;
-}
-.story{
-    border: none;
-    color: #fff;
-    background: #1b74E4;
-    border-radius: 5px;
-    padding:  12px;
-    cursor: pointer;
-    display: flex;
-    gap: 5px;
-}
-.edit-btn{
-    border: none;
-    background: #e4e6eb;
-    border-radius: 5px;
-    padding:  12px;
-    cursor: pointer;
-    display: flex;
-    gap: 5px;
-}
-.description-text{
-    display: flex;
-    flex-direction: column;
-}
-.description-text input{
-    background: #e4e6eb;
-    height: 78px;
-    padding:8px 12px;
-    border: none;
-    border-radius: 5px;
-    margin: 0 auto;
-}
-.description-text input:focus{
-    outline-color: #1b74E4;
-    background: #fff;
-}
-.description-text span{
-    color: #8a8d91;
-    font-size: 14px;
-    margin: 0 auto;
-}
-.cancel{
-    background: #e4e6eb;
-    border: none;
-    cursor: pointer;
-    padding: 0 12px;
-    border-radius: 5px;
-}
-.save{
-   background: #e4e6eb;
-    border: none;
-    cursor: not-allowed;
-    padding: 0 12px;
-    border-radius: 5px;
-}
-.user-requests{
-    display: flex;
-    gap: 10px;
-    margin: 0 auto;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .post{
     display: flex;
@@ -822,6 +639,7 @@ h1{
     margin: 0 auto;
     padding: 20px 40px;
     gap: 30px;
+    width: 60%;
 }
 .right{
     grid-column: 2/2;
@@ -833,7 +651,7 @@ h1{
     background: #fff;
     border-radius: 10px;
    margin: 0 auto;
-   max-width: 600px;
+  
 }
 .sent-img{
     margin: 0 auto;
@@ -1009,6 +827,189 @@ visibility: hidden;
 .posts-xoxo{
     display: flex;
 }
+.add-bio{
+    margin: 0 auto;
+    color: #0f70e7;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+.add-bio:hover{
+    text-decoration: underline;
+
+}
+#profile-edit{
+    background:#fff;
+    border-radius: 10px;
+    position:absolute;
+    margin-top:3%;
+    margin-left: 30%;
+    box-shadow: 3px 3px 5px #ceced1, 3px 3px 5px #ceced1;
+    border-top: 0.5px solid #9d9ea0;
+    /* padding: 0 16px; */
+    width: 700px;
+}
+.top{
+    display: flex;
+    align-items: center;
+    padding:0 16px;
+    height: 58px;
+    border-bottom: 0.5px solid #8a8d91;
+}
+.top h2{
+    margin: 0 auto;
+}
+.top span{
+    width: 40px;
+    height: 40px;
+    border-radius:50%;
+    background: #e4e6eb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.filepic{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+}
+.profilepic, .coverpic, .bio, .featured, .intro, .hobbies{
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 20px;
+}
+.profilepic span{
+    width: 168px;
+    height: 168px;
+    border-radius: 50%;
+    background: #e4e6eb;
+    margin: 0 auto;
+     display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.profilepic .fa-user{
+    font-size: 120px;
+}
+.filephoto, .filebio, .fileintro, .filehobbies, .filefeatured{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+}
+.cover-photo{
+    margin:0 auto;
+    background: #e4e6eb;
+    width: 500px;
+    height: 185px;
+    border-radius: 5px;
+}
+.self-description{
+    margin: 0 auto;
+    color: #8a8d91;
+}
+#profile-edit label{
+    color: #216FD8;
+      padding: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+}
+#profile-edit label:hover{
+    background: #e4e6eb;
+  
+}
+.togglebar{
+    margin: 0 auto;
+    display:flex;
+    gap:10px;
+    align-items: center;
+    height: 60px;
+}
+.togglebar span{
+    color: #65676b;
+   padding: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+ display: flex;
+ gap: 5px;
+}
+.togglebar span:hover{
+    background: #eff0f3;
+}
+.story{
+    border: none;
+    color: #fff;
+    background: #1b74E4;
+    border-radius: 5px;
+    padding:  12px;
+    cursor: pointer;
+    display: flex;
+    gap: 5px;
+}
+.edit-btn{
+    border: none;
+    background: #e4e6eb;
+    border-radius: 5px;
+    padding:  12px;
+    cursor: pointer;
+    display: flex;
+    gap: 5px;
+}
+.description-text{
+    display: flex;
+    flex-direction: column;
+}
+.description-text input{
+    background: #e4e6eb;
+    height: 78px;
+    padding:8px 12px;
+    border: none;
+    border-radius: 5px;
+    margin: 0 auto;
+}
+.description-text input:focus{
+    outline-color: #1b74E4;
+    background: #fff;
+}
+.description-text span{
+    color: #8a8d91;
+    font-size: 14px;
+    margin: 0 auto;
+}
+.cancel{
+    background: #e4e6eb;
+    border: none;
+    cursor: pointer;
+    padding: 0 12px;
+    border-radius: 5px;
+}
+.save{
+   background: #e4e6eb;
+    border: none;
+    cursor: not-allowed;
+    padding: 0 12px;
+    border-radius: 5px;
+    color: #ceced1;
+    font-weight: 700;
+}
+.save2{
+   background: #e4e6eb;
+    border: none;
+    cursor: pointer;
+    padding: 0 12px;
+    border-radius: 5px;
+    font-weight: 700;
+}
+
+.user-requests{
+    display: flex;
+    gap: 10px;
+    margin: 0 auto;
+}
+
+
 @media all and (max-width:900px){
     .wrap{
         grid-template-columns: repeat(1, 1fr);
@@ -1028,9 +1029,35 @@ visibility: hidden;
         visibility: visible;
     }
 }
- @media all and (max-width:450px){
+@media all and (max-width:600px){
+   .togglebar .bar{
+        display: none;  
+    }
+   nav .user-pic{
+        display: none;
+    }
+    .post{
+        width: calc(100% - 20px);
+    }
+    nav{
+        gap: 20px;
+    }
+    .fb-point input{
+        display: none;
+    }
+    
+    .wrap{
+        width: 100%;
+        padding: 20px 10px;
+    }
+}
 
- }
+@media all and (max-width:400px){
+    .wrap{
+        padding: 20px 0;
+    }
+
+}
 
 
 </style>

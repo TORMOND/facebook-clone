@@ -133,12 +133,20 @@
  </div>
 
               </div>
- <div  v-for="some in awesome" :key="some" >
-     
-     <p v-if="post.id.includes(this.commentInfor)" class="shown-comments">
-       <!-- <img :src="post.userProfilePic" v-if="post.id.includes(some.id)" style="width:40px; height:40px; border-radius:50%;">   -->
-         <a>{{some.userName}}</a>:{{some.userRemarks}}</p>
+ <div  v-for="some in awesome" :key="some"  class="users-comments">
+     <div id="shown-comments">
+
+      <img :src="otherUsersPic"  style="width:40px; height:40px; border-radius:50%;" >   
+     <p v-if="post.id.includes(this.commentInfor)" class="shown-comments" @click="pool(some.id)">
+         
+         <a>{{some.userName}}</a>
+         {{some.userRemarks}}</p>
+        
      <p v-else></p>
+      <span class="three-dots"><i class="fas fa-ellipsis-h"></i></span>
+      </div>
+      <span class="engage-usability">Like</span>
+      <span class="engage-usability">Reply</span>
      </div>
 
     </div>
@@ -353,6 +361,8 @@ export default {
       videoUrl:"",
       picture:false,
       video:false,
+      otherUsersPic:{},
+      somethingId:"",
        } 
     },
     methods: {
@@ -360,6 +370,7 @@ comment:function(id){
 this.commentInfor=id
     this.commented=!this.commented
     onAuthStateChanged(auth, (user) => {
+
  const userComments = collection(db, 'created-post', this.commentInfor, "comments")
 // const t = query(userComments, where("user", "==", this.commentInfor)) 
 onSnapshot(userComments, (snapshot)=>{
@@ -368,11 +379,28 @@ let m = []
 m.push({...doc.data(), id:doc.id})
 
 this.awesome[doc.id] = {...doc.data(), id:doc.id}
+
+
 // console.log(m)
 // console.log(this.awesome)
 })
 
 });
+
+const userPic = collection(db, 'user-Details')
+const n = query(userPic, where("id", "==", this.somethingId  ))
+onSnapshot(n, (snapshot)=>{
+    let pics = []
+    snapshot.docs.forEach((doc)=>{
+        pics.push({...doc.data(), id:doc.id})
+        // console.log(doc.data().name)
+        //  console.log(doc.data().secondName)
+        this.otherUsersPic.push(doc.data())
+    })
+    console.log(pics)
+    // console.log(users)
+
+})
 
 this.userComments=user.uid
 updateDoc(doc(db, "created-post", id ), { 
@@ -475,10 +503,7 @@ send:function(id){
 
     }else{
         let user = auth.currentUser
-//        updateDoc(doc(db, "created-post", id ), { 
-// postedAt:serverTimestamp(),
-//  userRemarks:[this.comments, user.email]
-//        });
+
 const r = this.createdPosts[id]
 r.comments+= 1
 
@@ -637,11 +662,16 @@ const user = auth.currentUser;
 this.modal=false
            const app = document.querySelector('#opt')
          app.classList=""   
+},
+pool:function(id){
+//   console.log(id)
+  this.$router.push({ name: 'Users', params: { id: id }})
+const useRef = collection(db, 'user-Details')
+
 }, 
     },  
  beforeMount(){
     this.create()
- 
 
  },
      
@@ -835,6 +865,7 @@ background: #f0f2f5;
     border-radius:10px ;
     margin-top: 80px;
     box-shadow: 1px 1px 1px #ceced1;
+    padding-bottom: 10px;
 }
 .profile img{
     width: 50px;
@@ -938,6 +969,7 @@ iframe{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     padding: 12px 16px 16px;
+    
 }
 label{
     display: flex;
@@ -1330,6 +1362,9 @@ textarea:focus{
   padding: 2px 10px;
   height: 32px;
 }
+.write-comment{
+    border-top: 0.5px solid #65676b;
+}
 .sent{
     display: flex;
      border-radius: 12px;
@@ -1338,18 +1373,64 @@ textarea:focus{
      align-items: center;
      padding:0px 16px;
 }
+#shown-comments{
+    display: flex;
+    padding: 0 16px;
+    align-items: center;
+    gap: 10px;
+}
+#shown-comments i{
+ color: #65676b;
+ 
+}
+.three-dots{
+    
+ border-radius: 50%;
+ width:20px;
+ height: 20px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ visibility: hidden;
+ cursor: pointer;
+}
 .shown-comments{
     background: #e4e6eb;
-    padding: 8px 16px;
-    margin: 0 auto;
-    width: calc(100% - 20%);
-    border-radius: 10px;
+    padding: 8px;
+    border-radius: 16px;
     margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.shown-comments:hover+.three-dots{
+    visibility: visible;
+}
+.three-dots:hover{
+background: #e4e6eb;
 }
 .shown-comments a{
-    color:#87888a;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight:500;
+}
+.shown-comments a:hover{
+    text-decoration: underline;
+}
+.engage-usability{
+    font-size: 14px;
+    color: #65676b;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0 10px;
+    margin-top: -10px;
 }
 
+.engage-usability:hover{
+    text-decoration: underline;
+}
+.users-comments{
+    padding: 5px 0;
+}
 @media all and (max-width: 850px){
     .part-1{
         display: none;

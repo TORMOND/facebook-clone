@@ -34,7 +34,7 @@
         </div>
     </div>
 
-    <div class="footer" >
+    <div class="footer" v-show="false">
         <div class="wrapper">
 <div class="wrap-1">
     <a href="#">Kiswahili</a>
@@ -324,8 +324,8 @@ this.$router.push('/Login')
 .app{
    margin: 0;
     padding: 0;
-    width: 100vw;
-    min-height: 100vh;
+    /* width: 100vw;
+    min-height: 100vh; */
     display: flex;
     flex-direction: column;
     position: relative;
@@ -719,7 +719,6 @@ input{
     font-size: 15px;
     margin: 6px 0;
 }
-
 
 
 @media all and(max-width:1024px) {

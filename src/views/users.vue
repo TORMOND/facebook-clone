@@ -55,7 +55,6 @@
            </div>
 
 
-
 </div>
 <div class="wrapper">
 <div class="wrap">
@@ -442,7 +441,6 @@ onSnapshot(c, (snapshot)=>{
 })
 
 
-
     const friends = collection(db, 'user-Details')
 onSnapshot(friends, (snapshot)=>{
     let y = []
@@ -489,8 +487,7 @@ onSnapshot(x, (snapshot)=>{
         //  this.userPosts.push(doc.data())
          this.userPosts[doc.id] = {...doc.data(), id:doc.id}
         //  console.log(doc.data())
-        // console.log(doc.data().likes)
-       
+        // console.log(doc.data().likes)      
         // console.log(lik)
 
     })

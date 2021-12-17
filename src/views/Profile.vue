@@ -61,7 +61,10 @@
 
         </div>
            <div class="togglebar">
-               <span class="bar">Posts</span>
+
+               
+               <span class="bar" >Posts</span>
+
                <span class="bar">About</span>
                <span class="bar">Friends</span>
                <span class="bar">Photos</span>
@@ -312,20 +315,20 @@ bio:"",
 
  run:function(){
 this.$router.push('/profile')
-      },
+},
 showDescribe:function(){
 this.describe=!this.describe
-        },
+},
 cancel:function(){
 this.describe=false
 this.bio = ""
-        },
+},
 pickFile:function(){
     this.$refs.fileInput.click()
-      },
+},
 selectFile:function(){
     this.$refs.fileInput.click()
-      },
+},
 closeProfileEdit:function(){
  this.profileEdit=false
  const app = document.querySelector('#opt')
@@ -359,7 +362,7 @@ updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
 //    console.log(this.number)
      
 
-        },
+},
 like:function(){
 // const thumb = document.querySelector('.thumbs-up');
 // thumb.style.color = "#216fd8"; 
@@ -374,7 +377,7 @@ this.present = false
        });
 //    console.log(this.number)
      
-        },
+},
  onFileSelected:function(event){
 const files = event.target.files
 let filename = files[0].name
@@ -388,7 +391,7 @@ fileReader.addEventListener('load', () =>{
 fileReader.readAsDataURL(files[0])
 this.image = files[0]
 // console.log(this.image)
-      },
+},
 onSelected:function(event){
 const files = event.target.files
 let filename = files[0].name
@@ -402,7 +405,7 @@ fileReader.addEventListener('load', () =>{
 fileReader.readAsDataURL(files[0])
 this.image = files[0]
 // console.log(this.image)
-      },
+},
 send:function(){
     
     if(this.comments===""){

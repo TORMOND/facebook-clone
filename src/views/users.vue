@@ -106,11 +106,11 @@
         <span @click="unlike(post.id)" v-show="absent" class="heart"><i class="fas fa-heart"></i></span>
        <p>
         
-           <label v-if="number">{{post.likes}}</label>
+           <label v-if="post.likes>0">{{post.likes}}</label>
           </p>
         </div>
         <div class="reviews">
-        <p>{{post.comments}} comments</p>
+        <p v-if="post.comments>0">{{post.comments}} comments</p>
         <p>2.6k Shares </p>
         </div>
     </div>
@@ -504,21 +504,6 @@ onSnapshot(x, (snapshot)=>{
 
 });
 
-const colRef = collection(db, 'Posts')
-onSnapshot(colRef, (snapshot)=>{
-    let posts = []
-    snapshot.docs.forEach((doc)=>{
-        posts.push({...doc.data(), id:doc.id})
-        // console.log(doc.data())
-         this.more.push (doc.data())
-         this.person.push(doc.data().user)
-         
-    this.moreComments = true
-    })
-//     console.log(person)
-//    console.log(this.more)
-//    console.log(this.person)
-})
 },
 
     },

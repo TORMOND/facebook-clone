@@ -20,7 +20,8 @@
   <label @click="run">
    
       <div class="user-pic">
-  <img :src="profilePic">
+ <img :src="profilePic" v-if="profilePic=this.profilePic ">
+              <span v-else><i class="fas fa-user"></i></span>  
  {{name}} 
 </div>
 
@@ -38,8 +39,12 @@
         <div class="container">
            <div class="back-image">
                <div class="circle">
-<img :src="profilePic" id="profileimg" v-if="profilePic !=='' ">
-<span v-else><i class="fas fa-user"></i></span>
+ <img :src="profilePic" v-if="profilePic=this.profilePic ">
+              <span v-else><i class="fas fa-user"></i></span> 
+
+              <label class="camera" @click="updateProfile"><i class="fas fa-camera"></i></label>
+
+               <input type="file" style="display:none;" @change="onFileSelected" ref="fileInput" accept="image/*">
                </div>        
            </div>
            <div class="information">
@@ -60,11 +65,8 @@
 </div>
 
         </div>
-           <div class="togglebar">
-
-               
+           <div class="togglebar">            
                <span class="bar" >Posts</span>
-
                <span class="bar">About</span>
                <span class="bar">Friends</span>
                <span class="bar">Photos</span>
@@ -87,6 +89,7 @@
         <div class="persons">
            <div class="images" v-for="friend in currentFriends" :key="friend" > 
               <img :src="friend.url" @click="pool(friend.id)"> 
+
                     <p ref="friendName">{{friend.name}} {{friend.secondName}}</p>
                 </div>
               
@@ -95,7 +98,8 @@
 
  
   <div class="right"> 
-    <div class="posts">
+
+    <div class="posts" v-for="post in userPosts" :key="post" >
       <div class="post">
 
 <div class="user-pic">
@@ -106,31 +110,32 @@
  <p>{{name}} {{secondName}}</p>
     </div>
     <div class="sent-image">
-        <img src="" id="postimg">
+        <!-- <img :src="post.url" id="myimg"> -->
+        <img :src="post.url" id="myimg" v-if="post.type !=='video/mp4' ">
+   <iframe :src="post.url" v-else width="100%" height="400px"></iframe>
+
     </div>
       <div class="more"></div>
     <div class="engagement">
         <div class="emoji">
-        <span @click="like" v-show="present" class="like"><i class="fas fa-thumbs-up"></i></span>
-        <span @click="like" v-show="present" class="heart"><i class="fas fa-heart"></i></span>
+        <span @click="like(post.id)" v-show="present" class="like"><i class="fas fa-thumbs-up"></i></span>
+        <span @click="like(post.id)" v-show="present" class="heart"><i class="fas fa-heart"></i></span>
 
-          <span @click="unlike" v-show="absent " class="like"><i class="fas fa-thumbs-up"></i></span>
-        <span @click="unlike" v-show="absent" class="heart"><i class="fas fa-heart"></i></span>
+          <span @click="unlike(post.id)" v-show="absent " class="like"><i class="fas fa-thumbs-up"></i></span>
+        <span @click="unlike(post.id)" v-show="absent" class="heart"><i class="fas fa-heart"></i></span>
        <p>
-           <!-- <label v-show="unliked">177k</label>
-           <label v-show="liked">You and 177k others</label> -->
-
-           <label v-if="number">{{number}}</label>
+        
+           <label v-if="post.likes>0">{{post.likes}}</label>
           </p>
         </div>
         <div class="reviews">
-        <p>{{more.length}} comments</p>
+       <p v-if="post.comments>0">{{post.comments}} comments</p>
         <p>2.6k Shares </p>
         </div>
     </div>
     <div class="action">
-        <label @click="like" class="thumbs-up" v-show="present" ><i class="far fa-thumbs-up"></i>like</label>
-          <label @click="unlike" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
+      <label @click="like(post.id)" class="thumbs-up" v-show="present" ><i class="far fa-thumbs-up"></i>like</label>
+          <label @click="unlike(post.id)" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
              <label><i class="far fa-comment-alt"></i>comment</label>
                   <label><i class="fas fa-share"></i>share</label>
     </div>
@@ -141,11 +146,11 @@
   <div class="user-pic">
 
 
-  <img :src="profilePic" v-if="profilePic !=='' ">
-<span v-else><i class="fas fa-user"></i></span>
+   <img :src="profilePic" v-if="profilePic=this.profilePic ">
+              <span v-else><i class="fas fa-user"></i></span>  
 </div>
  <input type="text" placeholder="write a comment" v-model="comments" >
- <div @click="send" style="cursor:pointer" class="sent">
+ <div @click="send(post.id)" style="cursor:pointer" class="sent">
  <i class="far fa-paper-plane"></i>
  <p>Send</p>
  </div>
@@ -247,6 +252,18 @@
     <p>Feature your favourite photos and stories here for all of your friends to see.</p>    
     </div>
 </div>
+
+<div class="profile-pic-update" v-if="profileUpdate">
+    <h3>Update Profile Picture</h3>
+
+    <button @click="closeUpdate"><i class="fas fa-times"></i></button>
+
+    <div class="btns">
+        <button @click="pickFile">Upload Photo</button>
+        <button>Add Frame</button>
+    </div>
+</div>
+
     </div>
 </template>
 <script>
@@ -257,31 +274,31 @@ import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWith
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
  
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-const storage = getStorage();
-getDownloadURL(ref(storage, 'Rolls-Royce-Phantom-Black.jpg'))
-  .then((url) => {
-    // `url` is the download URL for 'images/stars.jpg'
+// onAuthStateChanged(auth, (user) => {
+//   if (user) {
+// const storage = getStorage();
+// getDownloadURL(ref(storage, 'Rolls-Royce-Phantom-Black.jpg'))
+//   .then((url) => {
+//     // `url` is the download URL for 'images/stars.jpg'
 
-    // This can be downloaded directly:
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
-    xhr.onload = (event) => {
-      const blob = xhr.response;
-    };
-    xhr.open('GET', url);
-    xhr.send();
+//     // This can be downloaded directly:
+//     const xhr = new XMLHttpRequest();
+//     xhr.responseType = 'blob';
+//     xhr.onload = (event) => {
+//       const blob = xhr.response;
+//     };
+//     xhr.open('GET', url);
+//     xhr.send();
 
-    // Or inserted into an <img> element
-    const img = document.getElementById('postimg');
-    img.setAttribute('src', url);
-  })
-  .catch((error) => {
-    // Handle any errors
-  });
-  }
- })
+//     // Or inserted into an <img> element
+//     const img = document.getElementById('postimg');
+//     img.setAttribute('src', url);
+//   })
+//   .catch((error) => {
+//     // Handle any errors
+//   });
+//   }
+//  })
 
 
  import{ app, db, auth, firebaseConfig, user } from '@/firebase.js'
@@ -304,15 +321,25 @@ person:[],
 moreComments:false,
 posts:[],
 profilePic:[],
-userPosts:[],
+userPosts:{},
 currentFriends:{},
 profileEdit:false,
 describe:false,
 bio:"",
+profileUpdate:false,
         }
     },
     methods: {
-
+updateProfile:function(){
+this.profileUpdate= true
+const app = document.querySelector('#opt')
+         app.classList="active" 
+},
+closeUpdate:function(){
+    this.profileUpdate= false
+const app = document.querySelector('#opt')
+         app.classList="" 
+},
  run:function(){
 this.$router.push('/profile')
 },
@@ -347,36 +374,83 @@ operate:function(){
     this.popup =!this.popup;
     
 },
-unlike:function(){
-//     const thumb = document.querySelector('.thumbs-up');
-// thumb.style.color = "#65675b"; 
-this.number--
-this.absent = false
-this.present = true
-updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
-    // const b = query(docRef, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ));
+unlike:function(id){
 
-   likes:this.number
-     
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+const userRef = collection(db, 'user-Details')
+const q = query(userRef, where("likedOn", "==", [id]))
+onSnapshot(q, (snapshot)=>{
+    let users = []
+    snapshot.docs.forEach((doc)=>{
+        users.push({...doc.data(), id:doc.id})
+
+ console.log(doc.data().likedOn)
+
+ if(id==doc.data().likedOn){
+   console.log(id)
+           this.absent =false
+          this.present = true      
+console.log("unliked")
+ }else{
+   this.absent = true
+          this.present = false
+ }
+       
+    })    
+    console.log(users)
+})
+const b = this.userPosts[id]
+b.likes-= 1
+// console.log(b)
+ updateDoc(doc(db, "created-post", id ), { 
+   likes:b.likes 
        });
-//    console.log(this.number)
-     
 
+  updateDoc(doc(db, "user-Details", user.uid), {
+    likedOn:[]
+    });
+  }
+ })
 },
-like:function(){
-// const thumb = document.querySelector('.thumbs-up');
-// thumb.style.color = "#216fd8"; 
-this.number++
-this.absent = true
-this.present = false
+like:function(id){
 
- updateDoc(doc(db, "information", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ), {
-    // const b = query(docRef, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ));
-   likes:this.number
-     
+ onAuthStateChanged(auth, (user) => {
+const userRef = collection(db, 'user-Details')
+const q = query(userRef, where("likedOn", "==", [id]))
+onSnapshot(q, (snapshot)=>{
+    let users = []
+    snapshot.docs.forEach((doc)=>{
+        users.push({...doc.data(), id:doc.id})
+ console.log(doc.data().likedOn)
+ if(id!==doc.data().likedOn){
+this.absent = true
+this.present = false  
+console.log("liked")
+ }else{
+   this.absent =false
+   this.present = true   
+        
+ }      
+    })
+    console.log(users)
+})
+
+const o = this.userPosts[id]
+o.likes+= 1
+
+ updateDoc(doc(db, "created-post", id ), { 
+   likes:o.likes,
+      likedBy:[user.uid, user.email]
        });
-//    console.log(this.number)
-     
+
+  updateDoc(doc(db, "user-Details", user.uid), {
+    likedOn:[id]
+    });
+ 
+
+ })
+
 },
  onFileSelected:function(event){
 const files = event.target.files
@@ -408,17 +482,20 @@ this.image = files[0]
 },
 send:function(){
     
-    if(this.comments===""){
+   if(this.comments===""){
 
     }else{
-        let user = auth.currentUser
-       const docRef = addDoc(collection(db, "Posts"), {
-     comments:this.comments,    
-     user:user.email,
-
-    
+        const r = this.userPosts[id]
+r.comments+= 1
+updateDoc(doc(db, "created-post", id ), { 
+ comments:r.comments,
        });
 
+        let user = auth.currentUser
+       updateDoc(doc(db, "created-post", id ), { 
+postedAt:serverTimestamp(),
+ userRemarks:[this.comments, user.email]
+       });
        }
 },
 pool:function(id){
@@ -438,7 +515,7 @@ signOut:function(){
 },
 names:function(){
 const like = collection(db, 'information')
-// const like = query(infor, where("id", "==", "tUmz1C3i4uYB5z5xNrXZlEElc8M2" ))
+
 onSnapshot(like, (snapshot)=>{
     let likes = []
     snapshot.docs.forEach((doc)=>{
@@ -494,7 +571,10 @@ onSnapshot(x, (snapshot)=>{
     let lik = []
     snapshot.docs.forEach((doc)=>{
         lik.push({...doc.data(), id:doc.id})
-         this.userPosts.push(doc.data())
+        //  this.userPosts.push(doc.data())
+
+this.userPosts[doc.id] = {...doc.data(), id:doc.id}
+
         //  console.log(doc.data())
         // console.log(doc.data().likes)
         
@@ -511,22 +591,23 @@ onSnapshot(x, (snapshot)=>{
 
 });
 
-const colRef = collection(db, 'Posts')
+// const colRef = collection(db, 'Posts')
 
-onSnapshot(colRef, (snapshot)=>{
-    let posts = []
-    snapshot.docs.forEach((doc)=>{
-        posts.push({...doc.data(), id:doc.id})
-        // console.log(doc.data())
-         this.more.push (doc.data())
-         this.person.push(doc.data().user)
+// onSnapshot(colRef, (snapshot)=>{
+//     let posts = []
+//     snapshot.docs.forEach((doc)=>{
+//         posts.push({...doc.data(), id:doc.id})
+//         // console.log(doc.data())
+//          this.more.push (doc.data())
+//          this.person.push(doc.data().user)
          
-    this.moreComments = true
-    })
-//     console.log(person)
-//    console.log(this.more)
-//    console.log(this.person)
-})
+//     this.moreComments = true
+//     })
+// //     console.log(person)
+// //    console.log(this.more)
+// //    console.log(this.person)
+// })
+
 const saved = document.querySelector('.save')
 if(this.bio!==""){
     saved.style.cursor = "pointer"
@@ -541,7 +622,51 @@ if(this.bio!==""){
 }
 </script>
 <style scoped>
+.profile-pic-update{
+    background: #fff;
+    border-radius: 5px;
+    position: fixed;
+    z-index: 1;
+    top: 45%;
+    left: 40%;
+    box-shadow: 3px 3px 5px #9d9ea0, 3px 3px 5px #9d9ea0 ;
+}
+.btns{
+    display: flex;
+    gap: 20px;
+}
+.btns button:first-child{
+    border: none;
+    color:#1b74E4;
+    background: #cfe0f5;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.btns button:last-child{
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
+
+.camera{
+    position: absolute;
+    z-index: 1;
+    margin-left: 170px;
+    margin-top: 50px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 3px 3px #9d9ea0, 3px 3px #9d9ea0;
+    cursor: pointer;
+}
+#myimg{
+   width: 100%; 
+}
 .post{
     display: flex;
     gap: 20px;
@@ -602,7 +727,7 @@ if(this.bio!==""){
      flex-direction: column;
 }
 .back-image{
-background: #ceced1;
+background:linear-gradient( to top, #929394 20%, #f6f8fa 80%);
 margin: 0 auto;
 border-radius: 10px;
 padding: 248.18px 0 0;

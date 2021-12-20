@@ -11,20 +11,19 @@
           
           <div class="navigate">
               
-            <span ><i class="fas fa-home"></i></span>
-            
+            <span ><i class="fas fa-home"></i></span>            
            <span><i class="fab fa-youtube"></i></span>
-             <span><i class="fas fa-store"></i></span>
-             <!-- <span class="material-icons-outlined">storefront</span>  -->
+             <span><i class="fas fa-store"></i></span>      
              <span><label class="user" ><i class="fas fa-users"></i></label></span>
           </div>
           <div class="extras">
               <label @click="run">
-              <!-- <span><i class="fas fa-user"></i></span> -->
-                  <div class="user-pic">
-  <img :src="profilePic">
+              
+                  <div class="user-pic">        
+  <img :src="profilePic" v-if="profilePic=this.profilePic ">
+              <span v-else><i class="fas fa-user"></i></span>  
 </div>   
-              {{name}}
+              <p>{{name}}</p>
               </label>
              <span @click="open" class="create"><i class="fas fa-plus"></i></span>
              <div class="tooltip">Create Posts</div>
@@ -40,7 +39,8 @@
 <div class="part-1">
     <div class="post" @click="run">
     <div class="user-pic">
-  <img :src="profilePic">
+ <img :src="profilePic" v-if="profilePic=this.profilePic ">
+              <span v-else><i class="fas fa-user"></i></span>  
 </div>   
   <!-- <span><i class="fas fa-user"></i></span> -->
   <p>{{name}} {{secondName}}</p>
@@ -60,7 +60,8 @@
     <div class="postz">
 
      <div class="user-pic">
-  <img :src="profilePic">
+ <img :src="profilePic" v-if="profilePic=this.profilePic ">
+              <span v-else><i class="fas fa-user"></i></span>  
 </div>   
   <input type="text" placeholder="Whats on Your mind?" @click="open">
     </div>
@@ -89,7 +90,7 @@
     <div class="image">
       
    <img :src="post.url" class="myimg" v-if="post.type !=='video/mp4' ">
-   <iframe :src="post.url" v-else></iframe>
+   <iframe :src="post.url" v-else width="100%" height="500px"></iframe>
    
     </div>
     <div class="more"></div>
@@ -102,11 +103,11 @@
         <span @click="like(post.id)" v-else class="heart"><i class="fas fa-heart"></i></span>
 
        <p>
-             <label id="post-likes" ref="likeInput">{{post.likes}}</label>
+             <label id="post-likes" ref="likeInput" v-if="post.likes>0">{{post.likes}}</label>
        </p>
         </div>
         <div class="reviews">
-        <p @click="comment" style="cursor:pointer;">{{post.comments}} comments</p>
+        <p @click="comment" style="cursor:pointer;" v-if="post.comments>0">{{post.comments}} comments</p>
         <p>2.6k Shares </p>
         </div>
     </div>
@@ -136,7 +137,8 @@
  <div  v-for="some in awesome" :key="some"  class="users-comments">
      <div id="shown-comments">
 
-      <img :src="otherUsersPic"  style="width:40px; height:40px; border-radius:50%;" >   
+      <img :src="some.userUrl"  style="width:40px; height:40px; border-radius:50%; cursor:pointer;" @click="pool(some.id)" >   
+
      <p v-if="post.id.includes(this.commentInfor)" class="shown-comments" @click="pool(some.id)">
          
          <a>{{some.userName}}</a>
@@ -155,6 +157,86 @@
     </div>
 </div>
 
+<div class="card" >
+    <div class="profile">
+        <div style="display:flex; align-items:center; gap:10px;">
+        <!-- <img :src="post.userProfilePic"> -->
+       
+ <a>Victor</a>
+ 
+   </div> 
+   <div class="elipsis"><i class="fas fa-ellipsis-h"></i></div>
+    </div>
+    <div class="description">
+      Youtube link
+    </div>
+    <div class="image">
+      
+   <!-- <img :src="post.url" class="myimg" v-if="post.type !=='video/mp4' "> -->
+   <iframe src="https://www.youtube.com/embed/EEikRQ58NwM?controls=0" style="width:100%;  height:500px"></iframe>
+   
+    </div>
+    <div class="more"></div>
+    <div class="engagement">
+        <div class="emoji">
+
+          <!-- <span @click="unlike(post.id)" v-if="post.likedBy.includes(this.currentUserId)" class="like"><i class="fas fa-thumbs-up"></i></span>
+            <span @click="like(post.id)" v-else class="like" ><i class="fas fa-thumbs-up"></i></span>
+        <span @click="unlike(post.id)" v-if="post.likedBy.includes(this.currentUserId)" class="heart"><i class="fas fa-heart"></i></span>
+        <span @click="like(post.id)" v-else class="heart"><i class="fas fa-heart"></i></span> -->
+
+       <p>
+             <!-- <label id="post-likes" ref="likeInput">{{post.likes}}</label> -->
+       </p>
+        </div>
+        <div class="reviews">
+        <!-- <p @click="comment" style="cursor:pointer;">{{post.comments}} comments</p> -->
+        <p>2.6k Shares </p>
+        </div>
+    </div>
+    <div class="action">
+       
+        
+          <!-- <label @click="unlike(post.id)" class="thumbs-up" v-if="post.likedBy.includes(this.currentUserId)"><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
+ <label @click="like(post.id)" class="thumbs-up"  v-else><i class="far fa-thumbs-up"></i>like</label>
+             <label @click="comment(post.id)" ><i class="far fa-comment-alt"></i>comment</label> -->
+            
+                  <label><i class="fas fa-share"></i>share</label>
+    </div>
+    <!-- <div v-if="commented">
+    <div class="write-comment" v-if="post.id.includes(this.commentInfor)" >
+              <div class="post">
+  <span><i class="fas fa-user"></i></span>
+  <div class="user-pic">
+  <img :src="profilePic">
+</div>
+ <input type="text" placeholder="write a comment" v-model="comments" >
+ <div @click="send(post.id)" style="cursor:pointer" class="sent">
+ <i class="far fa-paper-plane"></i>
+ <p>Send</p>
+ </div>
+
+              </div>
+ <div  v-for="some in awesome" :key="some"  class="users-comments">
+     <div id="shown-comments">
+
+      <img :src="otherUsersPic"  style="width:40px; height:40px; border-radius:50%;" >   
+     <p v-if="post.id.includes(this.commentInfor)" class="shown-comments" @click="pool(some.id)">
+         
+         <a>{{some.userName}}</a>
+         {{some.userRemarks}}</p>
+        
+     <p v-else></p>
+      <span class="three-dots"><i class="fas fa-ellipsis-h"></i></span>
+      </div>
+      <span class="engage-usability">Like</span>
+      <span class="engage-usability">Reply</span>
+     </div>
+
+    </div>
+    </div> -->
+
+    </div>
 </div>
 
 <div class="part-2">
@@ -221,7 +303,8 @@
     <h3>Contacts</h3>
   <div class="post" @click="run">
           <div class="user-pic">
-  <img :src="profilePic">
+   <img :src="profilePic" v-if="profilePic=this.profilePic ">
+              <span v-else><i class="fas fa-user"></i></span>  
 </div>   
   <!-- <span><i class="fas fa-user"></i></span> -->
   <p>{{name}} {{secondName}}</p>
@@ -311,7 +394,8 @@
    <label @click="operate">
      <!--    <span><i class="fas fa-user"></i></span> -->
    <div class="user-pic" style="margin-right:5px">
-  <img :src="profilePic">
+   <img :src="profilePic" v-if="profilePic=this.profilePic ">
+              <span v-else><i class="fas fa-user"></i></span>  
 </div>   
   <p><router-link to="/profile" class="view">View Profile</router-link></p></label>
  </div>
@@ -367,6 +451,7 @@ export default {
     },
     methods: {
 comment:function(id){
+    // console.log(id)
 this.commentInfor=id
     this.commented=!this.commented
     onAuthStateChanged(auth, (user) => {
@@ -388,17 +473,17 @@ this.awesome[doc.id] = {...doc.data(), id:doc.id}
 });
 
 const userPic = collection(db, 'user-Details')
-const n = query(userPic, where("id", "==", this.somethingId  ))
-onSnapshot(n, (snapshot)=>{
+// const n = query(userPic, where("id", "==", this.somethingId  ))
+onSnapshot(userPic, (snapshot)=>{
     let pics = []
     snapshot.docs.forEach((doc)=>{
         pics.push({...doc.data(), id:doc.id})
         // console.log(doc.data().name)
         //  console.log(doc.data().secondName)
-        this.otherUsersPic.push(doc.data())
+        this.otherUsersPic[doc.id] = {...doc.data(), id:doc.id}
     })
     console.log(pics)
-    // console.log(users)
+    console.log(this.otherUsersPic)
 
 })
 
@@ -407,7 +492,9 @@ updateDoc(doc(db, "created-post", id ), {
   commentDetails:[user.uid]
        });
     })  
-   
+   this.comments=""
+ 
+  
         },
 toggle:function(){
  this.emerge=!this.emerge
@@ -426,10 +513,10 @@ onSnapshot(q, (snapshot)=>{
     snapshot.docs.forEach((doc)=>{
         users.push({...doc.data(), id:doc.id})
 
- console.log(doc.data().likedOn)
+//  console.log(doc.data().likedOn)
      
     })    
-    console.log(users)
+    // console.log(users)
 })
 const b = this.createdPosts[id]
 b.likes-= 1
@@ -449,7 +536,7 @@ b.likes-= 1
         },
  like:function(id){
              this.postId=id
-console.log(this.postId)
+// console.log(this.postId)
 
  onAuthStateChanged(auth, (user) => {
 const userRef = collection(db, 'user-Details')
@@ -458,10 +545,10 @@ onSnapshot(q, (snapshot)=>{
     let users = []
     snapshot.docs.forEach((doc)=>{
         users.push({...doc.data(), id:doc.id})
- console.log(doc.data().likedOn)
+//  console.log(doc.data().likedOn)
 
     })
-    console.log(users)
+    // console.log(users)
 })
 
 const o = this.createdPosts[id]
@@ -514,6 +601,7 @@ postedAt:serverTimestamp(),
  userEmail:user.email,
  userName: this.name + this.secondName,
  comments:r.comments,
+ userUrl:this.profilePic,
        });
 
 updateDoc(doc(db, "created-post", id ), { 
@@ -643,18 +731,19 @@ const uploadTask = uploadBytes(storageRef,this.image, metadata).then(()=>{
     xhr.send(); 
   
 const user = auth.currentUser;
-    setDoc(doc(db, "created-post", user.uid), {  
+    // setDoc(doc(db, "created-post", user.uid)
+    doc(collection(db, "created-post")), {  
       remarks:this.remarks,
       id:user.uid,
       user:user.email,
-      likes:null,
-      comments:null,
+      likes:0,
+      comments:0,
      url:url,
     createdAt:serverTimestamp(),
     userName:this.name + this.secondName,
     type:this.image.type,
     userProfilePic:this.profilePic,
-    });
+    };
       
   })
 
@@ -863,7 +952,7 @@ background: #f0f2f5;
     display: flex;
     flex-direction: column;
     border-radius:10px ;
-    margin-top: 80px;
+    margin-top: 20px;
     box-shadow: 1px 1px 1px #ceced1;
     padding-bottom: 10px;
 }
@@ -1353,6 +1442,7 @@ textarea:focus{
   margin-top: 50px;
   position: absolute;
   z-index: 1;
+  box-shadow: 2px 2px #7f7f80;
 }
 
 .create:hover+.tooltip {
@@ -1469,10 +1559,10 @@ nav{
     gap: 40px;
 }
 .search{
-    visibility: visible;
+    display: none;
 }
 .messenger{
-    visibility: hidden;
+  display: none;
 }
 .bells{
     display: none;
@@ -1480,29 +1570,49 @@ nav{
 }
 @media all and (max-width:425px){
   .content{
-        grid-column: 1/12;
+        grid-column: 1/13;
+        width: 100%;
+        padding: 0 0;
     }  
       #modal{
-        top:50px;
+        top:0px;
         left:5%;
         width: 80vw;
     }
     .post-2 label:last-child{
         display: none;
     }
-   .messenger{
+    nav{
+        width: 100%;
+    }
+/* nav .messenger{
+    display: none;
+
+}*/
+   nav  .bells{
+    display: none;
+} 
+nav .extras p{
     display: none;
 }
-.bells{
-    display: none;
+
+.card{
+    width: 100%;
+    border-radius: 0px;
 }
+
 }
 @media all and (max-width:320px){
    .reviews{
         font-size: 14px;
     }
     .content{
-        width: calc(100% - 20px);
+         grid-column: 1/13;
+        width: 100%;
+        padding: 0 0;
+    }
+    .engagement{
+        padding: 12px 6px 0;
     }
 }
 

@@ -1,5 +1,38 @@
 <template >
     <div id="admin">
+ <nav>
+          <div class="fb-point">
+          <i class="fab fa-facebook"></i>
+          <input type="text" placeholder="Search Facebook" class="field">
+
+           <!-- <span class="search" @click="toggle"><i class="fas fa-search"></i></span> -->
+          </div>
+          
+          <div class="navigate" >
+          <p>Users</p>
+          <p @click="reportsPage">Reports</p>
+          <p @click="advertisementsPage">Advertisements</p>
+          <p @click="analyticsPage">Analytics</p>
+            
+          </div>
+          <div class="extras">
+              <label @click="run">
+            
+                  <div class="user-pic">        
+  <img :src="profilePic" v-if="profilePic=this.profilePic ">
+              <span v-else><i class="fas fa-user-cog"></i></span>  
+</div>   
+              <p>{{name}}</p>
+              </label>
+             <!-- <span @click="open" class="create"><i class="fas fa-plus"></i></span> -->
+             <!-- <div class="tooltip">Create Posts</div> -->
+          <!-- <span><label class="user" ><i class="fas fa-users"></i></label></span>   -->
+           <span><i class="fas fa-ellipsis-v"></i><i class="fas fa-ellipsis-v"></i><i class="fas fa-ellipsis-v"></i></span>
+              <span @click="operate" class="home"><i class="fas fa-caret-down"></i></span>
+              <!-- <div class="tooltiptext">Account</div> -->
+          </div>
+      </nav>
+
              
 <div class="users">
  <div class="controls"><input type="text" v-model="findUser" placeholder="Search by email address or USER UID">
@@ -16,7 +49,7 @@
         <th>Status</th>
         <th>user UID</th>
     </tr>
-    <tr v-for="user in users" :key="user">
+    <tr v-for="user in users" :key="user" @click="pool(user.id)">
         <td>{{user.email}}</td>
         <td><i class="fas fa-envelope"></i></td>
         <td>Nov 25, 2021</td>
@@ -41,6 +74,13 @@ export default {
         return{
             findUser:'',
             users:[],
+            // hide:false,
+            navigator:[
+                {name:"Users"},
+                {name:"Reports"},
+                 {name:"Advertisements"},
+                 {name:"Analytics"}
+            ]
         }
     },
     methods: {
@@ -68,7 +108,7 @@ onSnapshot(userRef, (snapshot)=>{
         
     })
     
-    console.log(users)
+  
 })
 
   } else {
@@ -79,6 +119,21 @@ onSnapshot(userRef, (snapshot)=>{
 
 });
         },
+pool:function(id){
+//   console.log(id)
+  this.$router.push({ name: 'AdminUsers', params: { id: id }})
+// const useRef = collection(db, 'user-Details')
+
+}, 
+reportsPage(){
+this.$router.push('/Reports')
+},
+advertisementsPage(){
+this.$router.push('/Adverts')
+},
+analyticsPage(){
+this.$router.push('/Analytics')
+},
     },
 
      beforeMount(){
@@ -87,6 +142,11 @@ onSnapshot(userRef, (snapshot)=>{
 }
 </script>
 <style scoped>
+nav p{
+    cursor: pointer;
+    color: #65676B;
+}
+
 #admin{
     background: #f0f2f5;
     display:flex;
@@ -139,6 +199,7 @@ onSnapshot(userRef, (snapshot)=>{
      color: #65676B;
      font-size: 14px;
      padding: 14px 24px;
+     cursor: pointer;
 }
 tr{
     border-top: 0.5px solid #ceced1;

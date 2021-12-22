@@ -73,6 +73,7 @@
 </div>
 
 
+
 <div v-for="post in createdPosts" :key="post">
 <div class="card" >
     <div class="profile">
@@ -82,7 +83,18 @@
  <a>{{post.userName}}</a>
  
    </div> 
-   <div class="elipsis"><i class="fas fa-ellipsis-h"></i></div>
+   <div class="elipsis" @click="userReaction(post.id)"   v-if="this.reactionId==null" ><i class="fas fa-ellipsis-h" ></i></div>
+   <div class="elipsis" @click="userReactionClose()" v-else><i class="fas fa-ellipsis-h"></i></div>
+<div id="reaction-popup" v-if="this.reactionId!==null">
+    <ul v-if="post.id.includes(this.reactionId)">
+<li>Save Video</li>
+<li>Copy Link</li>
+<li>Hide Post</li>
+<li>snooze person for 30days</li>
+<li @click="report(post.id)" v-if="post.id!==this.currentUserId">Report this Post</li>
+    </ul>
+</div>
+
     </div>
     <div class="description">
       {{post.remarks}}
@@ -97,9 +109,9 @@
     <div class="engagement">
         <div class="emoji">
 
-          <span @click="unlike(post.id)" v-if="post.likedBy.includes(this.currentUserId)" class="like"><i class="fas fa-thumbs-up"></i></span>
+          <span @click="unlike(post.id)" v-if="post.likedBy==!this.currentUserId" class="like"><i class="fas fa-thumbs-up"></i></span>
             <span @click="like(post.id)" v-else class="like" ><i class="fas fa-thumbs-up"></i></span>
-        <span @click="unlike(post.id)" v-if="post.likedBy.includes(this.currentUserId)" class="heart"><i class="fas fa-heart"></i></span>
+        <span @click="unlike(post.id)" v-if="post.likedBy==!this.currentUserId" class="heart"><i class="fas fa-heart"></i></span>
         <span @click="like(post.id)" v-else class="heart"><i class="fas fa-heart"></i></span>
 
        <p>
@@ -139,9 +151,9 @@
 
       <img :src="some.userUrl"  style="width:40px; height:40px; border-radius:50%; cursor:pointer;" @click="pool(some.id)" >   
 
-     <p v-if="post.id.includes(this.commentInfor)" class="shown-comments" @click="pool(some.id)">
+     <p v-if="post.id.includes(this.commentInfor)" class="shown-comments" >
          
-         <a>{{some.userName}}</a>
+         <a  @click="pool(some.id)">{{some.userName}}</a>
          {{some.userRemarks}}</p>
         
      <p v-else></p>
@@ -327,10 +339,10 @@
 </div>
       </div>
 </div>
-<div id="emerge" @click="emerge">
+<!-- <div id="emerge" @click="emerge">
 <i class="fas fa-arrow-alt-left"></i>
 <input type="text" placeholder="search facebook">
-</div>
+</div> -->
 
 <div id="modal" v-if="modal" >
     <div class="create">
@@ -471,10 +483,35 @@ export default {
       somethingId:"",
       message:false,
       non:false,
+      reactionId:null,
+      userId:""
        } 
     },
 
     methods: {
+
+report(id){
+const user = auth.currentUser;
+
+  // setDoc(collection(db, "created-post")) 
+ setDoc(doc(db, "reports", id), { 
+   createdPostsId:id,  
+   Reporter:user.email,
+   message:"innapropriate Content"
+    });
+
+},
+ userReaction(id){
+     if(this.reactionId!==null){
+this.reactionId=null
+     }
+ this.reactionId=id
+
+ },
+ userReactionClose(){
+ this.reactionId=null
+
+ },              
 openMessenger(){
 this.message=!this.message
 },
@@ -513,8 +550,8 @@ onSnapshot(userPic, (snapshot)=>{
         //  console.log(doc.data().secondName)
         this.otherUsersPic[doc.id] = {...doc.data(), id:doc.id}
     })
-    console.log(pics)
-    console.log(this.otherUsersPic)
+    // console.log(pics)
+    // console.log(this.otherUsersPic)
 
 })
 
@@ -768,13 +805,14 @@ const user = auth.currentUser;
       remarks:this.remarks,
       id:user.uid,
       user:user.email,
-      likes:0,
+      likes:null,
       comments:0,
      url:url,
     createdAt:serverTimestamp(),
     userName:this.name + this.secondName,
     type:this.image.type,
     userProfilePic:this.profilePic,
+    likedBy:[],
     });
       
   })
@@ -786,7 +824,7 @@ this.modal=false
 },
 pool:function(id){
 //   console.log(id)
-  this.$router.push({ name: 'Users', params: { id: id }})
+this.$router.push({ name: 'Users', params: { id: id }})
 const useRef = collection(db, 'user-Details')
 
 }, 
@@ -799,6 +837,22 @@ const useRef = collection(db, 'user-Details')
 }
 </script>
 <style scoped>
+#reaction-popup{
+    background: #fff;
+     box-shadow: 5px 5px 8px #ceced1, 3px 3px 5px #f0f2f5; 
+     border-radius: 5px;
+     position: absolute;
+     z-index: 1;
+     margin-left: 420px;
+     margin-top: 230px;
+}
+#reaction-popup li{
+    list-style: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
 
 #popup{
     position:fixed;

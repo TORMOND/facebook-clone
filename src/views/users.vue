@@ -1147,6 +1147,9 @@ max-height: 280px;
 }
 
 @media all and (max-width:400px){
+    .back-image{
+        width: 100%;
+    }
     .wrap{
         padding: 20px 0;
     }

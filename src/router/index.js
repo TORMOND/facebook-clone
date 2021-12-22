@@ -73,6 +73,38 @@ const routes = [
     component: function () {
       return import( '../views/users.vue')
     },
+  },
+    {
+      path: '/Admin/:id',
+      name: 'AdminUsers',
+     
+      component: function () {
+        return import( '../views/AdminUsers.vue')
+      },
+    },
+    {
+      path: '/Reports',
+      name: 'Reports',
+     
+      component: function () {
+        return import( '../views/Reports.vue')
+      },
+    },
+      {
+        path: '/Adverts',
+        name: 'Adverts',
+       
+        component: function () {
+          return import( '../views/Adverts.vue')
+        },
+      },
+      {
+        path: '/Analytics',
+        name: 'Analytics',
+       
+        component: function () {
+          return import( '../views/Analytics.vue')
+        },
 
 }
 ]

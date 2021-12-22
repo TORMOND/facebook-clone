@@ -77,10 +77,10 @@
 
     
   <div class="right"> 
-    <div class="posts" v-for="post in userPosts" :key="post">
+      <p v-if="postElement== '' " class="no-posts">No Posts</p>  
+    <div class="posts" v-for="post in userPosts" :key="post" v-else>
 
-       <p v-if="this.userPosts==null " class="no-posts">No Posts</p>  
-      <div class="post" v-else>
+      <div class="post" >
 
 <div class="user-pic">
   <img :src="profilePic">
@@ -99,11 +99,17 @@
       <div class="more"></div>
     <div class="engagement">
         <div class="emoji">
-        <span @click="like(post.id)" v-show="present" class="like"><i class="fas fa-thumbs-up"></i></span>
+        <!-- <span @click="like(post.id)" v-show="present" class="like"><i class="fas fa-thumbs-up"></i></span>
         <span @click="like(post.id)" v-show="present" class="heart"><i class="fas fa-heart"></i></span>
 
           <span @click="unlike(post.id)" v-show="absent " class="like"><i class="fas fa-thumbs-up"></i></span>
-        <span @click="unlike(post.id)" v-show="absent" class="heart"><i class="fas fa-heart"></i></span>
+        <span @click="unlike(post.id)" v-show="absent" class="heart"><i class="fas fa-heart"></i></span> -->
+      
+       <span @click="unlike(post.id)" v-if="post.likedBy.includes(this.currentUserId)" class="like"><i class="fas fa-thumbs-up"></i></span>
+            <span @click="like(post.id)" v-else class="like" ><i class="fas fa-thumbs-up"></i></span>
+        <span @click="unlike(post.id)" v-if="post.likedBy.includes(this.currentUserId)" class="heart"><i class="fas fa-heart"></i></span>
+        <span @click="like(post.id)" v-else class="heart"><i class="fas fa-heart"></i></span>
+      
        <p>
         
            <label v-if="post.likes>0">{{post.likes}}</label>
@@ -115,8 +121,11 @@
         </div>
     </div>
     <div class="action">
-        <label @click="like(post.id)" class="thumbs-up" v-show="present" ><i class="far fa-thumbs-up"></i>like</label>
-          <label @click="unlike(post.id)" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
+<label @click="unlike(post.id)" class="thumbs-up" v-if="post.likedBy.includes(this.currentUserId)"><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
+ <label @click="like(post.id)" class="thumbs-up"  v-else><i class="far fa-thumbs-up"></i>like</label>
+
+        <!-- <label @click="like(post.id)" class="thumbs-up" v-show="present" ><i class="far fa-thumbs-up"></i>like</label>
+          <label @click="unlike(post.id)" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label> -->
              <label><i class="far fa-comment-alt"></i>comment</label>
                   <label><i class="fas fa-share"></i>share</label>
     </div>
@@ -147,7 +156,33 @@
   
 </div>
 </div>
+
+
+
 </div>
+
+<div id="message-tag" @click="openMessenger">
+<i class="fas fa-edit"></i>
+</div>
+
+<div class="message-platform" v-if="message">
+<div class="top">
+    <p>New Message</p>
+     <button @click="closeMessenger" class="times-btn" ><i class="fas fa-times"></i></button>
+</div>
+<div class="to-textarea">
+    <p>To:</p>
+    <input  type="text" >
+</div>
+<div>
+  <p>Suggested</p>  
+</div>
+
+
+
+</div>
+
+
 <div id="popup" v-if="popup">
      <!-- <div class="post">
    <label @click="operate"> <span><i class="fas fa-user"></i></span>
@@ -270,9 +305,18 @@ bio:"",
 profileEdit:false,
 pic:"",
 currentUserName:"",
+postElement:"",
+message:false,
+currentUserId:"",
         }
     },
     methods: {
+openMessenger(){
+this.message=!this.message
+},
+closeMessenger(){
+this.message=false
+},
  run:function(){
 this.$router.push('/profile')
 },
@@ -315,15 +359,15 @@ onSnapshot(q, (snapshot)=>{
 
  console.log(doc.data().likedOn)
 
- if(id==doc.data().likedOn){
-   console.log(id)
-           this.absent =false
-          this.present = true      
-console.log("unliked")
- }else{
-   this.absent = true
-          this.present = false
- }
+//  if(id==doc.data().likedOn){
+//    console.log(id)
+//            this.absent =false
+//           this.present = true      
+// console.log("unliked")
+//  }else{
+//    this.absent = true
+//           this.present = false
+//  }
        
     })    
     console.log(users)
@@ -332,7 +376,8 @@ const b = this.userPosts[id]
 b.likes-= 1
 // console.log(b)
  updateDoc(doc(db, "created-post", id ), { 
-   likes:b.likes 
+   likes:b.likes, 
+   likedBy:[]
        });
 
   updateDoc(doc(db, "user-Details", user.uid), {
@@ -353,15 +398,15 @@ onSnapshot(q, (snapshot)=>{
     snapshot.docs.forEach((doc)=>{
         users.push({...doc.data(), id:doc.id})
  console.log(doc.data().likedOn)
- if(id!==doc.data().likedOn){
-this.absent = true
-this.present = false  
-console.log("liked")
- }else{
-   this.absent =false
-   this.present = true   
+//  if(id!==doc.data().likedOn){
+// this.absent = true
+// this.present = false  
+// console.log("liked")
+//  }else{
+//    this.absent =false
+//    this.present = true   
         
- }      
+//  }      
     })
     console.log(users)
 })
@@ -371,7 +416,7 @@ o.likes+= 1
 
  updateDoc(doc(db, "created-post", id ), { 
    likes:o.likes,
-      likedBy:[user.uid, user.email]
+      likedBy:[user.uid]
        });
 
   updateDoc(doc(db, "user-Details", user.uid), {
@@ -436,6 +481,7 @@ onSnapshot(c, (snapshot)=>{
         us.push({...doc.data(), id:doc.id})
       this.pic = doc.data().url
     this.currentUserName = doc.data().name
+     this.currentUserId = doc.data().id   
     })
  
 })
@@ -473,6 +519,7 @@ onSnapshot(q, (snapshot)=>{
          this.name = doc.data().name
          this.secondName = doc.data().secondName
          this.profilePic = doc.data().url
+        
     })
     
     // console.log(users)
@@ -486,6 +533,7 @@ onSnapshot(x, (snapshot)=>{
         lik.push({...doc.data(), id:doc.id})
         //  this.userPosts.push(doc.data())
          this.userPosts[doc.id] = {...doc.data(), id:doc.id}
+         this.postElement = doc.id
         //  console.log(doc.data())
         // console.log(doc.data().likes)      
         // console.log(lik)
@@ -1001,6 +1049,63 @@ max-height: 280px;
     font-weight: 700;
   
 }
+#message-tag{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #fff;
+    position: fixed;
+    top: 92%;
+    left: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 5px 5px 8px #ceced1, 3px 3px 5px #f0f2f5;
+}
+
+.message-platform{
+   background: #fff;
+   box-shadow: 5px 5px 8px #ceced1, 3px 3px 5px #f0f2f5;   
+   position: fixed;
+   top: 50%;
+   left: 75%;
+    display: flex;
+    border-radius: 5px;
+    flex-direction: column; 
+    min-height: 455px; 
+    width: 18vw;                                                                                     
+}
+.message-platform input{
+    border: none;
+}
+.message-platform input:focus{
+    outline: none;
+}
+.top{
+    display: flex;
+    align-items: center;
+    padding: 5px 20px;
+    justify-content: space-between;
+}
+
+.fa-times{
+    color: #216FD8;
+    font-size: 20px;
+}
+.times-btn{
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+
+}
+.to-textarea{
+    display: flex;
+    gap: 10px;
+    border-bottom: 0.5px solid #d3d4d4;
+}
+
 
 @media all and (max-width:900px){
     .wrap{

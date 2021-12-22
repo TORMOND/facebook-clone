@@ -157,7 +157,7 @@
     </div>
 </div>
 
-<div class="card" >
+<div class="card"  v-if="non">
     <div class="profile">
         <div style="display:flex; align-items:center; gap:10px;">
         <!-- <img :src="post.userProfilePic"> -->
@@ -180,13 +180,13 @@
     <div class="engagement">
         <div class="emoji">
 
-          <!-- <span @click="unlike(post.id)" v-if="post.likedBy.includes(this.currentUserId)" class="like"><i class="fas fa-thumbs-up"></i></span>
-            <span @click="like(post.id)" v-else class="like" ><i class="fas fa-thumbs-up"></i></span>
-        <span @click="unlike(post.id)" v-if="post.likedBy.includes(this.currentUserId)" class="heart"><i class="fas fa-heart"></i></span>
-        <span @click="like(post.id)" v-else class="heart"><i class="fas fa-heart"></i></span> -->
+           <!-- <span @click="unlike" class="like"><i class="fas fa-thumbs-up"></i></span>
+            <span @click="like" class="like" ><i class="fas fa-thumbs-up"></i></span>
+        <span @click="unlike"  class="heart"><i class="fas fa-heart"></i></span>
+        <span @click="like" class="heart"><i class="fas fa-heart"></i></span>  -->
 
        <p>
-             <!-- <label id="post-likes" ref="likeInput">{{post.likes}}</label> -->
+             <label id="post-likes" ref="likeInput">{{post.likes}}</label>
        </p>
         </div>
         <div class="reviews">
@@ -404,6 +404,28 @@
 </div>
 </div>
 
+
+<div id="message-tag" @click="openMessenger">
+<i class="fas fa-edit"></i>
+</div>
+
+<div class="message-platform" v-if="message">
+<div class="top">
+    <p>New Message</p>
+     <button @click="closeMessenger" class="times-btn" ><i class="fas fa-times"></i></button>
+</div>
+<div class="to-textarea">
+    <p>To:</p>
+    <input  type="text" >
+</div>
+<div>
+  <p>Suggested</p>  
+</div>
+
+
+
+</div>
+
     </div>
 </template>
 <script>
@@ -447,9 +469,18 @@ export default {
       video:false,
       otherUsersPic:{},
       somethingId:"",
+      message:false,
+      non:false,
        } 
     },
+
     methods: {
+openMessenger(){
+this.message=!this.message
+},
+closeMessenger(){
+this.message=false
+},
 comment:function(id){
     // console.log(id)
 this.commentInfor=id
@@ -731,8 +762,9 @@ const uploadTask = uploadBytes(storageRef,this.image, metadata).then(()=>{
     xhr.send(); 
   
 const user = auth.currentUser;
-    // setDoc(doc(db, "created-post", user.uid)
-    doc(collection(db, "created-post")), {  
+
+  // setDoc(collection(db, "created-post")) 
+ setDoc(doc(db, "created-post", user.uid), { 
       remarks:this.remarks,
       id:user.uid,
       user:user.email,
@@ -743,7 +775,7 @@ const user = auth.currentUser;
     userName:this.name + this.secondName,
     type:this.image.type,
     userProfilePic:this.profilePic,
-    };
+    });
       
   })
 
@@ -1057,7 +1089,7 @@ iframe{
 .action{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    padding: 12px 16px 16px;
+    padding: 5px 16px;
     
 }
 label{
@@ -1521,6 +1553,62 @@ background: #e4e6eb;
 .users-comments{
     padding: 5px 0;
 }
+#message-tag{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #fff;
+    position: fixed;
+    top: 92%;
+    left: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+   box-shadow: 5px 5px 8px #ceced1, 3px 3px 5px #f0f2f5;
+}
+.message-platform{
+   background: #fff;
+   box-shadow: 5px 5px 8px #ceced1, 3px 3px 5px #f0f2f5;   
+   position: fixed;
+   top: 50%;
+   left: 75%;
+    display: flex;
+    border-radius: 5px;
+    flex-direction: column; 
+    min-height: 455px; 
+    width: 18vw;                                                                                     
+}
+.message-platform input{
+    border: none;
+}
+.message-platform input:focus{
+    outline: none;
+}
+.top{
+    display: flex;
+    align-items: center;
+    padding: 5px 20px;
+    justify-content: space-between;
+}
+
+.fa-times{
+    color: #216FD8;
+    font-size: 20px;
+}
+.times-btn{
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+
+}
+.to-textarea{
+    display: flex;
+    gap: 10px;
+    border-bottom: 0.5px solid #d3d4d4;
+}
+
 @media all and (max-width: 850px){
     .part-1{
         display: none;
@@ -1529,7 +1617,9 @@ background: #e4e6eb;
         display: none;
     }
     .content{
-        grid-column: 2/10;
+        grid-column: 1/13;
+          width: 100%;
+        padding: 0 0;
     }
     .navigate{
         display: none;
@@ -1539,10 +1629,16 @@ background: #e4e6eb;
         left: 20%;
         width: 45vw;
     }
+    #message-tag{
+        left: 90%;
+    }
+
 }
 @media all and (max-width:600px){
 .content{
         grid-column: 1/12;
+          width: 100%;
+        padding: 0 0;
     }
 .navigate{
     display: none;
@@ -1566,6 +1662,9 @@ nav{
 }
 .bells{
     display: none;
+}
+#message-tag{
+    left: 88%;
 }
 }
 @media all and (max-width:425px){
@@ -1600,6 +1699,9 @@ nav .extras p{
     width: 100%;
     border-radius: 0px;
 }
+#message-tag{
+    left: 85%;
+}
 
 }
 @media all and (max-width:320px){
@@ -1614,6 +1716,9 @@ nav .extras p{
     .engagement{
         padding: 12px 6px 0;
     }
+    #message-tag{
+    left: 82%;
+}
 }
 
 </style>

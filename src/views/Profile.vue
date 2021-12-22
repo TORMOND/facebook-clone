@@ -51,7 +51,9 @@
                <h1 >{{name}} {{secondName}}</h1>
 
            </div>
-           <a class="add-bio" @click="showDescribe">Add Bio</a>
+          
+           <a class="add-bio" @click="showDescribe" v-if="bioInfor==null">Add Bio</a>
+ <p v-else class="users-bio">{{bioInfor}}</p>
 
            <div class="description-text" v-if="describe">
         <input type="text" placeholder="Describe who you are" v-model="bio" class="text-description">
@@ -60,8 +62,8 @@
         <div class="user-requests">
         <p><i class="fas fa-globe-africa"></i>Public</p>
         <button class="cancel" @click="cancel">Cancel</button>
-        <button class="save" @click="save" v-if="this.bio=='' ">Save</button>
-         <button  class="save2" v-else>Save</button>
+        <button class="save" v-if="this.bio=='' ">Save</button>
+         <button  class="save2" v-else @click="save" >Save</button>
 </div>
 
         </div>
@@ -98,8 +100,11 @@
 
  
   <div class="right"> 
+  <p v-if="postElement=='' " class="no-posts">No Posts</p> 
 
-    <div class="posts" v-for="post in userPosts" :key="post" >
+
+    <div class="posts" v-for="post in userPosts" :key="post"  v-else>
+        
       <div class="post">
 
 <div class="user-pic">
@@ -118,11 +123,17 @@
       <div class="more"></div>
     <div class="engagement">
         <div class="emoji">
-        <span @click="like(post.id)" v-show="present" class="like"><i class="fas fa-thumbs-up"></i></span>
+  <span @click="unlike(post.id)" v-if="post.likedBy.includes(this.currentUserId)" class="like"><i class="fas fa-thumbs-up"></i></span>
+            <span @click="like(post.id)" v-else class="like" ><i class="fas fa-thumbs-up"></i></span>
+        <span @click="unlike(post.id)" v-if="post.likedBy.includes(this.currentUserId)" class="heart"><i class="fas fa-heart"></i></span>
+        <span @click="like(post.id)" v-else class="heart"><i class="fas fa-heart"></i></span>
+
+
+        <!-- <span @click="like(post.id)" v-show="present" class="like"><i class="fas fa-thumbs-up"></i></span>
         <span @click="like(post.id)" v-show="present" class="heart"><i class="fas fa-heart"></i></span>
 
           <span @click="unlike(post.id)" v-show="absent " class="like"><i class="fas fa-thumbs-up"></i></span>
-        <span @click="unlike(post.id)" v-show="absent" class="heart"><i class="fas fa-heart"></i></span>
+        <span @click="unlike(post.id)" v-show="absent" class="heart"><i class="fas fa-heart"></i></span> -->
        <p>
         
            <label v-if="post.likes>0">{{post.likes}}</label>
@@ -134,8 +145,12 @@
         </div>
     </div>
     <div class="action">
-      <label @click="like(post.id)" class="thumbs-up" v-show="present" ><i class="far fa-thumbs-up"></i>like</label>
-          <label @click="unlike(post.id)" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
+
+ <label @click="unlike(post.id)" class="thumbs-up" v-if="post.likedBy.includes(this.currentUserId)"><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label>
+ <label @click="like(post.id)" class="thumbs-up"  v-else><i class="far fa-thumbs-up"></i>like</label>
+
+      <!-- <label @click="like(post.id)" class="thumbs-up" v-show="present" ><i class="far fa-thumbs-up"></i>like</label>
+          <label @click="unlike(post.id)" class="thumbs-up" v-show="absent" ><i class="fas fa-thumbs-up" style="color:#1a73e8"></i>like</label> -->
              <label><i class="far fa-comment-alt"></i>comment</label>
                   <label><i class="fas fa-share"></i>share</label>
     </div>
@@ -170,6 +185,30 @@
 
 </div>
 </div>
+
+
+
+</div>
+
+<div id="message-tag" @click="openMessenger">
+<i class="fas fa-edit"></i>
+</div>
+
+<div class="message-platform" v-if="message">
+<div class="top">
+    <p>New Message</p>
+     <button @click="closeMessenger" class="times-btn" ><i class="fas fa-times"></i></button>
+</div>
+<div class="to-textarea">
+    <p>To:</p>
+    <input  type="text" >
+</div>
+<div>
+  <p>Suggested</p>  
+</div>
+
+
+
 </div>
 <div id="popup" v-if="popup">
      <!-- <div class="post">
@@ -222,7 +261,7 @@
         <div class="user-requests">
         <p><i class="fas fa-globe-africa"></i>Public</p>
         <button class="cancel" @click="showDescribe">Cancel</button>
-        <button class="save">Save</button>
+        <button class="save" @click="save">Save</button>
 </div>
 
         </div>
@@ -253,16 +292,42 @@
     </div>
 </div>
 
-<div class="profile-pic-update" v-if="profileUpdate">
-    <h3>Update Profile Picture</h3>
+<div id="profile-pic-update" v-if="profileUpdate">
 
-    <button @click="closeUpdate"><i class="fas fa-times"></i></button>
+<div class="top-element">
+    <h3 class="top-heading">Update Profile Picture</h3>
+    <button @click="closeUpdate" class="times-btn"><i class="fas fa-times"></i></button>
 
+</div>
+<div v-if="imageUrl=='' ">
     <div class="btns">
-        <button @click="pickFile">Upload Photo</button>
+        <button @click="pickFile"><i class="fas fa-plus"></i>Upload Photo</button>
         <button>Add Frame</button>
     </div>
 </div>
+<div class="onPicLoad" v-else>
+
+    <input type="text" placeholder="Description">
+    <img :src="imageUrl">
+
+<div class="adjust-btns">
+  <button><i class="fas fa-crop-alt"></i>Crop Photo</button>
+<button><i class="fas fa-clock"></i>Make Temporary</button>  
+</div>
+
+
+<p><i class="fas fa-globe-africa"></i>Your Profile Picture is Public.</p>
+
+<div class="manouver-btns">
+<button @click="cancelPhoto">Cancel</button>
+<button @click="savePhoto">Save</button>    
+</div>
+
+
+</div>
+
+</div>
+
 
     </div>
 </template>
@@ -271,7 +336,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, doc, getDocs, getDoc, onSnapshot, query, where, setDoc, updateDoc} from "firebase/firestore"
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
  
 // onAuthStateChanged(auth, (user) => {
@@ -327,9 +392,72 @@ profileEdit:false,
 describe:false,
 bio:"",
 profileUpdate:false,
+imageUrl:"",
+postElement:"",
+bioInfor:"",
+ message:false,
+ currentUserId:"",
         }
     },
     methods: {
+openMessenger(){
+this.message=!this.message
+},
+closeMessenger(){
+this.message=false
+},
+save(){
+const user = auth.currentUser;
+   updateDoc(doc(db, "user-Details", user.uid ), { 
+  bio:this.bio,
+  
+       });
+       this.describe=false
+},
+cancelPhoto(){
+    this.imageUrl = ""
+    const picUpdate = document.querySelector('#profile-pic-update')
+ picUpdate.classList=""
+},
+savePhoto:function(){
+
+    const storage = getStorage();
+const storageRef = ref(storage, 'images/' + this.image.name);
+
+const metadata = {
+  contentType: this.image.type,
+  size:this.image.size,
+  name:this.image.name,
+  type:this.image.type,
+};
+
+// Upload the file and metadata
+const uploadTask = uploadBytes(storageRef,this.image, metadata).then(()=>{
+ getDownloadURL(storageRef).then((url)=>{
+    //  console.log(url)
+     const xhr = new XMLHttpRequest();
+    xhr.responseType = 'blob';
+    xhr.onload = (event) => {
+      const blob = xhr.response;
+    };
+    xhr.open('GET', url);
+    xhr.send(); 
+  
+const user = auth.currentUser;
+    // setDoc(doc(db, "created-post", user.uid)
+   updateDoc(doc(db, "user-Details", user.uid ), { 
+  url:url,
+       });
+      
+  })
+
+})
+       this.profileUpdate= false
+const app = document.querySelector('#opt')
+         app.classList="" 
+         this.imageUrl=""
+
+        },
 updateProfile:function(){
 this.profileUpdate= true
 const app = document.querySelector('#opt')
@@ -339,6 +467,7 @@ closeUpdate:function(){
     this.profileUpdate= false
 const app = document.querySelector('#opt')
          app.classList="" 
+         this.imageUrl=""
 },
  run:function(){
 this.$router.push('/profile')
@@ -387,15 +516,15 @@ onSnapshot(q, (snapshot)=>{
 
  console.log(doc.data().likedOn)
 
- if(id==doc.data().likedOn){
-   console.log(id)
-           this.absent =false
-          this.present = true      
-console.log("unliked")
- }else{
-   this.absent = true
-          this.present = false
- }
+//  if(id==doc.data().likedOn){
+//    console.log(id)
+//            this.absent =false
+//           this.present = true      
+// console.log("unliked")
+//  }else{
+//    this.absent = true
+//           this.present = false
+//  }
        
     })    
     console.log(users)
@@ -404,7 +533,8 @@ const b = this.userPosts[id]
 b.likes-= 1
 // console.log(b)
  updateDoc(doc(db, "created-post", id ), { 
-   likes:b.likes 
+   likes:b.likes, 
+   likedBy:[]
        });
 
   updateDoc(doc(db, "user-Details", user.uid), {
@@ -423,15 +553,15 @@ onSnapshot(q, (snapshot)=>{
     snapshot.docs.forEach((doc)=>{
         users.push({...doc.data(), id:doc.id})
  console.log(doc.data().likedOn)
- if(id!==doc.data().likedOn){
-this.absent = true
-this.present = false  
-console.log("liked")
- }else{
-   this.absent =false
-   this.present = true   
+//  if(id!==doc.data().likedOn){
+// this.absent = true
+// this.present = false  
+// console.log("liked")
+//  }else{
+//    this.absent =false
+//    this.present = true   
         
- }      
+//  }      
     })
     console.log(users)
 })
@@ -441,7 +571,7 @@ o.likes+= 1
 
  updateDoc(doc(db, "created-post", id ), { 
    likes:o.likes,
-      likedBy:[user.uid, user.email]
+      likedBy:[user.uid]
        });
 
   updateDoc(doc(db, "user-Details", user.uid), {
@@ -458,13 +588,15 @@ let filename = files[0].name
 const fileReader = new FileReader()
 fileReader.addEventListener('load', () =>{
     this.imageUrl = fileReader.result
-//     console.log(filename)  
-//  console.log(this.imageUrl)
+    console.log(filename)  
+ console.log(this.imageUrl)
+ const picUpdate = document.querySelector('#profile-pic-update')
+ picUpdate.classList="on"
 
 })
 fileReader.readAsDataURL(files[0])
 this.image = files[0]
-// console.log(this.image)
+console.log(this.image)
 },
 onSelected:function(event){
 const files = event.target.files
@@ -560,6 +692,8 @@ onSnapshot(q, (snapshot)=>{
          this.name = doc.data().name
          this.secondName = doc.data().secondName
          this.profilePic = doc.data().url
+         this.bioInfor = doc.data().bio
+         this.currentUserId = doc.data().id   
     })
     
     // console.log(users)
@@ -574,6 +708,8 @@ onSnapshot(x, (snapshot)=>{
         //  this.userPosts.push(doc.data())
 
 this.userPosts[doc.id] = {...doc.data(), id:doc.id}
+this.postElement = doc.id
+
 
         //  console.log(doc.data())
         // console.log(doc.data().likes)
@@ -622,32 +758,47 @@ if(this.bio!==""){
 }
 </script>
 <style scoped>
-.profile-pic-update{
+#profile-pic-update{
     background: #fff;
     border-radius: 5px;
     position: fixed;
     z-index: 1;
     top: 45%;
-    left: 40%;
+    left: 30%;
     box-shadow: 3px 3px 5px #9d9ea0, 3px 3px 5px #9d9ea0 ;
+    width: 40vw;
 }
+#profile-pic-update.on{
+    top: 5%;
+}
+
 .btns{
     display: flex;
     gap: 20px;
+    padding: 10px 20px ;
+     font-size: 15px;
+     justify-content: center;
 }
 .btns button:first-child{
     border: none;
     color:#1b74E4;
-    background: #cfe0f5;
+    background: #d7e4f5;
     border-radius: 5px;
     cursor: pointer;
+   padding: 10px 20px;
+   width: calc(100% - 40%);
+   font-weight: 600;
+}
+.btns button:first-child:hover{
+   background: #cfdff3; 
 }
 .btns button:last-child{
     border: none;
     border-radius: 5px;
     cursor: pointer;
+     width: calc(100% - 40%);
+     font-weight: 600;
 }
-
 
 .camera{
     position: absolute;
@@ -661,9 +812,101 @@ if(this.bio!==""){
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 3px 3px #9d9ea0, 3px 3px #9d9ea0;
+    box-shadow: 3px 3px #c4c5c5,2px 2px #eeeff0;
     cursor: pointer;
 }
+.times-btn{
+    cursor: pointer;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    
+}
+.top-element{
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 0.5px solid #e1e1e2;
+}
+.top-heading{
+    margin: 0 auto;
+}
+.onPicLoad{
+    display: flex;
+    flex-direction: column;
+    padding: 10px 20px ;
+}
+.onPicLoad input{
+   padding: 10px 20px;
+   width: calc(100% - 10%);
+ margin: 0 auto;
+ border-radius: 5px;
+border: 0.5px solid #bfc0c2;
+}
+.onPicLoad input:focus{
+outline-color: #1b74E4;
+}
+.onPicLoad img{
+    width: 300px ;
+    height: 300px;
+    border-radius: 50%;
+    margin: auto;
+    margin-top: 20px;
+}
+.adjust-btns{
+ display: flex;
+ gap: 10px;
+ justify-content: center;
+ padding: 20px 10px;
+}
+.adjust-btns button{
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+.onPicLoad p{
+    color:#65676b;
+}
+.manouver-btns{
+    display: flex;
+    gap: 10px;
+    padding: 10px 20px;
+    justify-content: flex-end;
+    border-top:0.5px solid #e5e6e7 ;
+}
+.manouver-btns button:first-child{
+    border: none;
+    background: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 5px;
+    padding: 10px 30px;
+}
+.manouver-btns button:first-child:hover{
+    background: #f6f8fa;
+}
+.manouver-btns button:last-child{
+    border: none;
+   color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    background: #1b74E4;
+    border-radius: 5px;
+    padding: 10px 30px;
+}
+
+
+
+
+
+
+
 #myimg{
    width: 100%; 
 }
@@ -1139,7 +1382,76 @@ visibility: hidden;
     gap: 10px;
     margin: 0 auto;
 }
+.no-posts{
+    margin:  auto;
+    font-weight: 600;
+    color: #8a8d91;
+}
+#message-tag{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #fff;
+    position: fixed;
+    top: 92%;
+    left: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 5px 5px 8px #ceced1, 3px 3px 5px #f0f2f5;
+}
 
+.message-platform{
+   background: #fff;
+   box-shadow: 5px 5px 8px #ceced1, 3px 3px 5px #f0f2f5;   
+   position: fixed;
+   top: 50%;
+   left: 75%;
+    display: flex;
+    border-radius: 5px;
+    flex-direction: column; 
+    min-height: 455px; 
+    width: 18vw;                                                                                     
+}
+.message-platform input{
+    border: none;
+}
+.message-platform input:focus{
+    outline: none;
+}
+.top{
+    display: flex;
+    align-items: center;
+    padding: 5px 20px;
+    justify-content: space-between;
+}
+
+.fa-times{
+    color: #216FD8;
+    font-size: 20px;
+}
+.times-btn{
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+
+}
+.to-textarea{
+    display: flex;
+    gap: 10px;
+    border-bottom: 0.5px solid #d3d4d4;
+}
+.users-bio{
+    margin: 0 auto;
+}
+@media all and (max-width:1024px){
+    .profile-pic-update{
+        width: 60vw;
+        left: 25%;
+    }  
+}
 
 @media all and (max-width:900px){
     .wrap{
@@ -1158,6 +1470,10 @@ visibility: hidden;
     }
     .home-2{
         visibility: visible;
+    }
+    .profile-pic-update{
+        width: 55vw;
+        left: 30%;
     }
 }
 @media all and (max-width:600px){
@@ -1181,13 +1497,22 @@ visibility: hidden;
         width: 100%;
         padding: 20px 10px;
     }
+     .profile-pic-update{
+        width: 90vw;
+        left: 5%;
+    }
+
+  
 }
 
 @media all and (max-width:400px){
     .wrap{
         padding: 20px 0;
     }
-
+ .profile-pic-update{
+        width: 90vw;
+        left: 5%;
+    }
 }
 
 

@@ -118,24 +118,25 @@
                     </p>
                     <span class="date-no">
                         <select id="day">
-                        
+                        <option v-for="date in day" :key="date">{{date}}</option>
                         </select>
     
                         <select id="month">
-                          
+                          <option v-for="month in months" :key="month">{{month}}</option>
+
                         </select>
     
                         <select id="year">
-                      
+                       <option v-for="year in years" :key="year">{{year}}</option>
                         </select>
                     </span>
                     <p class="date">Gender
                         <i class="fas fa-question-circle"></i>
                     </p>
                     <label class="radio-btn" id="gender" >
-                        <span><p>Female</p><input type="radio" name="gender" id="female" v-model="female" @click="noCustoms"></span>
-                        <span><p>Male</p><input type="radio" name="gender" id="male" v-model="male" @click="noCustoms"></span>
-                        <span><p>Custom</p><input type="radio" name="gender" id="custom" v-model="custom" @click="customs"></span>
+                        <span><p>Female</p><input type="radio" name="gender" id="female"  @click="selectedFemale"></span>
+                        <span><p>Male</p><input type="radio" name="gender" id="male"  @click="selectedMale"></span>
+                        <span><p>Custom</p><input type="radio" name="gender" id="custom"  @click="customs"></span>
                     </label>
                     <div v-if="customize" class="customize">
                         <!-- v-for="pronoun in pronouns" v-bind:key="pronoun" -->
@@ -184,12 +185,13 @@ export default {
        optionalGender : '',
        firstName:'',
        surName:'',
-       female:'',
-       male:'',
+      gender:"",
        custom:'',
        closer:false,
        opener:true,
-
+       day:[],
+       months:[ "Jan", "Feb", "Mar", "May","Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ],
+       years:[],
       }
     },
     methods: {
@@ -209,25 +211,42 @@ export default {
       this.popup=true
      this.closer = true
      this.opener=false
-       const app = document.querySelector('#opt')
+    const app = document.querySelector('#opt')
          app.classList="active"   
 
-// if(this.popup=true){
-//     app.classList = "active"; 
-// }else{
-//     app.classList ="";
-// }
- 
+for(var i=0; i<32; i++){
+    // console.log(i)
+  this.day.push(i)
+console.log(this.day)
+    
+}
+
+for(var y=2021; y>1994; y--){
+    // console.log(i)
+  this.years.push(y)
+// console.log(this.years)
+    
+}
+
     },
     customs:function(){
         this.customize = true
+         this.gender="custom"
+       
     },
-    noCustoms:function(){
+   selectedMale:function(){
         this.customize = false
     },
-  infor:function(){
- console.log(email.value)
-  },
+    selectedMale:function(){
+        this.customize = false
+        this.gender="male"
+      
+    },
+    selectedFemale:function(){
+        this.customize = false
+        this.gender="Female"
+         
+    },
   signUp:function(){
   console.log(this.firstName, this.surName, this.password,this.custom)
       createUserWithEmailAndPassword(auth, this.email, this.password).then((userCredential) => {  
@@ -238,6 +257,7 @@ export default {
       secondName: this.surName,
       password:this.password,
       id:user.uid,
+      sex:this.gender,
     });
 this.popup=false
     console.log(user);
@@ -250,7 +270,9 @@ this.popup=false
          this.opener=true
          this.closer=false
   },
- 
+   infor:function(){
+ console.log(email.value)
+  },
  login:function(){
  if(this.mail === "" && this.pass === ""){
 this.$router.push('/Login')
@@ -295,6 +317,7 @@ this.$router.push('/Login')
 </script>
 
 <style scoped>
+
 
  #popup.active {
     pointer-events: all;
@@ -753,7 +776,6 @@ input{
   }
 }
 @media all and (max-width:600px){
-
 
 }
 </style>
